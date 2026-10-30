@@ -1,0 +1,227 @@
+---
+// "How my work has evolved": scroll down a line in space. On wide screens the stage pins and
+// scroll progress slides the nodes past a fixed centre point; the active project expands and
+// the skills row grows. Phones, reduced motion and no-JS get a plain vertical timeline.
+// Data lives in src/data/journey.ts. The starfield warps while you approach the last node.
+import Shot from './Shot.astro';
+import { nodes, future } from '../data/journey';
+
+const skills: { name: string; at: number }[] = [];
+nodes.forEach((n, i) =>
+  n.stack.forEach((s) => {
+    if (!skills.some((k) => k.name === s)) skills.push({ name: s, at: i });
+  })
+);
+const M = nodes.length + 1; // projects plus the future
+---
+<section id="journey" class="journey" style={`--m:${M}`} aria-labelledby="journey-title" data-journey>
+  <a class="skipj" href="#about">Skip the timeline</a>
+  <div class="stage">
+    <div class="frame top">
+      <h2 id="journey-title" class="wipe" data-split>How my work has evolved</h2>
+      <p class="era" data-era aria-hidden="true">{nodes[0].date}</p>
+    </div>
+
+    <div class="line" aria-hidden="true"></div>
+    <div class="ring" aria-hidden="true"></div>
+
+    <ol class="nodes">
+      {nodes.map((n, i) => (
+        <li class:list={['node', i % 2 ? 'left' : 'right', { active: i === 0 }]} style={`--i:${i}`} data-node data-date={n.date}>
+          <p class="tag" aria-hidden="true"><span>{n.date}</span> {n.title}</p>
+          <article class="card" data-reveal data-card aria-label={n.title}>
+            <div class="shotwrap" data-polish={n.polish}>
+              <Shot src={n.image} alt={n.alt} host={n.host} sizes="(max-width: 900px) 92vw, 520px" />
+            </div>
+            <div class="body">
+              <h3>{n.title}</h3>
+              <p class="meta">{n.date} · {n.role}</p>
+              <p class="stack">{n.stack.join(' · ')}</p>
+              <p class="learned">{n.learned}</p>
+              {n.href && (
+                <p><a class="link" href={n.href}>{n.href.startsWith('/') ? 'Read the case study' : 'Visit'}</a></p>
+              )}
+            </div>
+          </article>
+        </li>
+      ))}
+
+      <li class="node future left" style={`--i:${nodes.length}`} data-node data-date={future.date}>
+        <p class="tag" aria-hidden="true"><span>{future.date}</span> {future.title}</p>
+        <article class="card future-card" data-reveal data-card aria-label={`Next: ${future.title}`}>
+          <div class="star" aria-hidden="true"></div>
+          <div class="body">
+            <h3>Next: {future.title}</h3>
+            <p class="learned">{future.text}</p>
+            <p><a class="link" href="#contact">Get in touch</a></p>
+          </div>
+        </article>
+      </li>
+    </ol>
+
+    <div class="skills">
+      <p class="label">Skills picked up along the way</p>
+      <ul>
+        {skills.map((s) => <li class="chip" data-chip data-at={s.at}>{s.name}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-journey]');
+  if (root) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const wide = matchMedia('(min-width: 901px)');
+    const items = [...root.querySelectorAll<HTMLElement>('[data-node]')];
+    const cards = items.map((el) => el.querySelector<HTMLElement>('[data-card]')!);
+    const chips = [...root.querySelectorAll<HTMLElement>('[data-chip]')];
+    const era = root.querySelector<HTMLElement>('[data-era]')!;
+    const M = items.length;
+    const w = window as unknown as { __warp?: number; __kick?: number };
+    const smooth = (x: number) => { const t = Math.min(1, Math.max(0, x)); return t * t * (3 - 2 * t); };
+
+    let pinned = false, ticking = false, last = -1;
+
+    const warpFor = (f: number) => {
+      const peak = M - 1.4; // just before the last node
+      if (f < peak) return smooth((f - (M - 3.2)) / 1.8);
+      return Math.max(0, 1 - (f - peak) / 0.4);
+    };
+
+    const update = () => {
+      ticking = false;
+      if (!pinned) return;
+      const total = root.offsetHeight - innerHeight;
+      const p = Math.min(1, Math.max(0, -root.getBoundingClientRect().top / total));
+      const f = p * (M - 1);
+      items.forEach((el, i) => {
+        const d = i - f;
+        el.style.setProperty('--d', d.toFixed(3));
+        el.style.setProperty('--ad', Math.min(Math.abs(d), 3).toFixed(3));
+      });
+      const a = Math.round(f);
+      if (a !== last) {
+        items.forEach((el, i) => {
+          el.classList.toggle('active', i === a);
+          el.classList.toggle('past', i < a);
+          cards[i].inert = i !== a;
+        });
+        chips.forEach((c) => c.classList.toggle('on', a >= Number(c.dataset.at)));
+        era.textContent = items[a].dataset.date ?? '';
+        era.classList.remove('tick'); void era.offsetWidth; era.classList.add('tick');
+        if (a === M - 1) w.__kick = performance.now(); // the last star ignites: the field pulses
+        last = a;
+      }
+      w.__warp = warpFor(f);
+    };
+
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+
+    const setMode = () => {
+      pinned = wide.matches && !reduce.matches;
+      root.classList.toggle('pinned', pinned);
+      last = -1;
+      if (pinned) update();
+      else {
+        w.__warp = 0;
+        cards.forEach((c) => (c.inert = false));
+        items.forEach((el) => el.classList.remove('active', 'past'));
+      }
+    };
+    wide.addEventListener('change', setMode);
+    reduce.addEventListener('change', setMode);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    setMode();
+  }
+</script>
+
+<style>
+  /* ---------- default: plain vertical timeline (phones, reduced motion, no JS) ---------- */
+  .journey { padding-block: var(--section); }
+  .skipj { position: absolute; left: var(--margin); top: -4rem; z-index: 5; background: var(--accent); color: var(--accent-ink); padding: 0.6rem 1rem; border-radius: var(--btn-radius); text-decoration: none; }
+  .skipj:focus-visible { top: 5.5rem; }
+  .top { display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; }
+  h2 { font-size: var(--step-head); }
+  .era, .line, .ring { display: none; }
+  .nodes { position: relative; margin: 3.5rem auto 0; width: 100%; max-width: var(--max); padding: 0 var(--margin) 0 calc(var(--margin) + 2.25rem); display: grid; gap: 4.5rem; }
+  .nodes::before { content: ''; position: absolute; left: calc(var(--margin) + 6px); top: 0.4rem; bottom: 0; width: 2px; background: rgb(143 166 142 / 0.3); }
+  .node { position: relative; }
+  .node::before { content: ''; position: absolute; left: -2.25rem; top: 0.45rem; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); }
+  .tag { display: none; }
+  .card { display: grid; gap: 1.5rem; max-width: 46rem; }
+  .shotwrap :global(figure) { max-width: 100%; }
+  .shotwrap[data-polish='0'] :global(img) { filter: grayscale(0.85) contrast(0.85) brightness(0.92); }
+  .shotwrap[data-polish='1'] :global(img) { filter: grayscale(0.4) contrast(0.93); }
+  .shotwrap[data-polish='2'] :global(img) { filter: saturate(0.92); }
+  h3 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); }
+  .meta { margin-top: 0.4rem; color: var(--muted); font-size: var(--step-small); }
+  .stack { margin-top: 0.9rem; font-size: var(--step-small); color: var(--accent); }
+  .learned { margin-top: 0.9rem; max-width: 42ch; }
+  .body p:last-child { margin-top: 1.1rem; }
+  .star { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); }
+  .skills { margin: 4rem auto 0; width: 100%; max-width: var(--max); padding: 0 var(--margin); }
+  .label { color: var(--muted); font-size: var(--step-small); margin-bottom: 0.9rem; }
+  .skills ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip { background: var(--surface); padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.9375rem; }
+
+  /* ---------- pinned: travel down a line in space (wide screens, motion allowed) ---------- */
+  .journey.pinned { height: calc(100svh + (var(--m) - 1) * 85svh); padding-block: 0; }
+  .pinned .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --gap: 34svh; --cw: min(40vw, 520px, 56svh); }
+  .pinned .top { position: absolute; top: 5rem; left: 0; right: 0; z-index: 3; margin-inline: auto; width: 100%; max-width: var(--max); padding-inline: var(--margin); }
+  .pinned h2 { font-size: var(--step-lead); }
+  .pinned .era { display: block; font-size: clamp(2rem, 1.2rem + 2.4vw, 4rem); letter-spacing: -0.04em; color: var(--accent); line-height: 1; }
+  .pinned .era.tick { animation: tick 600ms var(--ease-out); }
+  @keyframes tick { from { opacity: 0; transform: translateY(14px); } }
+  .pinned .line { display: block; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: rgb(143 166 142 / 0.28); }
+  .pinned .ring { display: block; position: absolute; left: 50%; top: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--accent); /* taste-skill-ignore */ animation: ping 4.8s var(--ease-out) infinite; }
+  @keyframes ping { 0%, 60%, 100% { transform: scale(1); opacity: 0.9; } 8% { transform: scale(1.55); opacity: 0.2; } 16% { transform: scale(1); opacity: 0.9; } 24% { transform: scale(1.3); opacity: 0.35; } 32% { transform: scale(1); } }
+
+  .pinned .nodes { position: absolute; inset: 0; margin: 0; padding: 0; max-width: none; display: block; }
+  .pinned .nodes::before { display: none; }
+  .pinned .node {
+    --d: 0; --ad: 0;
+    position: absolute; left: 50%; top: 50%; width: 0; height: 0;
+    transform: translateY(calc(var(--d) * var(--gap)));
+    opacity: calc(1 - var(--ad) * 0.34);
+  }
+  .pinned .node::before { left: -7px; top: -7px; background: var(--surface-2); transition: background-color 400ms ease, transform 500ms var(--ease-out); }
+  .pinned .node.past::before, .pinned .node.active::before { background: var(--accent); }
+  .pinned .node.active::before { transform: scale(1.5); }
+  .pinned .tag { display: block; position: absolute; top: -0.7rem; width: max-content; max-width: 28vw; font-size: 0.9375rem; color: var(--muted); transition: opacity 300ms ease; }
+  .pinned .tag span { color: var(--accent); margin-right: 0.4rem; }
+  .pinned .right .tag { left: 28px; }
+  .pinned .left .tag { right: 28px; text-align: right; }
+  .pinned .active .tag { opacity: 0; }
+
+  .pinned .card {
+    position: absolute; top: 0; width: var(--cw); max-width: none;
+    transform: translateY(calc(-50% + 28px)); opacity: 0; visibility: hidden;
+    transition: opacity 600ms ease, transform 800ms var(--ease-out), visibility 0s linear 600ms;
+  }
+  .pinned .right .card { left: 60px; }
+  .pinned .left .card { right: 60px; }
+  .pinned .active .card { transform: translateY(-50%); opacity: 1; visibility: visible; transition-delay: 120ms, 120ms, 0s; }
+  .pinned .card > :global(*) { opacity: 1 !important; transform: none !important; } /* reveal effect is for the list layout */
+  .pinned .card { gap: 1rem; }
+  .pinned h3 { font-size: clamp(1.375rem, 1rem + 1vw, 2rem); }
+  .pinned .learned, .pinned .stack { margin-top: 0.5rem; font-size: 1rem; }
+  .pinned .body p:last-child { margin-top: 0.75rem; }
+  .pinned .meta { margin-top: 0.25rem; }
+  .pinned .future-card { grid-template-columns: auto 1fr; align-items: center; gap: 1.5rem; }
+
+  /* The last star: dark until you arrive, then it ignites and beats with the field. */
+  .pinned .future .star { background: transparent; box-shadow: inset 0 0 0 1.5px var(--muted); /* taste-skill-ignore */ transition: background-color 500ms ease; }
+  .pinned .future.active .star { background: var(--accent); box-shadow: 0 0 40px 10px rgb(143 166 142 / 0.55); /* taste-skill-ignore */ animation: beat 4.8s var(--ease-out) infinite; }
+  @keyframes beat { 0%, 60%, 100% { transform: scale(1); } 8% { transform: scale(1.18); } 16% { transform: scale(1); } 24% { transform: scale(1.1); } }
+
+  .pinned .skills { position: absolute; bottom: 1.25rem; left: 0; right: 0; margin: 0 auto; z-index: 3; padding-right: calc(var(--margin) + 64px); } /* clear of the back-to-top button */
+  .pinned .skills ul { gap: 0.4rem; }
+  .pinned .chip { padding: 0.3rem 0.7rem; font-size: 0.875rem; opacity: 0; transform: translateY(10px) scale(0.92); transition: opacity 400ms ease, transform 500ms var(--ease-out); }
+  .pinned .chip.on { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .era.tick, .ring, .star { animation: none !important; }
+  }
+</style>

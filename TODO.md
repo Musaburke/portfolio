@@ -36,5 +36,10 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 - [ ] Cloudflare Pages: build `npm run build`, output `dist`, env `NODE_VERSION=22`
 - [ ] The CSP in `public/_headers` is report-only. After deploying, open the live site with the console open. If there are no violations, rename the header to `Content-Security-Policy` to enforce it. Preview servers do not apply `_headers`, so this can only be checked live.
 
-## 7. Content
+## 7. Journey (`src/data/journey.ts`)
+- [ ] One honest "what I learned" line per project (5 lines) and the future text (what you are studying, what you want to build next)
+- [ ] Confirm roles: Islamic Tools Hub ("My own"?), News Flux (team: what was your part?), Hussein site ("My own"?), Renewly (your part)
+- [ ] Screenshots there were captured by me: Islamic Tools Hub (ran it locally), News Flux (live site), Hussein site (live). Replace with your own if you prefer: 1440x900, same file names in `src/assets/journey/`
+
+## 8. Content
 - [ ] `src/content/blog/hello-world.mdx`: write it (description + post, then `draft: false`) or delete it

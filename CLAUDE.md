@@ -35,7 +35,7 @@
 - Headlines two lines or fewer at every width. One `h1` per page; every section has a heading (visually hidden is fine).
 - No eyebrow labels, no 01/02/03 numbering, no tiny uppercase tracked labels, no monospace outside real code.
 - No gradients, no glows, no glass/backdrop blur, no shadows on things at rest, no hairline dividers or 1px boxes (real tables and `data-ui` frames like `Shot` excepted).
-- Approved exceptions (Musa asked for each): the starfield glow and constellation lines; the home preloader; glass on the scrolled header, drawer and contact card only; the Three.js globe and orb; isometric project stacks; colour slabs. Do not spread these to new places without asking.
+- Approved exceptions (Musa asked for each): the starfield glow and constellation lines; the home preloader; glass on the scrolled header, drawer and contact card only; the Three.js globe and orb; isometric project stacks; colour slabs; the Journey warp streaks and the glowing final star. Do not spread these to new places without asking.
 - Every heavy effect needs: a reduced-motion path, a pause when offscreen or the tab is hidden, and a no-JS state where the content is still visible.
 - Every project image goes through `Shot.astro`. Never place raw screenshots at mixed sizes or offsets.
 - No default Tailwind palette colours, no violet/indigo. Tokens only.

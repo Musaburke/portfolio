@@ -5,6 +5,7 @@ import { site } from '../data/site';
 const links = [
   { href: '/#top', label: 'Home', id: 'top' },
   { href: '/#work', label: 'Work', id: 'work' },
+  { href: '/#journey', label: 'Journey', id: 'journey' },
   { href: '/#about', label: 'About', id: 'about' },
   { href: '/#toolkit', label: 'Toolkit', id: 'toolkit' },
   { href: '/projects', label: 'Case studies', id: 'projects' },
@@ -94,7 +95,7 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/bl
       },
       { rootMargin: '-45% 0px -50% 0px' }
     );
-    ['top', 'work', 'about', 'toolkit', 'contact'].forEach((id) => {
+    ['top', 'work', 'journey', 'about', 'toolkit', 'contact'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) spy.observe(el);
     });

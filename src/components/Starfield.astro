@@ -36,6 +36,9 @@
     const LAYER_SCROLL = [0.015, 0.04, 0.08]; // scroll drift per layer
     const LINK_DIST = 110;        // px: max length of a constellation line
     const linked: number[] = [];  // x, y, strength of stars near the cursor this frame
+    const WARP_LAYER = [0.5, 1, 1.8]; // how fast each depth layer streams past in warp
+    const STREAK = [14, 36, 80];      // streak length per layer at full warp
+    let warpS = 0, warpPos = 0;       // smoothed warp level and accumulated travel
 
     let w = 0, h = 0, dpr = 1;
     let stars: Star[] = [];
@@ -108,11 +111,18 @@
       const beatNow = beat(((now % PERIOD) + PERIOD) % PERIOD) + beat((((now % PERIOD) + PERIOD) % PERIOD) - PERIOD);
       (window as unknown as { __beat: number }).__beat = still ? 0 : beatNow;
       linked.length = 0;
+      const wTarget = still ? 0 : (window as unknown as { __warp?: number }).__warp ?? 0;
+      warpS += (wTarget - warpS) * 0.08;
+      warpPos += warpS * 9;
+      const kick = (window as unknown as { __kick?: number }).__kick ?? -1e9;
+      const kickExtra = !still && now >= kick ? Math.exp(-(now - kick) / 500) * 2 : 0;
+      const streaks = warpS > 0.04;
+      if (streaks) ctx!.beginPath();
 
       for (const s of stars) {
         // Base position with scroll drift (wrapped) and pointer parallax.
         let x = s.x - px * LAYER_PARALLAX[s.layer];
-        let y = s.y - scrollY * LAYER_SCROLL[s.layer] - py * LAYER_PARALLAX[s.layer];
+        let y = s.y - scrollY * LAYER_SCROLL[s.layer] - py * LAYER_PARALLAX[s.layer] - warpPos * WARP_LAYER[s.layer];
         y = ((y % h) + h) % h;
 
         let near = 0;
@@ -139,7 +149,7 @@
           const delay = Math.hypot(x - originX, y - originY) / BEAT_SPEED;
           const local = (((now - delay) % PERIOD) + PERIOD) % PERIOD;
           const pulse = beat(local) + beat(local - PERIOD);
-          a *= 1 + pulse * amp * (s.layer === 0 ? 1 : 1.4);
+          a *= 1 + (pulse + kickExtra) * amp * (s.layer === 0 ? 1 : 1.4);
           r *= 1 + pulse * 0.25;
           a += near * 0.8;
           r *= 1 + near * 0.6;
@@ -150,6 +160,13 @@
         const size = r * (s.layer === 2 ? 9 : 6);
         ctx!.globalAlpha = a;
         ctx!.drawImage(sprites[s.tint], x - size / 2, y - size / 2, size, size);
+        if (streaks) { ctx!.moveTo(x, y); ctx!.lineTo(x, y + STREAK[s.layer] * warpS); }
+      }
+      if (streaks) {
+        ctx!.globalAlpha = 0.3 * warpS;
+        ctx!.strokeStyle = '#f4efe4';
+        ctx!.lineWidth = 1;
+        ctx!.stroke();
       }
 
       // Constellation lines between the brighter stars near the cursor.

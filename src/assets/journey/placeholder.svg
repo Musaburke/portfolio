@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <rect width="1440" height="900" fill="#1f1f1f"/>
+  <g fill="none" stroke="#8fa68e" stroke-opacity="0.5" stroke-width="2"><rect x="520" y="330" width="400" height="240" rx="12"/><path d="M520 380h400"/><circle cx="548" cy="355" r="5"/><circle cx="570" cy="355" r="5"/><circle cx="592" cy="355" r="5"/></g>
+  <text x="720" y="470" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#a3a49f">Screenshot coming</text>
+</svg>
