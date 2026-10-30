@@ -8,7 +8,7 @@
 
 ## Steps
 1. Capture at 1440x900 so the image fits `Shot` (16/10) with no crop:
-   `node tools/screenshot.mjs https://example.com/ proj-home --out .tmp/proj` (repeat per page).
+   `node tools/screenshot.mjs https://example.com/ proj-home --hd --png --out .tmp/proj` (repeat per page).
    Convert: `sips -s format jpeg -s formatOptions 82 .tmp/proj/proj-home-desktop.png --out src/assets/projects/proj-home.jpg`
 2. Create `src/content/projects/<slug>.mdx`. Copy the frontmatter shape from `dsb-cleaning.mdx`:
    `host` (label in the window bar), `cover` + `coverAlt`, and `gallery` (first two show on the home page).

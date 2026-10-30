@@ -29,7 +29,7 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 - [ ] Renewly: dashboard, renewals, spend analytics, landing (a real account if you can; otherwise keep the "sample data" label)
 - [ ] Then update `cover` and `gallery` in each project's `.mdx` (see `workflows/add-project.md`)
 - [ ] Square portrait photo for About (`src/components/About.astro`, line 25). Optional: the 3D orb stands in until then.
-- [ ] Social share image, 1200x630 (`public/og.jpg`). Needs a `og:image` meta tag in `src/layouts/Base.astro` once it exists.
+- [x] Social share image `public/og.jpg` (captured from the hero, tags in `Base.astro`). Replace it if you want a custom one.
 
 ## 6. Deploy
 - [ ] Real domain in `astro.config.mjs` (line 10) and `public/robots.txt` (the Sitemap line)

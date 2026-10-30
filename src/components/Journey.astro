@@ -14,7 +14,7 @@ nodes.forEach((n, i) =>
 );
 const M = nodes.length + 1; // projects plus the future
 ---
-<section id="journey" class="journey" style={`--m:${M}`} aria-labelledby="journey-title" data-journey>
+<section id="journey" class="journey" style={`--m:${M};--hue:${nodes[0].hue}`} aria-labelledby="journey-title" data-journey>
   <a class="skipj" href="#about">Skip the timeline</a>
   <div class="stage">
     <div class="frame top">
@@ -22,12 +22,13 @@ const M = nodes.length + 1; // projects plus the future
       <p class="era" data-era aria-hidden="true">{nodes[0].date}</p>
     </div>
 
-    <div class="line" aria-hidden="true"></div>
+    <p class="ghost" data-ghost aria-hidden="true">{nodes[0].date.split(' ').pop()}</p>
+    <div class="line" aria-hidden="true"><i class="trail"></i><i class="ahead"></i></div>
     <div class="ring" aria-hidden="true"></div>
 
     <ol class="nodes">
       {nodes.map((n, i) => (
-        <li class:list={['node', i % 2 ? 'left' : 'right', { active: i === 0 }]} style={`--i:${i}`} data-node data-date={n.date}>
+        <li class:list={['node', i % 2 ? 'left' : 'right', { active: i === 0 }]} style={`--i:${i};--hue:${n.hue}`} data-node data-date={n.date} data-hue={n.hue}>
           <p class="tag" aria-hidden="true"><span>{n.date}</span> {n.title}</p>
           <article class="card" data-reveal data-card aria-label={n.title}>
             <div class="shotwrap" data-polish={n.polish}>
@@ -46,7 +47,7 @@ const M = nodes.length + 1; // projects plus the future
         </li>
       ))}
 
-      <li class="node future left" style={`--i:${nodes.length}`} data-node data-date={future.date}>
+      <li class="node future left" style={`--i:${nodes.length};--hue:${future.hue}`} data-node data-date={future.date} data-hue={future.hue}>
         <p class="tag" aria-hidden="true"><span>{future.date}</span> {future.title}</p>
         <article class="card future-card" data-reveal data-card aria-label={`Next: ${future.title}`}>
           <div class="star" aria-hidden="true"></div>
@@ -77,6 +78,7 @@ const M = nodes.length + 1; // projects plus the future
     const cards = items.map((el) => el.querySelector<HTMLElement>('[data-card]')!);
     const chips = [...root.querySelectorAll<HTMLElement>('[data-chip]')];
     const era = root.querySelector<HTMLElement>('[data-era]')!;
+    const ghost = root.querySelector<HTMLElement>('[data-ghost]')!;
     const M = items.length;
     const w = window as unknown as { __warp?: number; __kick?: number };
     const smooth = (x: number) => { const t = Math.min(1, Math.max(0, x)); return t * t * (3 - 2 * t); };
@@ -107,9 +109,22 @@ const M = nodes.length + 1; // projects plus the future
           el.classList.toggle('past', i < a);
           cards[i].inert = i !== a;
         });
-        chips.forEach((c) => c.classList.toggle('on', a >= Number(c.dataset.at)));
-        era.textContent = items[a].dataset.date ?? '';
-        era.classList.remove('tick'); void era.offsetWidth; era.classList.add('tick');
+        chips.forEach((c) => {
+          const on = a >= Number(c.dataset.at);
+          // A chip earned at this node flashes in the project's colour, then settles.
+          if (on && !c.classList.contains('on') && Number(c.dataset.at) === a) {
+            c.style.setProperty('--flash', items[a].dataset.hue ?? '');
+            c.classList.add('fresh');
+            setTimeout(() => c.classList.remove('fresh'), 1400);
+          }
+          c.classList.toggle('on', on);
+        });
+        const date = items[a].dataset.date ?? '';
+        era.textContent = date;
+        ghost.textContent = date.split(' ').pop() ?? '';
+        for (const el of [era, ghost]) { el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); }
+        root.style.setProperty('--hue', items[a].dataset.hue ?? '');
+        root.classList.toggle('at-end', a === M - 1);
         if (a === M - 1) w.__kick = performance.now(); // the last star ignites: the field pulses
         last = a;
       }
@@ -148,7 +163,7 @@ const M = nodes.length + 1; // projects plus the future
   .nodes { position: relative; margin: 3.5rem auto 0; width: 100%; max-width: var(--max); padding: 0 var(--margin) 0 calc(var(--margin) + 2.25rem); display: grid; gap: 4.5rem; }
   .nodes::before { content: ''; position: absolute; left: calc(var(--margin) + 6px); top: 0.4rem; bottom: 0; width: 2px; background: rgb(143 166 142 / 0.3); }
   .node { position: relative; }
-  .node::before { content: ''; position: absolute; left: -2.25rem; top: 0.45rem; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); }
+  .node::before { content: ''; position: absolute; left: -2.25rem; top: 0.45rem; width: 14px; height: 14px; border-radius: 50%; background: var(--hue, var(--accent)); }
   .tag { display: none; }
   .card { display: grid; gap: 1.5rem; max-width: 46rem; }
   .shotwrap :global(figure) { max-width: 100%; }
@@ -157,10 +172,11 @@ const M = nodes.length + 1; // projects plus the future
   .shotwrap[data-polish='2'] :global(img) { filter: saturate(0.92); }
   h3 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); }
   .meta { margin-top: 0.4rem; color: var(--muted); font-size: var(--step-small); }
-  .stack { margin-top: 0.9rem; font-size: var(--step-small); color: var(--accent); }
+  .stack { margin-top: 0.9rem; font-size: 0.9375rem; color: var(--hue, var(--accent)); }
+  .ghost { display: none; }
   .learned { margin-top: 0.9rem; max-width: 42ch; }
   .body p:last-child { margin-top: 1.1rem; }
-  .star { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); }
+  .star { width: 56px; height: 56px; border-radius: 50%; background: var(--hue, var(--accent)); }
   .skills { margin: 4rem auto 0; width: 100%; max-width: var(--max); padding: 0 var(--margin); }
   .label { color: var(--muted); font-size: var(--step-small); margin-bottom: 0.9rem; }
   .skills ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -171,38 +187,59 @@ const M = nodes.length + 1; // projects plus the future
   .pinned .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --gap: 34svh; --cw: min(40vw, 520px, 56svh); }
   .pinned .top { position: absolute; top: 5rem; left: 0; right: 0; z-index: 3; margin-inline: auto; width: 100%; max-width: var(--max); padding-inline: var(--margin); }
   .pinned h2 { font-size: var(--step-lead); }
-  .pinned .era { display: block; font-size: clamp(2rem, 1.2rem + 2.4vw, 4rem); letter-spacing: -0.04em; color: var(--accent); line-height: 1; }
+  .pinned .era { display: block; font-size: clamp(2rem, 1.2rem + 2.4vw, 4rem); letter-spacing: -0.04em; color: var(--hue); line-height: 1; transition: color 600ms ease; }
+  /* A huge outlined year drifting behind everything: the era you are in. */
+  .pinned .ghost {
+    display: block; position: absolute; left: 50%; top: 50%; z-index: 0;
+    transform: translate(-50%, -50%);
+    font-size: clamp(9rem, 4rem + 16vw, 22rem); font-weight: 500; letter-spacing: -0.06em; line-height: 1;
+    color: transparent; -webkit-text-stroke: 1.5px var(--hue); opacity: 0.16;
+    white-space: nowrap; pointer-events: none; transition: -webkit-text-stroke-color 600ms ease;
+  }
+  .pinned .ghost.tick { animation: ghost 1100ms var(--ease-out); }
+  @keyframes ghost { from { opacity: 0; transform: translate(-50%, calc(-50% + 80px)) scale(0.94); } }
   .pinned .era.tick { animation: tick 600ms var(--ease-out); }
   @keyframes tick { from { opacity: 0; transform: translateY(14px); } }
-  .pinned .line { display: block; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: rgb(143 166 142 / 0.28); }
-  .pinned .ring { display: block; position: absolute; left: 50%; top: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--accent); /* taste-skill-ignore */ animation: ping 4.8s var(--ease-out) infinite; }
+  /* The line: lit behind you (the trail), dim ahead. At the end the road ahead is unwritten. */
+  .pinned .line { display: block; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; z-index: 1; }
+  .pinned .line i { position: absolute; left: 0; width: 100%; }
+  .pinned .trail { top: 0; height: 50%; background: var(--hue); opacity: 0.85; transition: background-color 600ms ease; }
+  .pinned .ahead { top: 50%; bottom: 0; background: rgb(255 255 255 / 0.14); transform-origin: top; transition: transform 900ms var(--ease-out), opacity 900ms ease; }
+  .pinned.at-end .ahead { transform: scaleY(0); opacity: 0; }
+  .pinned .ring { display: block; position: absolute; left: 50%; top: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--hue); /* taste-skill-ignore */ animation: ping 4.8s var(--ease-out) infinite; z-index: 1; transition: box-shadow 600ms ease; }
   @keyframes ping { 0%, 60%, 100% { transform: scale(1); opacity: 0.9; } 8% { transform: scale(1.55); opacity: 0.2; } 16% { transform: scale(1); opacity: 0.9; } 24% { transform: scale(1.3); opacity: 0.35; } 32% { transform: scale(1); } }
 
   .pinned .nodes { position: absolute; inset: 0; margin: 0; padding: 0; max-width: none; display: block; }
   .pinned .nodes::before { display: none; }
   .pinned .node {
     --d: 0; --ad: 0;
-    position: absolute; left: 50%; top: 50%; width: 0; height: 0;
+    position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 2;
+    perspective: 1400px;
     transform: translateY(calc(var(--d) * var(--gap)));
     opacity: calc(1 - var(--ad) * 0.34);
   }
   .pinned .node::before { left: -7px; top: -7px; background: var(--surface-2); transition: background-color 400ms ease, transform 500ms var(--ease-out); }
-  .pinned .node.past::before, .pinned .node.active::before { background: var(--accent); }
-  .pinned .node.active::before { transform: scale(1.5); }
+  .pinned .node.past::before, .pinned .node.active::before { background: var(--hue); }
+  .pinned .node.active::before { transform: scale(1.6); }
   .pinned .tag { display: block; position: absolute; top: -0.7rem; width: max-content; max-width: 28vw; font-size: 0.9375rem; color: var(--muted); transition: opacity 300ms ease; }
-  .pinned .tag span { color: var(--accent); margin-right: 0.4rem; }
+  .pinned .tag span { color: var(--hue); margin-right: 0.4rem; }
   .pinned .right .tag { left: 28px; }
   .pinned .left .tag { right: 28px; text-align: right; }
   .pinned .active .tag { opacity: 0; }
 
   .pinned .card {
     position: absolute; top: 0; width: var(--cw); max-width: none;
-    transform: translateY(calc(-50% + 28px)); opacity: 0; visibility: hidden;
-    transition: opacity 600ms ease, transform 800ms var(--ease-out), visibility 0s linear 600ms;
+    --hold: calc(var(--d) * var(--gap) * -0.75); /* cancel most of the node's travel: the card stays near centre */
+    transform: translateY(calc(-50% + 40px + var(--hold))) rotateY(var(--swing)) scale(0.94); opacity: 0; visibility: hidden;
+    transition: opacity 600ms ease, transform 900ms var(--ease-out), visibility 0s linear 600ms;
   }
+  .pinned .right .card { --swing: -14deg; transform-origin: left center; }
+  .pinned .left .card { --swing: 14deg; transform-origin: right center; }
+  /* The active screenshot gets a ring in the project's own colour. */
+  .pinned .active .shotwrap { border-radius: 10px; box-shadow: 0 0 0 1.5px var(--hue), 0 30px 80px -30px var(--hue); /* taste-skill-ignore */ }
   .pinned .right .card { left: 60px; }
   .pinned .left .card { right: 60px; }
-  .pinned .active .card { transform: translateY(-50%); opacity: 1; visibility: visible; transition-delay: 120ms, 120ms, 0s; }
+  .pinned .active .card { transform: translateY(calc(-50% + var(--hold))); opacity: 1; visibility: visible; transition-delay: 120ms, 120ms, 0s; }
   .pinned .card > :global(*) { opacity: 1 !important; transform: none !important; } /* reveal effect is for the list layout */
   .pinned .card { gap: 1rem; }
   .pinned h3 { font-size: clamp(1.375rem, 1rem + 1vw, 2rem); }
@@ -218,10 +255,12 @@ const M = nodes.length + 1; // projects plus the future
 
   .pinned .skills { position: absolute; bottom: 1.25rem; left: 0; right: 0; margin: 0 auto; z-index: 3; padding-right: calc(var(--margin) + 64px); } /* clear of the back-to-top button */
   .pinned .skills ul { gap: 0.4rem; }
-  .pinned .chip { padding: 0.3rem 0.7rem; font-size: 0.875rem; opacity: 0; transform: translateY(10px) scale(0.92); transition: opacity 400ms ease, transform 500ms var(--ease-out); }
+  .pinned .chip { padding: 0.3rem 0.7rem; font-size: 0.9375rem; opacity: 0; transform: translateY(10px) scale(0.92); transition: opacity 400ms ease, transform 500ms var(--ease-out); }
   .pinned .chip.on { opacity: 1; transform: none; }
+  .pinned .chip.fresh { animation: earn 1400ms var(--ease-out); }
+  @keyframes earn { 0% { background: var(--flash); color: #111; transform: scale(1.12); } 60% { background: var(--flash); color: #111; } 100% { transform: none; } }
 
   @media (prefers-reduced-motion: reduce) {
-    .era.tick, .ring, .star { animation: none !important; }
+    .era.tick, .ghost.tick, .ring, .star, .chip.fresh { animation: none !important; }
   }
 </style>

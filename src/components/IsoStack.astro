@@ -20,7 +20,7 @@ const { href, title, host, cover, back } = Astro.props;
         <Shot src={b.src} alt="" host={host} sizes="(max-width: 900px) 90vw, 50vw" />
       </div>
     ))}
-    <a class="layer front" href={href} aria-label={`${title} case study`}>
+    <a class="layer front" href={href}>
       <Shot src={cover.src} alt={cover.alt} host={host} sizes="(max-width: 900px) 90vw, 50vw" />
     </a>
   </div>

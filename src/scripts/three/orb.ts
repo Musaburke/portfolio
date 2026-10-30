@@ -44,7 +44,7 @@ export function mountOrb(canvas: HTMLCanvasElement) {
   const key = new THREE.DirectionalLight(0xffffff, 1.4);
   key.position.set(3, 4, 5);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0x8fa68e, 2);
+  const rim = new THREE.DirectionalLight(0x9fd09c, 2.2);
   rim.position.set(-4, -2, -3);
   scene.add(rim);
 

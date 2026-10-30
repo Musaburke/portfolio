@@ -16,8 +16,8 @@ const path = Astro.url.pathname;
 const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/blog') ? 'blog' : path === '/about' ? 'about' : path === '/' ? 'top' : '';
 ---
 <header class="hdr" data-hdr>
-  <a href="/" class="mono" aria-label={`${site.name}, home`}>
-    <span>M</span><span>B</span>
+  <a href="/" class="mono">
+    <span aria-hidden="true">M</span><span aria-hidden="true">B</span><span class="visually-hidden">MB, {site.name}, home</span>
   </a>
   <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Open menu" data-burger>
     <span></span><span></span><span></span>
@@ -121,7 +121,7 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/bl
     font-size: 1.5rem; font-weight: 500; letter-spacing: 0.02em; text-decoration: none;
     padding: 0.25rem 0.1rem;
   }
-  .mono span { display: inline-block; transition: transform 500ms var(--ease-out), color 200ms ease; }
+  .mono span[aria-hidden] { display: inline-block; transition: transform 500ms var(--ease-out), color 200ms ease; }
   .mono:hover span:first-child { transform: translateY(-3px); color: var(--accent); }
   .mono:hover span:last-child { transform: translateY(3px); }
   :global(html.js:not(.ready)) .mono span { transform: translateY(-120%); opacity: 0; }

@@ -21,6 +21,7 @@ export type Node = {
   host: string;        // label in the browser-frame bar
   href?: string;       // live site, case study or repo
   polish: 0 | 1 | 2 | 3; // how rough the screenshot looks: 0 roughest ... 3 full colour
+  hue: string;         // the project's own signature colour; lights the line, dot and year
 };
 
 export const nodes: Node[] = [
@@ -36,6 +37,7 @@ export const nodes: Node[] = [
     host: 'Practice_prayer_api · local run',
     href: 'https://github.com/Musaburke/Practice_prayer_api',
     polish: 0,
+    hue: '#f2a65a', // lantern orange
   },
   {
     id: 'news-flux',
@@ -49,6 +51,7 @@ export const nodes: Node[] = [
     host: 'news-flux-krxg.onrender.com',
     href: 'https://news-flux-krxg.onrender.com/',
     polish: 1,
+    hue: '#4fd18b', // News Flux green
   },
   {
     id: 'hussein',
@@ -62,6 +65,7 @@ export const nodes: Node[] = [
     host: 'musaburke.github.io',
     href: 'https://musaburke.github.io/Prof.-Dr-G.-Hussein-Website/',
     polish: 1,
+    hue: '#5cc8d6', // site teal
   },
   {
     id: 'renewly',
@@ -75,6 +79,7 @@ export const nodes: Node[] = [
     host: 'Renewly · sample data',
     href: '/projects/renewly',
     polish: 2,
+    hue: '#7fa7ff', // Renewly navy, lifted
   },
   {
     id: 'dsb',
@@ -88,6 +93,7 @@ export const nodes: Node[] = [
     host: 'dsbcommercialcleaning.co.uk',
     href: '/projects/dsb-cleaning',
     polish: 3,
+    hue: '#e9c46a', // DSB gold
   },
 ];
 
@@ -95,6 +101,7 @@ export const nodes: Node[] = [
 export const missingShot = placeholder;
 
 export const future = {
+  hue: '#9fd09c', // the site's own accent
   date: 'Next',
   title: 'Security',
   text: 'TODO(musa): what you are studying in cyber security right now, and what you want to build next.',

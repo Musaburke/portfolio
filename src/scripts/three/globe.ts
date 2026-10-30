@@ -44,7 +44,7 @@ export function mountGlobe(canvas: HTMLCanvasElement) {
 
   const lineGeo = new THREE.BufferGeometry();
   lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePos, 3));
-  const lineMat = new THREE.LineBasicMaterial({ color: 0x8fa68e, transparent: true, opacity: 0.32, depthWrite: false });
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x9fd09c, transparent: true, opacity: 0.32, depthWrite: false });
   group.add(new THREE.LineSegments(lineGeo, lineMat));
 
   // Round, soft points from a tiny canvas sprite.

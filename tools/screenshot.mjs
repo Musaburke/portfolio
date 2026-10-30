@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 // Screenshot a page at desktop (1440) and mobile (390) widths.
 // Usage:
-//   node tools/screenshot.mjs <path-or-url> [label] [--full] [--out <dir>]
+//   node tools/screenshot.mjs <path-or-url> [label] [--full] [--hd] [--png] [--out <dir>]
 //   node tools/screenshot.mjs /about            -> http://localhost:4321/about
 //   node tools/screenshot.mjs https://site.com  -> any URL
-// Output: .tmp/shots/<label>-desktop.png and <label>-mobile.png (overwritten each run).
+// Output: .tmp/shots/<label>-desktop.jpg and <label>-mobile.jpg (overwritten each run).
+// Default is 1x JPEG, which is cheap to read back. --hd = 2x, --png = PNG (use both for project captures).
 // Needs Google Chrome installed (uses playwright-core with channel "chrome", no browser download).
 import { chromium } from 'playwright-core';
 import { mkdirSync } from 'node:fs';
@@ -12,6 +13,8 @@ import { join } from 'node:path';
 
 const args = process.argv.slice(2);
 const full = args.includes('--full');
+const hd = args.includes('--hd');
+const png = args.includes('--png');
 const outIdx = args.indexOf('--out');
 const outDir = outIdx > -1 ? args[outIdx + 1] : '.tmp/shots';
 const positional = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--out');
@@ -29,7 +32,7 @@ mkdirSync(outDir, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome' });
 try {
   for (const vp of viewports) {
-    const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 2 });
+    const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: hd ? 2 : 1 });
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
     if (full) {
@@ -47,8 +50,8 @@ try {
       );
       await page.waitForTimeout(900);
     }
-    const file = join(outDir, `${label}-${vp.name}.png`);
-    await page.screenshot({ path: file, fullPage: full });
+    const file = join(outDir, `${label}-${vp.name}.${png ? 'png' : 'jpg'}`);
+    await page.screenshot({ path: file, fullPage: full, ...(png ? {} : { quality: 70 }) });
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
     console.log(`${file}${overflow ? '  WARN: horizontal overflow' : ''}`);
     await page.close();
