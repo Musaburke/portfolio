@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import IsoStack from './IsoStack.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+<section id="work" aria-labelledby="work-title">
+  <header class="frame head">
+    <h2 id="work-title" class="wipe" data-split>Selected work</h2>
+    <p class="muted" data-reveal><span>Two projects, finished and shipped. Each one written up properly.</span></p>
+  </header>
+
+  {projects.map((p, i) => (
+    <article class:list={['project section-screen', { flip: i % 2 === 1 }]} style={`--slab:${p.data.slab}`} aria-labelledby={`p-${p.id}`} data-inview>
+      <div class="slab" aria-hidden="true"></div>
+      <div class="frame grid">
+        <div class="text" data-reveal>
+          <h3 id={`p-${p.id}`}><a href={`/projects/${p.id}`}>{p.data.title}</a></h3>
+          <p class="summary">{p.data.summary}</p>
+          <p class="stack muted">{p.data.year} · {p.data.stack.join(' · ')}</p>
+          <p class="actions">
+            <a class="btn" href={`/projects/${p.id}`}>Read the case study</a>
+            {p.data.live && <a class="link" href={p.data.live}>Visit site</a>}
+            {p.data.repo && <a class="link" href={p.data.repo}>Code</a>}
+          </p>
+        </div>
+        <div class="media">
+          <IsoStack
+            href={`/projects/${p.id}`}
+            title={p.data.title}
+            host={p.data.host}
+            cover={{ src: p.data.cover, alt: p.data.coverAlt }}
+            back={p.data.gallery}
+          />
+        </div>
+      </div>
+    </article>
+  ))}
+</section>
+
+<style>
+  .head { padding-top: var(--section); display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; flex-wrap: wrap; }
+  h2 { font-size: var(--step-head); }
+  .project { position: relative; overflow: hidden; }
+  .slab {
+    position: absolute; top: 14%; bottom: 14%; right: 0; width: 58%;
+    background: var(--slab);
+    transform: scaleX(0); transform-origin: right;
+    transition: transform 1200ms var(--ease-out);
+  }
+  .flip .slab { right: auto; left: 0; transform-origin: left; }
+  :global(html:not(.js)) .slab, .project.in .slab { transform: none; }
+  .grid {
+    position: relative;
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2vw, 2rem); align-items: center;
+  }
+  .text { grid-column: 1 / 5; }
+  .media { grid-column: 6 / 13; }
+  .flip .text { grid-column: 9 / 13; grid-row: 1; }
+  .flip .media { grid-column: 1 / 8; grid-row: 1; }
+  h3 { font-size: clamp(2rem, 1.3rem + 2.4vw, 3.5rem); }
+  h3 a { text-decoration: none; transition: color 180ms ease; }
+  h3 a:hover { color: var(--accent); }
+  .summary { margin-top: 1.25rem; font-size: var(--step-body); }
+  .stack { margin-top: 1.25rem; font-size: var(--step-small); }
+  .actions { margin-top: 2rem; display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+
+  @media (max-width: 900px) {
+    .grid { display: flex; flex-direction: column-reverse; gap: 2.5rem; }
+    .slab, .flip .slab { top: 8%; bottom: auto; height: 38%; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slab { transform: none; transition: none; } }
+</style>

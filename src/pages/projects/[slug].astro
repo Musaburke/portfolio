@@ -1,0 +1,73 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Shot from '../../components/Shot.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { slug: p.id }, props: { p } }));
+}
+const { p } = Astro.props;
+const { Content } = await render(p);
+const d = p.data;
+---
+<Base title={d.title} description={d.summary}>
+  <article class="frame case">
+    <header class="top" data-reveal>
+      <p class="back"><a class="link muted" href="/projects">All work</a></p>
+      <h1>{d.title}</h1>
+      <p class="lead">{d.summary}</p>
+    </header>
+
+    <div class="cover" data-reveal>
+      <Shot src={d.cover} alt={d.coverAlt} host={d.host} sizes="(max-width: 1440px) 100vw, 1376px" eager />
+    </div>
+
+    <div class="body">
+      <dl class="meta">
+        <div><dt>Year</dt><dd>{d.year}</dd></div>
+        <div><dt>Role</dt><dd>{d.role}</dd></div>
+        <div><dt>Stack</dt><dd>{d.stack.join(', ')}</dd></div>
+        {d.live && <div><dt>Live</dt><dd><a class="link" href={d.live}>{new URL(d.live).hostname}</a></dd></div>}
+        {d.repo && <div><dt>Code</dt><dd><a class="link" href={d.repo}>GitHub</a></dd></div>}
+      </dl>
+      <div class="prose"><Content /></div>
+    </div>
+
+    {d.gallery.length > 0 && (
+      <section class="gallery" aria-labelledby="gallery-title">
+        <h2 id="gallery-title">More screens</h2>
+        <div class="grid">
+          {d.gallery.map((g) => (
+            <figure data-reveal>
+              <Shot src={g.src} alt={g.alt} host={d.host} sizes="(max-width: 900px) 100vw, 50vw" />
+              <figcaption class="muted">{g.alt}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</Base>
+
+<style>
+  .top { padding-top: 4rem; max-width: 52rem; }
+  .back { font-size: var(--step-small); margin-bottom: 2rem; }
+  h1 { font-size: clamp(2.5rem, 1.1rem + 4.6vw, 5.25rem); letter-spacing: -0.04em; line-height: 1; }
+  .lead { margin-top: 1.5rem; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
+  .cover { margin-top: 4rem; }
+  .body { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1rem, 2vw, 2rem); margin-top: 6rem; }
+  .meta { grid-column: 1 / 4; display: grid; gap: 1.25rem; align-content: start; font-size: 1rem; position: sticky; top: 2rem; }
+  .prose { grid-column: 5 / 13; }
+  dt { color: var(--muted); font-size: var(--step-small); }
+  .gallery { margin-top: var(--section); }
+  .gallery h2 { font-size: var(--step-head); margin-bottom: 3rem; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 3vw, 2.75rem); align-items: start; }
+  figure { margin: 0; display: grid; gap: 1rem; }
+  figcaption { font-size: var(--step-small); max-width: 50ch; }
+  @media (max-width: 900px) {
+    .body { display: block; }
+    .meta { position: static; margin-bottom: 3rem; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>

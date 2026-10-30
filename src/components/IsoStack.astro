@@ -1,0 +1,69 @@
+---
+// A project's screenshots as an isometric, exploded stack that settles flat as it
+// scrolls into view (--p goes 0 -> 1). Phones and reduced motion get the flat state.
+import Shot from './Shot.astro';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  href: string;
+  title: string;
+  host: string;
+  cover: { src: ImageMetadata; alt: string };
+  back: { src: ImageMetadata; alt: string }[];
+}
+const { href, title, host, cover, back } = Astro.props;
+---
+<div class="iso" data-iso>
+  <div class="plane">
+    {back.slice(0, 2).reverse().map((b, i) => (
+      <div class:list={['layer', `b${back.slice(0, 2).length - i}`]} aria-hidden="true">
+        <Shot src={b.src} alt="" host={host} sizes="(max-width: 900px) 90vw, 50vw" />
+      </div>
+    ))}
+    <a class="layer front" href={href} aria-label={`${title} case study`}>
+      <Shot src={cover.src} alt={cover.alt} host={host} sizes="(max-width: 900px) 90vw, 50vw" />
+    </a>
+  </div>
+</div>
+
+<script>
+  const isos = [...document.querySelectorAll<HTMLElement>('[data-iso]')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const wide = matchMedia('(min-width: 901px)');
+  const ease = (x: number) => 1 - Math.pow(1 - x, 3);
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    for (const el of isos) {
+      if (reduce.matches || !wide.matches) { el.style.setProperty('--p', '1'); continue; }
+      const r = el.getBoundingClientRect();
+      // 0 while the stack enters at the bottom, 1 once its middle reaches the middle of the screen.
+      const raw = (innerHeight - r.top) / (innerHeight * 0.5 + r.height * 0.5);
+      el.style.setProperty('--p', ease(Math.min(1, Math.max(0, raw))).toFixed(4));
+    }
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+</script>
+
+<style>
+  .iso { --p: 1; perspective: 2400px; }
+  .plane {
+    --q: calc(1 - var(--p));
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(calc(var(--q) * 52deg)) rotateZ(calc(var(--q) * -38deg)) scale(calc(0.86 + var(--p) * 0.14));
+  }
+  .layer { display: block; transform-style: preserve-3d; }
+  .front { position: relative; transform: translateZ(calc(var(--q) * 120px)); }
+  .b1, .b2 { position: absolute; inset: 0; }
+  /* Exploded below the front card while tilted; fanned slightly behind it once flat. */
+  .b1 { transform: translateZ(calc(var(--q) * 20px)) translate(calc(var(--p) * 3.5%), calc(var(--p) * 5%)); opacity: calc(0.55 + var(--q) * 0.45); }
+  .b2 { transform: translateZ(calc(var(--q) * -80px)) translate(calc(var(--p) * 7%), calc(var(--p) * 10%)); opacity: calc(0.3 + var(--q) * 0.7); }
+  @media (max-width: 900px) {
+    .b1, .b2 { display: none; }
+    .plane, .front { transform: none; }
+  }
+</style>

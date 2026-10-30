@@ -1,0 +1,86 @@
+---
+// Contact footer: a triangle of links rising from the bottom edge, with the
+// back-to-top button at its centre. Only real destinations appear here.
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+---
+<nav class="pyramid" aria-label="Elsewhere" data-pyramid>
+  <div class="tri" aria-hidden="true"></div>
+  <ul class="rows">
+    <li class="r1">
+      <a href={site.linkedin} rel="me"><Icon name="linkedin" size={26} /><span>LinkedIn</span></a>
+    </li>
+    <li class="r2">
+      <a href={site.github} rel="me"><Icon name="github" size={26} /><span>GitHub</span></a>
+      <button type="button" class="top" data-top aria-label="Back to top"><Icon name="arrow-up" size={22} /></button>
+      <a href={`mailto:${site.email}`}><Icon name="mail" size={26} /><span>Email</span></a>
+    </li>
+    <li class="r3">
+      <a href="/projects"><Icon name="grid" size={24} /><span>Case studies</span></a>
+      <a href="/blog"><Icon name="pen" size={24} /><span>Writing</span></a>
+      {site.cv ? <a href={site.cv}><Icon name="doc" size={24} /><span>CV</span></a> : <a href="/about"><Icon name="doc" size={24} /><span>About</span></a>}
+    </li>
+  </ul>
+  <p class="legal">© {new Date().getFullYear()} {site.name}</p>
+</nav>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelector('[data-top]')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    document.querySelector<HTMLElement>('.mono')?.focus({ preventScroll: true });
+  });
+</script>
+
+<style>
+  .pyramid { position: relative; width: 100%; height: clamp(280px, 40vh, 380px); margin-top: auto; flex-shrink: 0; overflow: hidden; }
+  .tri {
+    position: absolute; inset: 0;
+    background: var(--surface);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    transform: translateY(100%);
+    transition: transform 1100ms var(--ease-out);
+  }
+  .pyramid.in .tri, :global(html:not(.js)) .tri { transform: none; }
+  .rows { position: absolute; inset: 0; display: grid; grid-template-rows: 1fr 1fr 1fr; padding: clamp(2.25rem, 6vh, 3.5rem) 0 2.75rem; }
+  .rows li { display: flex; justify-content: center; align-items: center; }
+  .r2 { gap: clamp(3rem, 14vw, 13rem); }
+  .r3 { gap: clamp(4rem, 26vw, 26rem); }
+  .rows a, .top {
+    display: grid; justify-items: center; gap: 0.4rem;
+    color: var(--ink); text-decoration: none; font-size: var(--step-small);
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 500ms ease, transform 600ms var(--ease-out), color 200ms ease;
+  }
+  .pyramid.in .rows a, .pyramid.in .top, :global(html:not(.js)) .rows a, :global(html:not(.js)) .top { opacity: 1; transform: none; }
+  .pyramid.in .r1 a { transition-delay: 500ms; }
+  .pyramid.in .r2 > * { transition-delay: 650ms; }
+  .pyramid.in .r3 a { transition-delay: 800ms; }
+  .rows a span { color: var(--muted); transition: color 200ms ease; }
+  .rows a:hover { color: var(--accent); }
+  .rows a:hover span { color: var(--ink); }
+  .rows a :global(svg) { transition: transform 300ms var(--ease-out); }
+  .rows a:hover :global(svg) { transform: translateY(-3px); }
+  .top {
+    all: unset; box-sizing: border-box; cursor: pointer;
+    width: 56px; height: 56px; border-radius: 50%;
+    display: grid; place-items: center; color: var(--ink);
+    box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.4); /* taste-skill-ignore */
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 500ms ease, transform 600ms var(--ease-out), box-shadow 200ms ease, background-color 200ms ease;
+  }
+  .top:hover { background: var(--accent); color: var(--accent-ink); box-shadow: none; } /* taste-skill-ignore */
+  .top:active { transform: scale(0.94); }
+  .top:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .legal { position: absolute; left: 0; right: 0; bottom: 1rem; text-align: center; font-size: 0.8125rem; color: var(--muted); }
+
+  @media (max-width: 600px) {
+    .rows a span { display: none; }
+    .r2 { gap: 3.25rem; }
+    .r3 { gap: 5.5rem; }
+    .rows { padding-bottom: 2.75rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tri, .rows a, .top { transition: none; transform: none; opacity: 1; }
+  }
+</style>

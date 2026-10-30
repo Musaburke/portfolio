@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((p) => ({ params: { slug: p.id }, props: { p } }));
+}
+const { p } = Astro.props;
+const { Content } = await render(p);
+const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: p.data.title,
+  description: p.data.description,
+  datePublished: p.data.pubDate.toISOString(),
+  author: { '@type': 'Person', name: site.name, url: Astro.site?.toString() },
+};
+---
+<Base title={p.data.title} description={p.data.description} jsonLd={jsonLd}>
+  <article class="frame post">
+    <p class="back"><a class="link muted" href="/blog">All writing</a></p>
+    <h1>{p.data.title}</h1>
+    <time class="muted" datetime={p.data.pubDate.toISOString()}>{fmt.format(p.data.pubDate)}</time>
+    <div class="prose"><Content /></div>
+  </article>
+</Base>
+
+<style>
+  .post { padding-top: 4rem; max-width: 52rem; }
+  .back { font-size: var(--step-small); margin-bottom: 2rem; }
+  h1 { font-size: var(--step-head); }
+  time { display: block; margin: 1.5rem 0 3rem; font-size: var(--step-small); }
+</style>

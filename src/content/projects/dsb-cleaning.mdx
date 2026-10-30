@@ -1,0 +1,43 @@
+---
+title: DSB Commercial Cleaning
+summary: A fast, secure website for a London-area cleaning company, live on its own domain.
+year: '2026'
+role: Design, build and launch. Sole developer. # TODO(musa): confirm
+stack: [Astro, TypeScript, Tailwind CSS, React, Cloudflare]
+order: 1
+live: https://dsbcommercialcleaning.co.uk
+host: dsbcommercialcleaning.co.uk
+slab: '#2b2414'
+cover: ../../assets/projects/dsb-home-desktop.jpg
+coverAlt: DSB Commercial Cleaning home page, black and gold, with a close-up of a freshly cleaned carpet.
+gallery:
+  - src: ../../assets/projects/dsb-areas-desktop.jpg
+    alt: Areas page with a gold outline map of the five counties the company covers.
+  - src: ../../assets/projects/dsb-services-desktop.jpg
+    alt: Services page with before-and-after photos of a carpet and an upholstered chair.
+  - src: ../../assets/projects/dsb-security-headers.jpg
+    alt: The site's security headers file, including the Content Security Policy.
+---
+
+## The brief
+
+A carpet, upholstery and kitchen extract cleaning company needed a site that gets people to call, WhatsApp or ask for a quote. It covers London, Buckinghamshire, Berkshire, Hertfordshire and Oxfordshire. {/* TODO(musa): how did the client find you, and what did they have before? */}
+
+## What I built
+
+- One services page built from Markdown files, so a new service is a new file.
+- A coverage map drawn from ONS county boundaries. Picking an area shows a card with Call and a WhatsApp message that names the area.
+- A gallery with before-and-after pairs, and a reviews page with every review copied word for word.
+- A quote form with a honeypot, a time trap, length limits and a retry cooldown.
+
+## Security
+
+The site ships an enforced Content Security Policy. Astro writes a hashed CSP `<meta>` into every page, and Cloudflare serves security headers from `public/_headers`. Only Astro's own inline scripts can run.
+
+## Launch
+
+Live on Cloudflare since 26 October 2026, with a business email, DMARC, Search Console and a Google Business Profile link.
+
+## What I'd do next
+
+TODO(musa): one honest paragraph. What would you change, and what did you learn?

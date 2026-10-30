@@ -1,0 +1,30 @@
+---
+import Pyramid from './Pyramid.astro';
+import { site } from '../data/site';
+---
+<section id="contact" class="contact" aria-labelledby="contact-title">
+  <div class="frame center">
+    <div class="card glass" data-reveal>
+      <h2 id="contact-title" data-split>Let's build something</h2>
+      <p class="lead">Looking for {site.openTo.toLowerCase()}. Happy to talk about front-end work or web security.</p>
+      <p class="actions">
+        <a class="btn" href={`mailto:${site.email}?subject=Hello%20Musa`}>Email me</a>
+        <a class="link" href={site.linkedin} rel="me">LinkedIn</a>
+      </p>
+    </div>
+  </div>
+  <Pyramid />
+</section>
+
+<style>
+  .contact { min-height: 100svh; display: flex; flex-direction: column; padding-top: clamp(5rem, 10vh, 7rem); }
+  .center { flex: 1; display: grid; place-items: center; padding-bottom: 2rem; }
+  .card {
+    width: min(100%, 44rem); border-radius: 20px;
+    padding: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+  }
+  h2 { font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.25rem); line-height: 1; letter-spacing: -0.04em; }
+  .lead { margin: 1.5rem auto 0; max-width: 30rem; font-size: var(--step-lead); line-height: 1.35; }
+  .actions { margin-top: 2.25rem; display: flex; justify-content: center; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
+</style>

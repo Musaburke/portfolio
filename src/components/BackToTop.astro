@@ -1,0 +1,62 @@
+---
+import Icon from './Icon.astro';
+---
+<button class="totop" type="button" aria-label="Back to top" data-totop tabindex="-1">
+  <svg class="progress" viewBox="0 0 52 52" aria-hidden="true">
+    <circle cx="26" cy="26" r="24" class="track" />
+    <circle cx="26" cy="26" r="24" class="fill" pathLength="1" data-ring />
+  </svg>
+  <Icon name="arrow-up" size={20} />
+</button>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-totop]')!;
+  const ring = btn.querySelector<SVGCircleElement>('[data-ring]')!;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pyramidVisible = false;
+
+  const update = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const p = max > 0 ? scrollY / max : 0;
+    ring.style.strokeDashoffset = String(1 - p);
+    const show = scrollY > innerHeight * 0.8 && !pyramidVisible;
+    btn.classList.toggle('show', show);
+    btn.tabIndex = show ? 0 : -1;
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+
+  // On the home page the pyramid has its own back-to-top, so hide this one there.
+  const pyramid = document.querySelector('[data-pyramid]');
+  if (pyramid) {
+    new IntersectionObserver(([e]) => { pyramidVisible = e.isIntersecting; update(); }).observe(pyramid);
+  }
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    document.querySelector<HTMLElement>('.mono')?.focus({ preventScroll: true });
+  });
+</script>
+
+<style>
+  .totop {
+    all: unset; box-sizing: border-box; cursor: pointer;
+    position: fixed; right: var(--margin); bottom: var(--margin); z-index: 30;
+    width: 52px; height: 52px; border-radius: 50%;
+    display: grid; place-items: center; color: var(--ink);
+    background: rgb(30 30 30 / 0.85);
+    opacity: 0; transform: translateY(16px) scale(0.9); pointer-events: none;
+    transition: opacity 300ms ease, transform 400ms var(--ease-out);
+  }
+  .totop.show { opacity: 1; transform: none; pointer-events: auto; }
+  .totop:hover :global(svg:not(.progress)) { transform: translateY(-3px); }
+  .totop :global(svg:not(.progress)) { transition: transform 300ms var(--ease-out); }
+  .totop:active { transform: scale(0.94); }
+  .totop:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .progress { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .progress circle { fill: none; stroke-width: 1.5; }
+  .track { stroke: rgb(255 255 255 / 0.12); }
+  .fill { stroke: var(--accent); stroke-dasharray: 1; stroke-dashoffset: 1; stroke-linecap: round; }
+  @media (prefers-reduced-motion: reduce) { .totop { transition: none; } }
+</style>

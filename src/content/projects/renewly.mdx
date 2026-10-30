@@ -1,0 +1,39 @@
+---
+title: Renewly
+summary: A shared dashboard that tells small teams the last day they can safely cancel each paid tool, before it auto-renews.
+year: '2026'
+role: TODO(musa) your role on the team
+stack: [Next.js, TypeScript, Supabase, TanStack Query, Tailwind CSS]
+order: 2
+repo: https://github.com/srahman14/renewly
+host: Renewly · sample data
+slab: '#1e2a45'
+cover: ../../assets/projects/renewly-dashboard.jpg
+coverAlt: Renewly dashboard with sample data. Seven tracked contracts, £899 monthly spend, and the three closest last-safe-cancel dates.
+gallery:
+  - src: ../../assets/projects/renewly-renewals.jpg
+    alt: Renewals page with sample data. Contracts whose notice window opens within 14 days, each with its last safe cancel date.
+  - src: ../../assets/projects/renewly-landing.jpg
+    alt: "Renewly landing page: The date that matters isn't your renewal date."
+---
+
+## The problem
+
+Small teams pay for many tools, and contracts don't just "renew on a date". They say things like "auto-renews annually unless cancelled 60 days before". The date that costs money is the last day you're allowed to cancel, and nobody owns it.
+
+## What Renewly does
+
+Renewly works out a **last-safe-cancel date** from each contract's renewal date and notice rule, including month-end dates and leap years. Around that: one shared list of every tool with its cost, owner and team, a renewals view of what needs a decision soon, spend analytics, and alerts before each window closes.
+
+## How it's built
+
+- Next.js App Router and TypeScript.
+- Supabase for Postgres, auth and Row Level Security. Every contract is scoped to its organisation at the database level, not only hidden in the UI.
+- TanStack Query for server state with optimistic updates; Zustand only for the session.
+- Team invites by email (Resend), with role checks enforced in the database.
+
+## My part
+
+TODO(musa): what you built (screens, data model, the date maths, invites?), who you built it with, and one decision you're proud of.
+
+{/* Screenshots on this site were taken from a local copy running on sample data. */}

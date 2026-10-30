@@ -1,0 +1,34 @@
+---
+// Small inline icons. GitHub comes from simple-icons at build time (no client cost);
+// LinkedIn is not in simple-icons, so it is a plain "in" glyph.
+import { siGithub } from 'simple-icons';
+interface Props { name: 'github' | 'linkedin' | 'mail' | 'arrow-up' | 'arrow-down' | 'doc' | 'pen' | 'grid'; size?: number }
+const { name, size = 22 } = Astro.props;
+---
+{name === 'github' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d={siGithub.path} /></svg>
+)}
+{name === 'linkedin' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="1.5" y="1.5" width="21" height="21" rx="3.5" fill="currentColor" />
+    <text x="12" y="17.2" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="13" fill="var(--bg, #1c1c1c)">in</text>
+  </svg>
+)}
+{name === 'mail' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3.5 6.5 8.5 6.5 8.5-6.5" /></svg>
+)}
+{name === 'arrow-up' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg>
+)}
+{name === 'arrow-down' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5.5 12.5 12 19l6.5-6.5" /></svg>
+)}
+{name === 'doc' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></svg>
+)}
+{name === 'pen' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z" /><path d="m13.5 6.5 4 4" /></svg>
+)}
+{name === 'grid' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><rect x="13" y="13" width="7" height="7" rx="1.5" /></svg>
+)}
