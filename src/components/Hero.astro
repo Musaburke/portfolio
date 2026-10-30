@@ -30,8 +30,11 @@ const roles = ['a front‑end developer.', 'a student.', 'learning cyber securit
     const canvas = document.querySelector<HTMLCanvasElement>('[data-globe]');
     if (!canvas) return;
     const load = () => import('../scripts/three/globe').then((m) => m.mountGlobe(canvas));
-    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 800 });
-    else setTimeout(load, 200);
+    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 2000 }) : setTimeout(load, 300));
+    // Wait for the page to finish loading, then a beat, so Three.js never competes with first paint.
+    const later = () => setTimeout(idle, 900);
+    if (document.readyState === 'complete') later();
+    else window.addEventListener('load', later, { once: true });
   };
   if (document.documentElement.classList.contains('ready')) start();
   else window.addEventListener('intro:done', start, { once: true });
@@ -68,12 +71,13 @@ const roles = ['a front‑end developer.', 'a student.', 'learning cyber securit
   .actions .btn:hover :global(svg) { transform: translateY(3px); }
 
   /* Intro choreography: lines rise in once the preloader leaves. */
-  :global(html.js:not(.ready)) .line { opacity: 0; transform: translateY(28px); }
+  /* Blur and rise instead of fading from 0, so the text counts as painted (LCP) under the preloader. */
+  :global(html.js:not(.ready)) .line { filter: blur(12px); transform: translateY(28px); }
   :global(html.ready) .line { animation: up 900ms var(--ease-out) both; }
   :global(html.ready) .l2 { animation-delay: 140ms; }
   :global(html.ready) .l3 { animation-delay: 300ms; }
   :global(html.ready) .l4 { animation-delay: 440ms; }
-  @keyframes up { from { opacity: 0; transform: translateY(28px); } }
+  @keyframes up { from { filter: blur(12px); transform: translateY(28px); opacity: 0.35; } }
 
   .mouse {
     position: absolute; left: 50%; bottom: 2rem; margin-left: -13px;

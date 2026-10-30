@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* Clash Grotesk (Fontshare, free licence), self-hosted so it never blocks first paint. */
+@font-face { font-family: 'Clash Grotesk'; src: url('/fonts/clash-grotesk-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Clash Grotesk'; src: url('/fonts/clash-grotesk-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+
 /* Direction: "The dark room" (tasteskill, seed 1513686349).
    One charcoal field, work shown as lit exhibits. Tokens only below this block. */
 :root {
@@ -7,8 +11,8 @@
   --surface: #262626;
   --surface-2: #303030;
   --ink: #f1f1ef;
-  --muted: #a3a49f;
-  --accent: #8fa68e;
+  --muted: #b4b5af;
+  --accent: #9fd09c; /* brighter sage-mint so actions and highlights pop */
   --accent-ink: #1c1c1c;
   --field-1: #c8c5ba;
   --field-1-ink: #1c1c1c;

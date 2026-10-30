@@ -72,10 +72,10 @@ import { site } from '../data/site';
   .top:hover { background: var(--accent); color: var(--accent-ink); box-shadow: none; } /* taste-skill-ignore */
   .top:active { transform: scale(0.94); }
   .top:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .legal { position: absolute; left: 0; right: 0; bottom: 1rem; text-align: center; font-size: 0.8125rem; color: var(--muted); }
+  .legal { position: absolute; left: 0; right: 0; bottom: 1rem; text-align: center; font-size: 0.875rem; color: var(--muted); }
 
   @media (max-width: 600px) {
-    .rows a span { display: none; }
+    .rows a span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     .r2 { gap: 3.25rem; }
     .r3 { gap: 5.5rem; }
     .rows { padding-bottom: 2.75rem; }

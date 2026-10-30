@@ -5,7 +5,7 @@
 - A screenshot: a live URL, a repo that runs locally, or an image from Musa.
 
 ## Steps
-1. Screenshot at 1440x900: `node tools/screenshot.mjs <url> <name> --out .tmp/j`, then
+1. Screenshot at 1440x900: `node tools/screenshot.mjs <url> <name> --hd --png --out .tmp/j`, then
    `sips -s format jpeg -s formatOptions 82 .tmp/j/<name>-desktop.png --out src/assets/journey/<name>.jpg`.
    App needs a server? Clone into `.tmp/<name>` (gitignored), run it there, capture, stop the servers. Use absolute paths: the shell's working directory can change between commands.
    No screenshot possible? Use `missingShot` from `src/data/journey.ts` and say so in `alt`.
