@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+// Screenshot a page at desktop (1440) and mobile (390) widths.
+// Usage:
+//   node tools/screenshot.mjs <path-or-url> [label] [--full] [--out <dir>]
+//   node tools/screenshot.mjs /about            -> http://localhost:4321/about
+//   node tools/screenshot.mjs https://site.com  -> any URL
+// Output: .tmp/shots/<label>-desktop.png and <label>-mobile.png (overwritten each run).
+// Needs Google Chrome installed (uses playwright-core with channel "chrome", no browser download).
+import { chromium } from 'playwright-core';
+import { mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+const args = process.argv.slice(2);
+const full = args.includes('--full');
+const outIdx = args.indexOf('--out');
+const outDir = outIdx > -1 ? args[outIdx + 1] : '.tmp/shots';
+const positional = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--out');
+const target = positional[0] ?? '/';
+const base = process.env.BASE_URL ?? 'http://localhost:4321';
+const url = /^(https?|file):\/\//.test(target) ? target : base + (target.startsWith('/') ? target : '/' + target);
+const label = positional[1] ?? (target.replace(/^https?:\/\//, '').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'home');
+
+const viewports = [
+  { name: 'desktop', width: 1440, height: 900 },
+  { name: 'mobile', width: 390, height: 844 },
+];
+
+mkdirSync(outDir, { recursive: true });
+const browser = await chromium.launch({ channel: 'chrome' });
+try {
+  for (const vp of viewports) {
+    const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 2 });
+    await page.goto(url, { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
+    if (full) {
+      // Scroll through the page so lazy images load and scroll reveals fire, then return to top.
+      await page.evaluate(async () => {
+        for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight / 2) {
+          window.scrollTo(0, y);
+          await new Promise((r) => setTimeout(r, 120));
+        }
+        window.scrollTo(0, 0);
+      });
+      // Wait for every image (dev server transforms images on first request).
+      await page.evaluate(() =>
+        Promise.all([...document.images].map((img) => img.complete ? 0 : new Promise((r) => { img.onload = img.onerror = r; })))
+      );
+      await page.waitForTimeout(900);
+    }
+    const file = join(outDir, `${label}-${vp.name}.png`);
+    await page.screenshot({ path: file, fullPage: full });
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+    console.log(`${file}${overflow ? '  WARN: horizontal overflow' : ''}`);
+    await page.close();
+  }
+} finally {
+  await browser.close();
+}

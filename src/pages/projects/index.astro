@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Shot from '../../components/Shot.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Work" description="Case studies of websites and apps built by Musa Burke.">
+  <section class="frame head" data-reveal>
+    <h1>Work</h1>
+    <p class="lead">Two projects, written up properly: the brief, what I built, and what I'd change.</p>
+  </section>
+  <ul class="frame list">
+    {projects.map((p, i) => (
+      <li class:list={['proj', { flip: i % 2 === 1 }]}>
+        <a class="pic" href={`/projects/${p.id}`} tabindex="-1" aria-hidden="true" data-reveal>
+          <Shot src={p.data.cover} alt="" host={p.data.host} sizes="(max-width: 900px) 100vw, 58vw" eager={i === 0} />
+        </a>
+        <div class="text" data-reveal>
+          <h2><a href={`/projects/${p.id}`}>{p.data.title}</a></h2>
+          <p>{p.data.summary}</p>
+          <p class="muted meta">{p.data.year} · {p.data.stack.join(' · ')}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</Base>
+
+<style>
+  .head { padding-top: 4rem; }
+  h1 { font-size: var(--step-head); }
+  .lead { margin-top: 1.5rem; max-width: 40ch; font-size: var(--step-lead); line-height: 1.3; }
+  .list { display: grid; gap: clamp(6rem, 12vw, 9rem); margin-top: 5rem; }
+  .proj { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1rem, 2vw, 2rem); align-items: center; }
+  .pic { grid-column: 1 / 8; display: block; }
+  .text { grid-column: 9 / 13; display: grid; gap: 1rem; }
+  .flip .pic { grid-column: 6 / 13; grid-row: 1; }
+  .flip .text { grid-column: 1 / 5; grid-row: 1; }
+  h2 { font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem); }
+  h2 a { text-decoration: none; transition: color 180ms ease; }
+  h2 a:hover { color: var(--accent); }
+  .meta { font-size: var(--step-small); }
+  @media (max-width: 900px) {
+    .proj { display: block; }
+    .text { margin-top: 1.75rem; }
+  }
+</style>

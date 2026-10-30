@@ -1,0 +1,176 @@
+@import 'tailwindcss';
+
+/* Direction: "The dark room" (tasteskill, seed 1513686349).
+   One charcoal field, work shown as lit exhibits. Tokens only below this block. */
+:root {
+  --bg: #1c1c1c;
+  --surface: #262626;
+  --surface-2: #303030;
+  --ink: #f1f1ef;
+  --muted: #a3a49f;
+  --accent: #8fa68e;
+  --accent-ink: #1c1c1c;
+  --field-1: #c8c5ba;
+  --field-1-ink: #1c1c1c;
+
+  --font: 'Clash Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --step-hero: clamp(2.25rem, 1.2rem + 3.4vw, 3.5rem);
+
+  --margin: clamp(1rem, 0.4rem + 2.4vw, 2rem);
+  --max: 90rem;
+  --section: clamp(7.5rem, 5rem + 8vw, 13rem);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --radius: 0;
+  --btn-radius: 999px;
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 100%;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 0; /* full-screen sections carry their own top padding */
+  }
+  body {
+    background: transparent; /* the starfield canvas sits between html and body content */
+    font-size: var(--step-body);
+    line-height: 1.55;
+    min-height: 100svh;
+  }
+  h1, h2, h3 {
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; height: auto; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+}
+
+/* Layout helpers */
+.frame {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+}
+.muted { color: var(--muted); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Controls */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: 3rem; padding: 0 1.5rem;
+  border-radius: var(--btn-radius);
+  background: var(--accent); color: var(--accent-ink);
+  font-weight: 500; text-decoration: none;
+  transition: transform 140ms var(--ease-out), background-color 180ms ease;
+}
+.btn:hover { background: #a2b8a1; }
+.btn:active { transform: scale(0.97); }
+
+.link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: text-decoration-color 180ms ease, color 180ms ease;
+}
+.link:hover { text-decoration-color: currentColor; }
+
+/* Entrances: content is visible without JS; .js enables the travel */
+.js [data-reveal] > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+}
+.js [data-reveal].in > * { opacity: 1; transform: none; }
+.js [data-reveal].in > *:nth-child(2) { transition-delay: 80ms; }
+.js [data-reveal].in > *:nth-child(3) { transition-delay: 160ms; }
+.js [data-reveal].in > *:nth-child(4) { transition-delay: 240ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] > * { opacity: 1; transform: none; transition: none; }
+  * { scroll-behavior: auto !important; }
+}
+
+/* Long-form text (case studies, posts) */
+.prose { max-width: 68ch; }
+.prose h2 { font-size: var(--step-lead); margin: 3.5rem 0 1rem; letter-spacing: -0.02em; }
+.prose p, .prose ul { margin: 0 0 1.25rem; }
+.prose ul { padding-left: 1.2rem; list-style: disc; }
+.prose li { margin-bottom: 0.5rem; }
+.prose li::marker { color: var(--accent); }
+.prose a { text-decoration: underline; text-underline-offset: 0.25em; }
+.prose code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; background: var(--surface); padding: 0.1em 0.35em; }
+
+/* ---- v3: screens, glass, heading wipe, word split ---- */
+:root {
+  --glass-bg: rgb(30 30 30 / 0.55);
+  --glass-ring: rgb(255 255 255 / 0.09);
+  --glass-blur: 18px;
+}
+
+/* Each home section fills the screen and centres its content (free scroll, no snap). */
+.section-screen {
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  padding-block: clamp(5rem, 10vh, 8rem);
+}
+
+/* Glass surface: only the scrolled header, the drawer and the contact card use it. */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  box-shadow: inset 0 0 0 1px var(--glass-ring); /* taste-skill-ignore */
+}
+
+/* Heading with an accent bar that wipes in under its tail. */
+.wipe { position: relative; display: inline-block; isolation: isolate; }
+.wipe::after {
+  content: '';
+  position: absolute; left: 0.4em; bottom: 0.06em;
+  width: 2.4em; height: 0.2em;
+  background: var(--accent);
+  z-index: -1;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 900ms var(--ease-out) 250ms;
+}
+.wipe.in::after, .in .wipe::after { transform: scaleX(1); }
+html:not(.js) .wipe::after { transform: scaleX(1); }
+
+/* Word split reveal: motion.ts wraps each word; words rise in one after another. */
+.js [data-split] .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.js [data-split] .w > span {
+  display: inline-block;
+  transform: translateY(105%);
+  transition: transform 800ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 45ms);
+}
+.js [data-split].in .w > span { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wipe::after { transform: scaleX(1); transition: none; }
+  .js [data-split] .w > span { transform: none; transition: none; }
+}

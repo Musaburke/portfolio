@@ -1,0 +1,196 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+const links = [
+  { href: '/#top', label: 'Home', id: 'top' },
+  { href: '/#work', label: 'Work', id: 'work' },
+  { href: '/#about', label: 'About', id: 'about' },
+  { href: '/#toolkit', label: 'Toolkit', id: 'toolkit' },
+  { href: '/projects', label: 'Case studies', id: 'projects' },
+  { href: '/blog', label: 'Writing', id: 'blog' },
+  { href: '/#contact', label: 'Contact', id: 'contact' },
+];
+const path = Astro.url.pathname;
+const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/blog') ? 'blog' : path === '/about' ? 'about' : path === '/' ? 'top' : '';
+---
+<header class="hdr" data-hdr>
+  <a href="/" class="mono" aria-label={`${site.name}, home`}>
+    <span>M</span><span>B</span>
+  </a>
+  <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Open menu" data-burger>
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="scrim" data-scrim></div>
+<nav id="drawer" class="drawer glass" aria-label="Main" hidden data-drawer>
+  <ol class="links">
+    {links.map((l, i) => (
+      <li style={`--i:${i}`}>
+        <a href={l.href} data-id={l.id} aria-current={l.id === current ? 'page' : undefined}>{l.label}</a>
+      </li>
+    ))}
+  </ol>
+  <div class="foot" style={`--i:${links.length}`}>
+    <a href={site.github} rel="me" aria-label="GitHub"><Icon name="github" /></a>
+    <a href={site.linkedin} rel="me" aria-label="LinkedIn"><Icon name="linkedin" /></a>
+    <a href={`mailto:${site.email}`} aria-label="Email"><Icon name="mail" /></a>
+  </div>
+</nav>
+
+<script>
+  const hdr = document.querySelector<HTMLElement>('[data-hdr]')!;
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]')!;
+  const drawer = document.querySelector<HTMLElement>('[data-drawer]')!;
+  const scrim = document.querySelector<HTMLElement>('[data-scrim]')!;
+  const root = document.documentElement;
+
+  const onScroll = () => hdr.classList.toggle('scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const focusables = () => [burger, ...drawer.querySelectorAll<HTMLElement>('a')];
+  // The drawer is display:none while closed; it is shown a frame before the slide-in
+  // starts and hidden again once the slide-out has finished.
+  let hideTimer = 0;
+  const setOpen = (open: boolean) => {
+    clearTimeout(hideTimer);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open) {
+      drawer.hidden = false;
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('menu-open')));
+      setTimeout(() => drawer.querySelector('a')?.focus({ preventScroll: true }), 250);
+    } else {
+      root.classList.remove('menu-open');
+      hideTimer = window.setTimeout(() => { drawer.hidden = true; }, 650);
+    }
+  };
+  burger.addEventListener('click', () => setOpen(!root.classList.contains('menu-open')));
+  scrim.addEventListener('click', () => setOpen(false));
+  drawer.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setOpen(false); });
+  document.addEventListener('keydown', (e) => {
+    if (!root.classList.contains('menu-open')) return;
+    if (e.key === 'Escape') { setOpen(false); burger.focus(); }
+    if (e.key === 'Tab') {
+      const list = focusables();
+      const i = list.indexOf(document.activeElement as HTMLElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); list[list.length - 1].focus(); }
+      else if (!e.shiftKey && i === list.length - 1) { e.preventDefault(); list[0].focus(); }
+    }
+  });
+
+  // Scroll-spy on the home page: mark the section in view.
+  if (location.pathname === '/') {
+    const links = [...drawer.querySelectorAll<HTMLAnchorElement>('a[data-id]')];
+    const spy = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          for (const a of links) a.toggleAttribute('aria-current', a.dataset.id === e.target.id);
+          links.find((a) => a.dataset.id === e.target.id)?.setAttribute('aria-current', 'page');
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' }
+    );
+    ['top', 'work', 'about', 'toolkit', 'contact'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) spy.observe(el);
+    });
+  }
+</script>
+
+<style>
+  .hdr {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 55;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem var(--margin);
+    transition: background-color 300ms ease, padding 300ms var(--ease-out);
+  }
+  .hdr.scrolled {
+    padding-block: 0.7rem;
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  }
+  :global(html.menu-open) .hdr { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .mono {
+    display: inline-flex; gap: 0.02em;
+    font-size: 1.5rem; font-weight: 500; letter-spacing: 0.02em; text-decoration: none;
+    padding: 0.25rem 0.1rem;
+  }
+  .mono span { display: inline-block; transition: transform 500ms var(--ease-out), color 200ms ease; }
+  .mono:hover span:first-child { transform: translateY(-3px); color: var(--accent); }
+  .mono:hover span:last-child { transform: translateY(3px); }
+  :global(html.js:not(.ready)) .mono span { transform: translateY(-120%); opacity: 0; }
+  :global(html.ready) .mono span { animation: drop 700ms var(--ease-out) both; }
+  :global(html.ready) .mono span:last-child { animation-delay: 90ms; }
+  @keyframes drop { from { transform: translateY(-120%); opacity: 0; } }
+
+  .burger {
+    all: unset; cursor: pointer; position: relative; z-index: 60;
+    width: 44px; height: 44px; display: grid; place-content: center; gap: 6px;
+    border-radius: 50%;
+  }
+  .burger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .burger span {
+    display: block; width: 26px; height: 1.5px; background: var(--ink);
+    transition: transform 400ms var(--ease-out), opacity 200ms ease, width 300ms var(--ease-out);
+  }
+  .burger span:nth-child(2) { width: 18px; justify-self: end; }
+  .burger:hover span:nth-child(2) { width: 26px; }
+  :global(html.menu-open) .burger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+  :global(html.menu-open) .burger span:nth-child(2) { opacity: 0; }
+  :global(html.menu-open) .burger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+  .scrim {
+    position: fixed; inset: 0; z-index: 45; background: rgb(10 10 10 / 0.45);
+    opacity: 0; pointer-events: none; transition: opacity 400ms ease;
+  }
+  :global(html.menu-open) .scrim { opacity: 1; pointer-events: auto; }
+
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 50;
+    width: min(380px, 86vw);
+    padding: 6.5rem 2.5rem 2.5rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transform: translateX(100%);
+    transition: transform 600ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  .drawer[hidden] { display: none; }
+  :global(html.menu-open) .drawer { transform: none; }
+  .links { display: grid; gap: 0.35rem; }
+  .links li, .foot {
+    opacity: 0; transform: translateX(40px);
+    transition: opacity 400ms ease, transform 600ms var(--ease-out);
+  }
+  :global(html.menu-open) .links li, :global(html.menu-open) .foot {
+    opacity: 1; transform: none;
+    transition-delay: calc(220ms + var(--i) * 70ms);
+  }
+  .links a {
+    position: relative; display: inline-block;
+    padding: 0.45rem 0 0.45rem 2.2rem;
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); letter-spacing: -0.02em;
+    text-decoration: none; color: var(--muted);
+    transition: color 200ms ease, transform 300ms var(--ease-out);
+  }
+  .links a::before {
+    content: ''; position: absolute; left: 0; top: 50%;
+    width: 1.5rem; height: 1.5px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left; transition: transform 400ms var(--ease-out);
+  }
+  .links a:hover { color: var(--ink); transform: translateX(4px); }
+  .links a[aria-current] { color: var(--ink); }
+  .links a[aria-current]::before { transform: scaleX(1); }
+  .foot { display: flex; gap: 1.25rem; }
+  .foot a { color: var(--muted); transition: color 200ms ease, transform 200ms var(--ease-out); padding: 0.4rem; margin: -0.4rem; }
+  .foot a:hover { color: var(--ink); transform: translateY(-2px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .drawer, .links li, .foot, .scrim { transition: none; }
+    .links li, .foot { opacity: 1; transform: none; }
+    :global(html.ready) .mono span { animation: none; }
+  }
+</style>

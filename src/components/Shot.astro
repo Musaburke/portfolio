@@ -1,0 +1,65 @@
+---
+// Every project image goes through this frame: a browser window at one fixed ratio.
+// Captures are 1440x900, so the default 16/10 shows them whole with no crop.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  host: string;
+  sizes: string;
+  eager?: boolean;
+  class?: string;
+}
+const { src, alt, host, sizes, eager = false, class: cls } = Astro.props;
+---
+<figure class:list={['shot', cls]} data-ui>
+  <div class="bar" aria-hidden="true">
+    <span class="dots"><i></i><i></i><i></i></span>
+    <span class="host">{host}</span>
+  </div>
+  <div class="view">
+    <Image src={src} alt={alt} widths={[480, 720, 960, 1440, 2160]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} />
+  </div>
+</figure>
+
+<style>
+  .shot {
+    margin: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #141414;
+    /* Window frame: ring + lift so screenshots read as objects on the starfield. */
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.09), 0 30px 60px -30px rgb(0 0 0 / 0.8); /* taste-skill-ignore */
+    transition: transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out);
+  }
+  .bar {
+    height: 28px;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    padding: 0 12px;
+    background: #222;
+  }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 9px; height: 9px; border-radius: 50%; background: #3a3a3a; }
+  .host { font-size: 11px; color: #8d8e89; letter-spacing: 0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40ch; }
+  .view { aspect-ratio: 16 / 10; overflow: hidden; }
+  .view :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+  :global(a:hover) > .shot,
+  :global(a:focus-visible) > .shot {
+    transform: translateY(-6px);
+    box-shadow: 0 0 0 1px rgb(143 166 142 / 0.45), 0 40px 80px -30px rgb(0 0 0 / 0.9); /* taste-skill-ignore */
+  }
+  :global(a:active) > .shot { transform: translateY(-2px) scale(0.99); }
+
+  @media (max-width: 600px) {
+    .bar { height: 22px; padding: 0 9px; }
+    .dots i { width: 7px; height: 7px; }
+    .host { font-size: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shot { transition: none; }
+    :global(a:hover) > .shot { transform: none; }
+  }
+</style>

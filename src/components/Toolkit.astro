@@ -1,0 +1,100 @@
+---
+import Shot from './Shot.astro';
+import dsbHome from '../assets/projects/dsb-home-desktop.jpg';
+import dsbServices from '../assets/projects/dsb-services-desktop.jpg';
+import dsbAreas from '../assets/projects/dsb-areas-desktop.jpg';
+import renewlyDashboard from '../assets/projects/renewly-dashboard.jpg';
+import renewlyRenewals from '../assets/projects/renewly-renewals.jpg';
+import security from '../assets/projects/dsb-security-headers.jpg';
+import { toolkit, type Shot as ShotKey } from '../data/toolkit';
+
+const shots: Record<ShotKey, { src: ImageMetadata; host: string }> = {
+  dsbHome: { src: dsbHome, host: 'dsbcommercialcleaning.co.uk' },
+  dsbServices: { src: dsbServices, host: 'dsbcommercialcleaning.co.uk/services' },
+  dsbAreas: { src: dsbAreas, host: 'dsbcommercialcleaning.co.uk/areas' },
+  renewlyDashboard: { src: renewlyDashboard, host: 'Renewly · sample data' },
+  renewlyRenewals: { src: renewlyRenewals, host: 'Renewly · sample data' },
+  security: { src: security, host: 'public/_headers' },
+};
+const used = [...new Set(toolkit.map((t) => t.shot))];
+const first = toolkit[0].shot;
+---
+<section id="toolkit" class="frame kit section-screen" aria-labelledby="kit-title">
+  <div class="stage" aria-hidden="true">
+    {used.map((key) => (
+      <div class:list={['slot', { on: key === first }]} data-shot={key}>
+        <Shot src={shots[key].src} alt="" host={shots[key].host} sizes="(max-width: 900px) 100vw, 55vw" />
+      </div>
+    ))}
+  </div>
+
+  <div class="list">
+    <h2 id="kit-title" class="wipe" data-split>What I work with</h2>
+    <ul>
+      {toolkit.map((t, i) => (
+        <li class:list={['row', { active: i === 0 }]} data-shot={t.shot}>
+          <button type="button" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`kit-${i}`}>
+            <span class="tool">{t.name}</span>
+            <span class="used">{t.usedIn}</span>
+          </button>
+          <p id={`kit-${i}`} class="detail">{t.detail}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  const kit = document.getElementById('toolkit');
+  if (kit) {
+    const rows = [...kit.querySelectorAll<HTMLLIElement>('.row')];
+    const slots = [...kit.querySelectorAll<HTMLElement>('.slot')];
+    const activate = (row: HTMLLIElement) => {
+      for (const r of rows) {
+        const on = r === row;
+        r.classList.toggle('active', on);
+        r.querySelector('button')?.setAttribute('aria-expanded', String(on));
+      }
+      for (const s of slots) s.classList.toggle('on', s.dataset.shot === row.dataset.shot);
+    };
+    for (const row of rows) {
+      row.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') activate(row); });
+      row.querySelector('button')?.addEventListener('click', () => activate(row));
+      row.querySelector('button')?.addEventListener('focus', () => activate(row));
+    }
+  }
+</script>
+
+<style>
+  .kit {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2vw, 2rem);
+    align-items: center;
+  }
+  .stage { grid-column: 1 / 8; position: sticky; top: 16vh; display: grid; }
+  .slot { grid-area: 1 / 1; opacity: 0; transform: scale(0.985); transition: opacity 360ms ease, transform 500ms var(--ease-out); }
+  .slot.on { opacity: 1; transform: none; }
+  .list { grid-column: 9 / 13; }
+  h2 { font-size: var(--step-head); margin-bottom: 2.5rem; }
+  .row { display: block; }
+  button {
+    all: unset; box-sizing: border-box; cursor: pointer;
+    width: 100%; min-height: 58px;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .tool { font-size: clamp(1.25rem, 1rem + 0.8vw, 1.5rem); color: var(--muted); transition: color 180ms ease; letter-spacing: -0.01em; }
+  .used { font-size: 0.9375rem; color: var(--muted); text-align: right; }
+  .row.active .tool { color: var(--ink); }
+  .row.active .used { color: var(--accent); }
+  .detail { max-width: 38ch; font-size: 1rem; display: none; padding-bottom: 1.25rem; }
+  .row.active .detail { display: block; }
+
+  @media (max-width: 900px) {
+    .kit { display: block; }
+    .stage { position: relative; top: auto; }
+    .list { margin-top: 2.5rem; }
+    button { min-height: 56px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slot { transition: none; transform: none; } }
+</style>

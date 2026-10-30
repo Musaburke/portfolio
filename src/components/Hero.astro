@@ -1,0 +1,101 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+const first = site.name.split(' ')[0];
+const roles = ['a front‑end developer.', 'a student.', 'learning cyber security.']; // ‑ = non-breaking hyphen
+---
+<section id="top" class="hero" aria-labelledby="hero-title">
+  <canvas class="globe" data-globe aria-hidden="true"></canvas>
+
+  <div class="frame copy">
+    <h1 id="hero-title" class="line l1">Hello, I'm <span class="name">{first}</span>.</h1>
+    <p class="line l2 big" aria-hidden="true">I'm <span class="role" data-rotator data-words={JSON.stringify(roles)}>{roles[0]}</span><span class="caret"></span></p>
+    <p class="visually-hidden">I'm a front-end developer and student, learning cyber security.</p>
+    <p class="lead line l3">I build fast, accessible websites with Astro, TypeScript and React.</p>
+    <p class="actions line l4">
+      <a class="btn" href="#work">View my work <Icon name="arrow-down" size={18} /></a>
+      <a class="link" href={site.github} rel="me">GitHub</a>
+      <a class="link" href={site.linkedin} rel="me">LinkedIn</a>
+    </p>
+  </div>
+
+  <a class="mouse" href="#work" aria-label="Scroll to work"><span></span></a>
+</section>
+
+<script>
+  import { initRotator } from '../scripts/motion';
+  const start = () => {
+    const rot = document.querySelector<HTMLElement>('[data-rotator]');
+    if (rot) initRotator(rot);
+    const canvas = document.querySelector<HTMLCanvasElement>('[data-globe]');
+    if (!canvas) return;
+    const load = () => import('../scripts/three/globe').then((m) => m.mountGlobe(canvas));
+    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 800 });
+    else setTimeout(load, 200);
+  };
+  if (document.documentElement.classList.contains('ready')) start();
+  else window.addEventListener('intro:done', start, { once: true });
+</script>
+
+<style>
+  .hero {
+    position: relative; min-height: 100svh;
+    display: grid; align-content: center;
+    text-align: center; overflow: hidden;
+  }
+  .globe {
+    position: absolute; left: 50%; top: 50%;
+    width: min(110vh, 120vw); height: min(110vh, 120vw);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0; transition: opacity 1600ms ease 300ms;
+  }
+  :global(html.ready) .globe { opacity: 0.8; }
+  .copy { position: relative; }
+  h1, .big { font-size: clamp(2.5rem, 1.2rem + 4.4vw, 5.25rem); line-height: 1.04; letter-spacing: -0.04em; }
+  .line { display: block; }
+  .name { color: var(--accent); }
+  .role { white-space: nowrap; }
+  .caret {
+    display: inline-block; width: 0.06em; height: 0.85em; margin-left: 0.06em;
+    background: var(--accent); vertical-align: -0.05em;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .lead { margin: 1.75rem auto 0; max-width: 34rem; font-size: var(--step-lead); line-height: 1.35; }
+  .actions { margin-top: 2.25rem; display: flex; justify-content: center; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
+  .actions :global(svg) { transition: transform 300ms var(--ease-out); }
+  .actions .btn:hover :global(svg) { transform: translateY(3px); }
+
+  /* Intro choreography: lines rise in once the preloader leaves. */
+  :global(html.js:not(.ready)) .line { opacity: 0; transform: translateY(28px); }
+  :global(html.ready) .line { animation: up 900ms var(--ease-out) both; }
+  :global(html.ready) .l2 { animation-delay: 140ms; }
+  :global(html.ready) .l3 { animation-delay: 300ms; }
+  :global(html.ready) .l4 { animation-delay: 440ms; }
+  @keyframes up { from { opacity: 0; transform: translateY(28px); } }
+
+  .mouse {
+    position: absolute; left: 50%; bottom: 2rem; margin-left: -13px;
+    width: 26px; height: 42px; border-radius: 14px;
+    box-shadow: inset 0 0 0 1.5px var(--muted); /* taste-skill-ignore */
+    display: flex; justify-content: center;
+    transition: box-shadow 200ms ease;
+  }
+  .mouse:hover { box-shadow: inset 0 0 0 1.5px var(--ink); } /* taste-skill-ignore */
+  .mouse span {
+    width: 3px; height: 8px; border-radius: 2px; margin-top: 8px; background: var(--ink);
+    animation: wheel 1.8s var(--ease-out) infinite;
+  }
+  @keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(12px); opacity: 0; } 100% { opacity: 0; } }
+
+  @media (max-width: 600px) {
+    h1, .big { font-size: 9.6vw; }
+    .role { white-space: normal; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .caret, .mouse span { animation: none; }
+    :global(html.ready) .line { animation: none; }
+    .globe { transition: none; }
+  }
+</style>
