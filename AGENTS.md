@@ -35,7 +35,8 @@ Musa Burke's portfolio. Static site: Astro 7, TypeScript (strict), Tailwind CSS 
 
 v3 flow (from Musa's references: cheryllao.me intro + drawer, benscott.dev hero + full-screen sections, perryolsson.com pyramid + back-to-top):
 preloader (name + gooey liquid blob, once per session) -> hero "Hello, I'm Musa." with typed rotator over the wireframe globe -> Work (one full screen per project: colour slab + isometric stack that flattens on scroll) -> About (liquid orb) -> Toolkit -> Contact (glass card + link pyramid with back-to-top). Free scroll, no snap.
-Section order and ids (`top`, `work`, `about`, `toolkit`, `contact`) are used by the drawer's scroll-spy; keep them in sync with `Header.astro`.
+Journey (`Journey.astro`, data in `src/data/journey.ts`): between Work and About. On wide screens the stage pins and scroll moves the nodes past a fixed centre ring; the active node expands, the skills row grows, and it sets `window.__warp` (0..1) so the starfield streaks before the last node, then `window.__kick` makes the field pulse as the final star ignites. Phones, reduced motion and no-JS get a plain vertical timeline. Add nodes with `workflows/add-journey-node.md`.
+Section order and ids (`top`, `work`, `journey`, `about`, `toolkit`, `contact`) are used by the drawer's scroll-spy; keep them in sync with `Header.astro`.
 
 Original v1 notes:
 
