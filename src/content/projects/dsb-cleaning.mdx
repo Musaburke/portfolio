@@ -2,7 +2,7 @@
 title: DSB Commercial Cleaning
 summary: A fast, secure website for a London-area cleaning company, live on its own domain.
 year: '2026'
-role: Design, build and launch. Sole developer. # TODO(musa): confirm
+role: Design, build and launch. Sole developer.
 stack: [Astro, TypeScript, Tailwind CSS, React, Cloudflare]
 order: 1
 live: https://dsbcommercialcleaning.co.uk
@@ -11,10 +11,14 @@ slab: '#2b2414'
 cover: ../../assets/projects/dsb-home-desktop.jpg
 coverAlt: DSB Commercial Cleaning home page, black and gold, with a close-up of a freshly cleaned carpet.
 gallery:
-  - src: ../../assets/projects/dsb-areas-desktop.jpg
-    alt: Areas page with a gold outline map of the five counties the company covers.
-  - src: ../../assets/projects/dsb-services-desktop.jpg
-    alt: Services page with before-and-after photos of a carpet and an upholstered chair.
+  - src: ../../assets/projects/dsb-areas.jpg
+    alt: Areas page with London picked on a gold outline map of the five counties covered, and a card offering Call and WhatsApp.
+  - src: ../../assets/projects/dsb-reviews.jpg
+    alt: Customer reviews page showing a 5.0 average from 14 rated reviews, above three customer review cards.
+  - src: ../../assets/projects/dsb-carpet.jpg
+    alt: Carpet cleaning section of the services page, with what's included, how it works and a photo of a freshly cleaned carpet.
+  - src: ../../assets/projects/dsb-contact.jpg
+    alt: Contact page with the quote request form on the left, and call, WhatsApp and opening hours on the right.
   - src: ../../assets/projects/dsb-security-headers.jpg
     alt: The site's security headers file, including the Content Security Policy.
 ---
@@ -38,6 +42,10 @@ The site ships an enforced Content Security Policy. Astro writes a hashed CSP `<
 
 Live on Cloudflare since 26 October 2026, with a business email, DMARC, Search Console and a Google Business Profile link.
 
-## What I'd do next
+## What I learned
 
-TODO(musa): one honest paragraph. What would you change, and what did you learn?
+This is where I put everything together. I had a full plan and stuck to it. I asked the client all my questions at once, set up scheduled talks and built prototypes for them to react to.
+
+I also learnt how to use AI properly. I treat it as a co-agent: it helps me build, teaches me as I go and helps me debug when I'm stuck, and I review everything it recommends before it goes in.
+
+It was my first time using Web3Forms, getting my own domain through Namecheap, deploying it and connecting it through Cloudflare, and my first time doing proper security checks, including rate limiting. I also set up a business email address with SPF and DMARC, used a Cloudflare Worker for email routing around launch, and followed UK rules on handling user data.

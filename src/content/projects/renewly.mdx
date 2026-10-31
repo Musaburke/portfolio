@@ -2,19 +2,23 @@
 title: Renewly
 summary: A shared dashboard that tells small teams the last day they can safely cancel each paid tool, before it auto-renews.
 year: '2026'
-role: TODO(musa) your role on the team
+role: Dashboard, design, contract logic, database rules and security. Built with a friend.
 stack: [Next.js, TypeScript, Supabase, TanStack Query, Tailwind CSS]
 order: 2
 repo: https://github.com/srahman14/renewly
 host: Renewly · sample data
 slab: '#1e2a45'
 cover: ../../assets/projects/renewly-dashboard.jpg
-coverAlt: Renewly dashboard with sample data. Seven tracked contracts, £899 monthly spend, and the three closest last-safe-cancel dates.
+coverAlt: Renewly dashboard with sample data. Ten tracked contracts, £1,923 monthly spend, and the three closest last-safe-cancel dates.
 gallery:
   - src: ../../assets/projects/renewly-renewals.jpg
-    alt: Renewals page with sample data. Contracts whose notice window opens within 14 days, each with its last safe cancel date.
-  - src: ../../assets/projects/renewly-landing.jpg
-    alt: "Renewly landing page: The date that matters isn't your renewal date."
+    alt: Renewals page with sample data. Three contracts past their notice window under Act now, each with its last safe cancel date.
+  - src: ../../assets/projects/renewly-members.jpg
+    alt: Members page with sample data. An invented team with an owner, two admins and members, and a form to invite someone with a role.
+  - src: ../../assets/projects/renewly-analytics.jpg
+    alt: Spend analytics with sample data. Spend by category, most expensive contracts and billing cycle mix. The spend by owner chart is empty.
+  - src: ../../assets/projects/renewly-settings.jpg
+    alt: Settings page with sample data. Profile details, dark mode and accent colours, with tabs for security and notifications.
 ---
 
 ## The problem
@@ -34,6 +38,10 @@ Renewly works out a **last-safe-cancel date** from each contract's renewal date 
 
 ## My part
 
-TODO(musa): what you built (screens, data model, the date maths, invites?), who you built it with, and one decision you're proud of.
+I built Renewly with a friend, and we planned the flow and the tools together before writing code. My side: the dashboard and the whole design, the logic for adding contracts, the rules and relationships in the Supabase database, and teams with owner and member permissions. I also tested it for security and set up email 2FA, account deletion and invite email. Several things are still unfinished.
+
+## What I learned
+
+It was my first time working with a database, a login system and a user base, so most of what I learnt was about protecting data: using SQL and Supabase to set the rules, stopping people reaching other accounts' data by changing the URL and keeping the backend hidden from the frontend. It also showed me how much communication with a collaborator matters, and how important file and variable naming gets across a huge number of files.
 
 {/* Screenshots on this site were taken from a local copy running on sample data. */}

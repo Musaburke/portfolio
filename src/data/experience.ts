@@ -14,16 +14,16 @@ export const experience: Entry[] = [
     when: '2026',
     title: 'Developer, Renewly',
     where: 'Team project',
-    detail: 'TODO(musa): one line on what you built on Renewly and with whom.',
+    detail: 'Built with a friend: the dashboard and whole design, the contract logic, database rules, email 2FA, account deletion, and teams with owner and member permissions.',
     href: '/projects/renewly',
   },
 ];
 
 export const education: Entry[] = [
   {
-    when: 'TODO(musa)',
-    title: 'TODO(musa): course name',
-    where: 'TODO(musa): university',
-    detail: 'TODO(musa): relevant modules, e.g. object-oriented programming in Java, databases, networks.',
+    when: 'Year 2',
+    title: 'BSc Computer Science',
+    where: 'City, University of London',
+    detail: 'Aiming for a career in cyber security. Learning on the side: TryHackMe and the Google Cybersecurity Certificate.',
   },
 ];

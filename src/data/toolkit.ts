@@ -37,7 +37,7 @@ export const toolkit: Tool[] = [
   {
     name: 'Cyber security',
     usedIn: 'Learning now',
-    detail: 'TODO(musa): what you are studying right now, e.g. TryHackMe paths or a certificate.',
+    detail: 'Working through TryHackMe and the Google Cybersecurity Certificate, alongside my BSc Computer Science.',
     shot: 'security',
   },
 ];

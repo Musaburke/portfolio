@@ -178,3 +178,13 @@ html:not(.js) .wipe::after { transform: scaleX(1); }
   .wipe::after { transform: scaleX(1); transition: none; }
   .js [data-split] .w > span { transform: none; transition: none; }
 }
+
+/* Page transitions: a native cross-document fade and rise, so no page script has to re-run. */
+@view-transition { navigation: auto; }
+@keyframes page-out { to { opacity: 0; transform: translateY(-8px); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(12px); } }
+::view-transition-old(root) { animation: page-out 180ms var(--ease-out) both; }
+::view-transition-new(root) { animation: page-in 320ms var(--ease-out) both; }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}
