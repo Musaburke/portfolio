@@ -1,13 +1,18 @@
 // The Journey section on the home page. Oldest first, ordered by GitHub creation date.
 // To add a node, see workflows/add-journey-node.md. Nothing here may overclaim: roles are
-// stated, and every "learned" line is Musa's own words (TODO(musa) until written).
+// stated, and every "learned" and "story" line comes from Musa's own account.
 import type { ImageMetadata } from 'astro';
 import prayer from '../assets/journey/prayer.jpg';
+import prayerTimes from '../assets/journey/prayer-times.jpg';
 import newsflux from '../assets/journey/newsflux.jpg';
+import newsfluxWeather from '../assets/journey/newsflux-weather.jpg';
 import hussein from '../assets/journey/hussein.jpg';
+import husseinServices from '../assets/journey/hussein-services.jpg';
 import placeholder from '../assets/journey/placeholder.svg';
 import renewly from '../assets/projects/renewly-dashboard.jpg';
+import renewlyMembers from '../assets/projects/renewly-members.jpg';
 import dsb from '../assets/projects/dsb-home-desktop.jpg';
+import dsbAreas from '../assets/projects/dsb-areas.jpg';
 
 export type Node = {
   id: string;
@@ -15,7 +20,9 @@ export type Node = {
   title: string;
   role: string;        // "My own", "Team project", ...
   stack: string[];     // skills this node adds to the running list
-  learned: string;     // one honest line, in Musa's words
+  learned: string;     // the key takeaway, short enough for the Journey card
+  story: string[];     // the longer version, shown on /journey
+  more?: { image: ImageMetadata; alt: string }; // a second screenshot on /journey
   image: ImageMetadata;
   alt: string;
   host: string;        // label in the browser-frame bar
@@ -29,9 +36,14 @@ export const nodes: Node[] = [
     id: 'islamic-tools-hub',
     date: 'Nov 2025',
     title: 'Islamic Tools Hub',
-    role: 'My own', // TODO(musa): confirm
-    stack: ['HTML', 'CSS', 'JavaScript', 'React', 'REST APIs'],
-    learned: 'TODO(musa): what the very first build taught you.',
+    role: 'My own',
+    stack: ['HTML', 'CSS', 'REST APIs'],
+    learned: 'This taught me the very basics: what an API key is, how it works and how to use one.',
+    story: [
+      "This was my first real try at building something with an API. It was very low level, it wasn't technical and it didn't look good at all.",
+      'It did teach me the very basics of what an API key is and how it works. Seeing that work is what made me want to build more.',
+    ],
+    more: { image: prayerTimes, alt: 'Prayer Times page of Islamic Tools Hub: city, country and calculation method fields above a Get Prayer Times button.' },
     image: prayer,
     alt: 'Islamic Tools Hub home page: lanterns and a crescent moon behind four buttons for Prayer Times, Tasbeeh Counter, Random Hadith and Islamic Quiz.',
     host: 'Practice_prayer_api · local run',
@@ -43,11 +55,17 @@ export const nodes: Node[] = [
     id: 'news-flux',
     date: 'Nov 2025',
     title: 'News Flux',
-    role: 'Team project', // TODO(musa): confirm your part; repo is srahman14/news-flux
-    stack: ['Python', 'Flask', 'Vite', 'API design'],
-    learned: 'TODO(musa): what working on a Flask and React app taught you.',
+    role: 'Team project',
+    stack: ['JavaScript', 'React', 'Tailwind CSS', 'Vite', 'Flask', 'Postman', 'Git'],
+    learned: 'How to work with a collaborator: committing, pushing and building one site together. Also my first proper go at React.',
+    story: [
+      'News Flux is a news aggregator I built with a friend. He made the news page. I made the weather, currency, NASA and crypto pages and designed the site.',
+      'It taught me how to work with a collaborator, and how to commit and push. I got much more practice with API keys, which gave me trouble at first, and picked up better design techniques from templates and classes I found online and on GitHub.',
+      'It was the first project where I properly used JavaScript in a website, along with Tailwind, React, Vite and Flask, and the first time I tested with Postman. It still had plenty of issues, but it was the first thing I made that I thought looked good.',
+    ],
+    more: { image: newsfluxWeather, alt: 'News Flux weather page showing a five-day forecast for London.' },
     image: newsflux,
-    alt: 'News Flux daily dashboard: weather forecast for Berlin, top currencies, top five cryptocurrencies and top headlines.',
+    alt: 'News Flux daily dashboard: a five-day weather forecast for Madrid, top currencies and the top five cryptocurrencies.',
     host: 'news-flux-krxg.onrender.com',
     href: 'https://news-flux-krxg.onrender.com/',
     polish: 1,
@@ -57,11 +75,17 @@ export const nodes: Node[] = [
     id: 'hussein',
     date: 'Dec 2025',
     title: 'Prof. Dr G. Hussein website',
-    role: 'My own', // TODO(musa): confirm
-    stack: ['GitHub Pages'],
-    learned: 'TODO(musa): what building a site for someone else taught you.',
+    role: 'My own',
+    stack: ['Web forms', 'CAPTCHA', 'GitHub Pages'],
+    learned: "If communication with a client isn't done right, the build drags on. And reuse matters: I wrote hundreds of near-identical lines of HTML.",
+    story: [
+      'I made this site for a professor to document his work, achievements and history. It was my first bigger solo project, and it showed.',
+      "The main thing I learnt is how important it is to communicate with a client. I didn't do it well, and that made the build extremely long and dragged out.",
+      'I also learnt the value of reusability. I built it almost entirely in HTML and some CSS, which meant hundreds of similar, redundant lines. Libraries would have made it far easier. It was also my first time with web forms, email routing, CAPTCHA, a navbar and 15+ blog posts with templates I designed myself. Not all of it went perfectly, but I got it running and I was really proud of it.',
+    ],
+    more: { image: husseinServices, alt: 'Services page of the Prof. Dr G. Hussein website: six cards of therapeutic, supervision and research services on a teal background.' },
     image: hussein,
-    alt: 'Home page of the Prof. Dr G. Hussein website.',
+    alt: 'Publications page of the Prof. Dr G. Hussein website: cards for books, journals and blogs above gradient buttons for browsing books by year.',
     host: 'musaburke.github.io',
     href: 'https://musaburke.github.io/Prof.-Dr-G.-Hussein-Website/',
     polish: 1,
@@ -71,11 +95,17 @@ export const nodes: Node[] = [
     id: 'renewly',
     date: 'Jul 2026',
     title: 'Renewly',
-    role: 'Team project', // TODO(musa): confirm your part
-    stack: ['TypeScript', 'Next.js', 'Supabase', 'TanStack Query'],
-    learned: 'TODO(musa): what the date logic and database rules taught you.',
+    role: 'Team project',
+    stack: ['TypeScript', 'Next.js', 'Supabase', 'SQL', 'Zustand'],
+    learned: 'Working with a database and real users means security comes first: who can see what, and what the frontend never gets to touch.',
+    story: [
+      'Renewly was my first big collaborative project and my first time working with a database, a login system and a user base. If it went wrong it could cause real damage, and that changed how I think. We also planned the flow and tools first, instead of just coding with no direction.',
+      "Most of what I learnt was about protecting data. I used SQL and Supabase to manage the database and set its rules, stopped people reaching other accounts' data by changing the URL, and kept the backend hidden from the frontend.",
+      "It also showed me how much communication with a collaborator matters, and how important file and variable naming gets across a huge number of files. I lost progress more than once to bad Git habits I thought didn't matter, which is how I learnt to take branches and rebasing seriously.",
+    ],
+    more: { image: renewlyMembers, alt: 'Renewly members page with sample data: an owner, two admins and members in an invented team, with a form to invite someone.' },
     image: renewly,
-    alt: 'Renewly dashboard with sample data: seven tracked contracts and the three closest last-safe-cancel dates.',
+    alt: 'Renewly dashboard with sample data: ten tracked contracts, £1,923 monthly spend and the three closest last-safe-cancel dates.',
     host: 'Renewly · sample data',
     href: '/projects/renewly',
     polish: 2,
@@ -86,8 +116,14 @@ export const nodes: Node[] = [
     date: 'Oct 2026',
     title: 'DSB Commercial Cleaning',
     role: 'Sole developer, real client',
-    stack: ['Astro', 'Tailwind CSS', 'Cloudflare', 'Security headers'],
-    learned: 'TODO(musa): what shipping for a real client taught you.',
+    stack: ['Astro', 'Cloudflare', 'Web3Forms', 'Security headers'],
+    learned: 'Everything came together here. I also learnt to use AI properly: as a co-agent that helps me build, teaches me and debugs, with me reviewing all of it.',
+    story: [
+      'This is where I put everything together, including my past mistakes. I had a full plan and stuck to it. I asked the client all my questions at once instead of waiting, set up scheduled talks and built prototypes for them to react to.',
+      "I also learnt how to use AI properly. I treat it as a co-agent: it helps me build, teaches me as I go and helps me debug when I'm stuck, and I review everything it recommends before it goes in. A lot of people use it blindly and their skills get dulled, so I made a point of using it the right way, and it went well.",
+      'It was my first time using Web3Forms, getting my own domain through Namecheap, deploying it and connecting it all through Cloudflare, after a lot of tutorials and failed deployments. It was also my first time doing proper security checks: HTTPS enforced with HSTS, a Content Security Policy, security headers and rate limiting. I set up a business email address with SPF and DMARC, used a Cloudflare Worker for email routing around launch, connected Google Search Console, and followed UK rules on handling user data.',
+    ],
+    more: { image: dsbAreas, alt: 'DSB areas page with London picked on a gold outline map of the five counties covered.' },
     image: dsb,
     alt: 'DSB Commercial Cleaning home page, black and gold, with a close-up of a freshly cleaned carpet.',
     host: 'dsbcommercialcleaning.co.uk',
@@ -104,5 +140,5 @@ export const future = {
   hue: '#9fd09c', // the site's own accent
   date: 'Next',
   title: 'Security',
-  text: 'TODO(musa): what you are studying in cyber security right now, and what you want to build next.',
+  text: 'Working through TryHackMe and the Google Cybersecurity Certificate, with the aim of a career in cyber security.',
 };

@@ -2,16 +2,17 @@
 // Search the repo for TODO(musa) to find what still needs filling in.
 
 export const site = {
-  name: 'Musa Burke', // TODO(musa): confirm display name
+  name: 'Musa Burke',
   role: 'Front-end developer',
   description:
     'Musa Burke is a student front-end developer building fast, accessible websites with Astro, TypeScript and React, and studying toward cyber security.',
-  location: 'TODO(musa): city, UK',
-  study: 'TODO(musa): course, university, year',
-  openTo: 'Internships and placements', // TODO(musa): confirm
-  email: 'hello@example.com', // TODO(musa): your public email address
+  location: 'London, UK',
+  study: 'BSc Computer Science',
+  studyAt: 'Year 2, City, University of London',
+  openTo: 'Internships and placements',
+  email: 'muburke07@gmail.com',
   github: 'https://github.com/Musaburke',
-  linkedin: 'https://www.linkedin.com/in/TODO-musa', // TODO(musa): real LinkedIn URL
+  linkedin: 'https://www.linkedin.com/in/musa-burke',
   cv: '', // TODO(musa): put cv.pdf in /public and set this to '/cv.pdf'
 };
 

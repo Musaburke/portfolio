@@ -15,7 +15,7 @@ import { site } from '../data/site';
         </p>
         <dl class="facts">
           <div><dt>Based in</dt><dd>{site.location}</dd></div>
-          <div><dt>Studying</dt><dd>{site.study}</dd></div>
+          <div><dt>Studying</dt><dd>{site.study}<span class="sub">{site.studyAt}</span></dd></div>
           <div><dt>Open to</dt><dd>{site.openTo}</dd></div>
         </dl>
         <p><a class="link" href="/about">Experience and education</a></p>
@@ -49,14 +49,15 @@ import { site } from '../data/site';
   .bio + .bio { margin-top: 1.25rem; }
   strong { font-weight: 400; color: var(--accent); }
   .soft { color: var(--muted); }
-  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2.75rem 0 2rem; font-size: 1rem; }
-  dt { color: var(--muted); font-size: var(--step-small); margin-bottom: 0.25rem; }
+  .facts { display: grid; gap: 1.1rem; margin: 2.75rem 0 2rem; font-size: 1rem; }
+  .facts div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1rem; align-items: baseline; }
+  dt { color: var(--muted); font-size: var(--step-small); }
+  .sub { display: block; margin-top: 0.15rem; color: var(--muted); font-size: var(--step-small); }
   .orb { display: block; width: 100%; aspect-ratio: 1; max-width: 560px; margin-inline: auto; cursor: crosshair; }
 
   @media (max-width: 900px) {
     .grid { display: flex; flex-direction: column; gap: 2rem; }
     .visual { order: -1; }
     .orb { max-width: 240px; }
-    .facts { grid-template-columns: 1fr; gap: 1rem; }
   }
 </style>
