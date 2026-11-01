@@ -22,7 +22,6 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 - [x] Social share image `public/og.jpg` (captured from the hero, tags in `Base.astro`). Replace it if you want a custom one.
 
 ## 6. Deploy
-- [ ] DSB DNS: change DMARC from `p=none` once reports look clean
 - [ ] Real domain in `astro.config.mjs` (line 10) and `public/robots.txt` (the Sitemap line)
 - [ ] Cloudflare Pages: build `npm run build`, output `dist`, env `NODE_VERSION=22`
 - [ ] The CSP in `public/_headers` is report-only. After deploying, open the live site with the console open. If there are no violations, rename the header to `Content-Security-Policy` to enforce it. Preview servers do not apply `_headers`, so this can only be checked live.
