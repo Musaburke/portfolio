@@ -10,6 +10,10 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 ## 2. Education and experience (`src/data/experience.ts`)
 - [ ] Education entry: add dates and relevant modules if you want them shown
 
+## 2b. Google Cybersecurity Certificate (`src/data/experience.ts`, `certifications`)
+- [x] Description paragraph approved
+- [x] Verification link and certificate image added (credential 4DNGSYGO1PEL, 5 Nov 2026)
+
 ## 3. Case studies
 - [ ] `src/content/projects/dsb-cleaning.mdx`: how the client found you, and what they had before
 

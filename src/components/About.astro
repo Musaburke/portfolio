@@ -1,5 +1,7 @@
 ---
 import { site } from '../data/site';
+import { certifications } from '../data/experience';
+const cert = certifications[0];
 ---
 <section id="about" class="frame about section-screen" aria-labelledby="about-title">
   <div class="grid">
@@ -16,6 +18,7 @@ import { site } from '../data/site';
         <dl class="facts">
           <div><dt>Based in</dt><dd>{site.location}</dd></div>
           <div><dt>Studying</dt><dd>{site.study}<span class="sub">{site.studyAt}</span></dd></div>
+          {cert && <div><dt>Certified</dt><dd><a class="link" href="/about#certifications">{cert.title}</a><span class="sub">{cert.issuer}, {cert.when}</span></dd></div>}
           <div><dt>Open to</dt><dd>{site.openTo}</dd></div>
         </dl>
         <p><a class="link" href="/about">Experience and education</a></p>

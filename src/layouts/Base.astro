@@ -6,6 +6,7 @@ import Starfield from '../components/Starfield.astro';
 import Preloader from '../components/Preloader.astro';
 import BackToTop from '../components/BackToTop.astro';
 import { site } from '../data/site';
+import { certifications } from '../data/experience';
 
 interface Props {
   title?: string;
@@ -24,6 +25,13 @@ const person = {
   jobTitle: site.role,
   url: Astro.site?.toString(),
   sameAs: [site.github, site.linkedin],
+  hasCredential: certifications.map((c) => ({
+    '@type': 'EducationalOccupationalCredential',
+    name: c.title,
+    credentialCategory: 'certificate',
+    recognizedBy: { '@type': 'Organization', name: 'Google' },
+    ...(c.verify && { url: c.verify }),
+  })),
 };
 ---
 <!doctype html>

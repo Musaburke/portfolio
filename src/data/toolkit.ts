@@ -36,8 +36,8 @@ export const toolkit: Tool[] = [
   },
   {
     name: 'Cyber security',
-    usedIn: 'Learning now',
-    detail: 'Working through TryHackMe and the Google Cybersecurity Certificate, alongside my BSc Computer Science.',
+    usedIn: 'Google certificate',
+    detail: 'Google Cybersecurity Certificate, Nov 2026: SIEM tools, Linux, SQL and Python automation. Now on TryHackMe, alongside my BSc.',
     shot: 'security',
   },
 ];
