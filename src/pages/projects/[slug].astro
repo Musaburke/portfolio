@@ -4,10 +4,11 @@ import Base from '../../layouts/Base.astro';
 import Shot from '../../components/Shot.astro';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map((p) => ({ params: { slug: p.id }, props: { p } }));
+  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  // Each case study ends by pointing at the next one (the last loops to the first).
+  return projects.map((p, i) => ({ params: { slug: p.id }, props: { p, next: projects[(i + 1) % projects.length]! } }));
 }
-const { p } = Astro.props;
+const { p, next } = Astro.props;
 const { Content } = await render(p);
 const d = p.data;
 ---
@@ -47,6 +48,21 @@ const d = p.data;
         </div>
       </section>
     )}
+    {next.id !== p.id && (
+      <section class="next" aria-labelledby="next-title">
+        <div class="next-text" data-reveal>
+          <h2 id="next-title">Next: {next.data.title}</h2>
+          <p class="lead">{next.data.summary}</p>
+          <p class="next-go">
+            <a class="btn" href={`/projects/${next.id}`}>Read the case study</a>
+            <a class="link" href="/projects">All work</a>
+          </p>
+        </div>
+        <a class="next-pic" href={`/projects/${next.id}`} tabindex="-1" aria-hidden="true" data-reveal>
+          <Shot src={next.data.cover} alt="" host={next.data.host} sizes="(max-width: 900px) 100vw, 50vw" />
+        </a>
+      </section>
+    )}
   </article>
 </Base>
 
@@ -65,7 +81,14 @@ const d = p.data;
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 3vw, 2.75rem); align-items: start; }
   figure { margin: 0; display: grid; gap: 1rem; }
   figcaption { font-size: var(--step-small); max-width: 50ch; }
+  .next { margin-top: var(--section); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1rem, 2vw, 2rem); align-items: center; }
+  .next-text { grid-column: 1 / 6; }
+  .next h2 { font-size: var(--step-head); line-height: 1.05; }
+  .next-go { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+  .next-pic { grid-column: 7 / 13; display: block; }
   @media (max-width: 900px) {
+    .next { display: block; }
+    .next-pic { display: block; margin-top: 2.5rem; }
     .body { display: block; }
     .meta { position: static; margin-bottom: 3rem; }
     .grid { grid-template-columns: 1fr; }

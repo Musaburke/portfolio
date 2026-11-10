@@ -91,6 +91,9 @@
 }
 .btn:hover { background: #a2b8a1; }
 .btn:active { transform: scale(0.97); }
+/* Secondary: a quiet pill for ways on, so the accent stays on the main action. */
+.btn-quiet { background: var(--surface); color: var(--ink); }
+.btn-quiet:hover { background: var(--surface-2); }
 
 .link {
   text-decoration: underline;

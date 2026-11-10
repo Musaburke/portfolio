@@ -1,14 +1,14 @@
 // The toolkit list on the home page. Each row lights up a picture of where it was used.
 // `shot` must be a key in the `shots` map in src/components/Toolkit.astro.
-export type Shot = 'dsbHome' | 'dsbServices' | 'dsbAreas' | 'renewlyDashboard' | 'renewlyRenewals' | 'security';
+export type Shot = 'afgHome' | 'dsbHome' | 'dsbAreas' | 'renewlyDashboard' | 'renewlyRenewals' | 'security';
 export type Tool = { name: string; usedIn: string; detail: string; shot: Shot };
 
 export const toolkit: Tool[] = [
   {
     name: 'Astro',
-    usedIn: 'DSB Cleaning',
-    detail: 'Static pages and content collections for services, reviews and FAQs. This portfolio too.',
-    shot: 'dsbServices',
+    usedIn: 'AI field guide, DSB',
+    detail: "Static pages built from data: the field guide's ten guides and 50 sources, and DSB's services, reviews and FAQs. This portfolio too.",
+    shot: 'afgHome',
   },
   {
     name: 'TypeScript',

@@ -12,13 +12,19 @@ import { site } from '../data/site';
         <a class="link" href={site.linkedin} rel="me">LinkedIn</a>
       </p>
     </div>
+    <p class="onward" data-reveal>
+      <span>Want the detail first?</span>
+      <a class="btn btn-quiet" href="/projects">Read the case studies</a>
+    </p>
   </div>
   <Pyramid />
 </section>
 
 <style>
   .contact { min-height: 100svh; display: flex; flex-direction: column; padding-top: clamp(5rem, 10vh, 7rem); }
-  .center { flex: 1; display: grid; place-items: center; padding-bottom: 2rem; }
+  .center { flex: 1; display: grid; place-items: center; align-content: center; gap: 2.5rem; padding-bottom: 2rem; }
+  /* The page doesn't end at the card: one more place to go before the footer. */
+  .onward { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.75rem 1.25rem; color: var(--muted); }
   .card {
     width: min(100%, 44rem); border-radius: 20px;
     padding: clamp(2rem, 4vw, 3rem);
