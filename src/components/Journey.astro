@@ -3,22 +3,31 @@
 // scroll progress slides the nodes past a fixed centre point; the active project expands and
 // the skills row grows. Phones, reduced motion and no-JS get a plain vertical timeline.
 // Data lives in src/data/journey.ts. The starfield warps while you approach the last node.
+// Only the home picks show here; /journey has every project.
 import Shot from './Shot.astro';
-import { nodes, future } from '../data/journey';
+import { published, homeNodes as nodes, future } from '../data/journey';
 
+// Skills come from every project. One first earned at a project that isn't shown here
+// lights up at the next one that is (or at the future, if none is).
 const skills: { name: string; at: number }[] = [];
-nodes.forEach((n, i) =>
+published.forEach((n) => {
+  const shownAt = nodes.findIndex((h) => published.indexOf(h) >= published.indexOf(n));
   n.stack.forEach((s) => {
-    if (!skills.some((k) => k.name === s)) skills.push({ name: s, at: i });
-  })
-);
+    if (!skills.some((k) => k.name === s)) skills.push({ name: s, at: shownAt === -1 ? nodes.length : shownAt });
+  });
+});
 const M = nodes.length + 1; // projects plus the future
 ---
 <section id="journey" class="journey" style={`--m:${M};--hue:${nodes[0].hue}`} aria-labelledby="journey-title" data-journey>
-  <a class="skipj" href="#about">Skip the timeline</a>
   <div class="stage">
     <div class="frame top">
-      <h2 id="journey-title" class="wipe" data-split>How my work has evolved</h2>
+      <div class="lead">
+        <h2 id="journey-title" class="wipe" data-split>How my work has evolved</h2>
+        <p class="ways">
+          <a class="skipj" href="#about">Skip the timeline</a>
+          <a class="link" href="/journey">All {published.length} projects</a>
+        </p>
+      </div>
       <p class="era" data-era aria-hidden="true">{nodes[0].date}</p>
     </div>
 
@@ -57,7 +66,7 @@ const M = nodes.length + 1; // projects plus the future
           <div class="body">
             <h3>Next: {future.title}</h3>
             <p class="learned">{future.text}</p>
-            <p><a class="link" href="#contact">Get in touch</a></p>
+            <p class="links"><a class="link" href="#contact">Get in touch</a><a class="link" href="/journey">All {published.length} projects</a></p>
           </div>
         </article>
       </li>
@@ -165,9 +174,17 @@ const M = nodes.length + 1; // projects plus the future
 <style>
   /* ---------- default: plain vertical timeline (phones, reduced motion, no JS) ---------- */
   .journey { padding-block: var(--section); }
-  .skipj { position: absolute; left: var(--margin); top: -4rem; z-index: 5; background: var(--accent); color: var(--accent-ink); padding: 0.6rem 1rem; border-radius: var(--btn-radius); text-decoration: none; }
-  .skipj:focus-visible { top: 5.5rem; }
-  .top { display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; }
+  /* The plain list never traps anyone, so there Skip only appears for keyboard users. */
+  .ways { margin-top: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; }
+  .skipj {
+    display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1.25rem;
+    border-radius: var(--btn-radius); background: var(--surface); color: var(--ink); text-decoration: none;
+    transition: transform 140ms var(--ease-out), background-color 180ms ease;
+  }
+  .skipj:hover { background: var(--surface-2); }
+  .skipj:active { transform: scale(0.97); }
+  .journey:not(.pinned) .skipj:not(:focus-visible) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; padding: 0; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; }
   h2 { font-size: var(--step-head); }
   .era, .line, .ring { display: none; }
   .nodes { position: relative; margin: 3.5rem auto 0; width: 100%; max-width: var(--max); padding: 0 var(--margin) 0 calc(var(--margin) + 2.25rem); display: grid; gap: 4.5rem; }
@@ -194,7 +211,7 @@ const M = nodes.length + 1; // projects plus the future
   .chip { background: var(--surface); padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.9375rem; }
 
   /* ---------- pinned: travel down a line in space (wide screens, motion allowed) ---------- */
-  .journey.pinned { height: calc(100svh + (var(--m) - 1) * 85svh); padding-block: 0; }
+  .journey.pinned { height: calc(100svh + (var(--m) - 1) * 55svh); padding-block: 0; }
   .pinned .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --gap: 34svh; --cw: min(40vw, 520px, 56svh); }
   .pinned .top { position: absolute; top: 5rem; left: 0; right: 0; z-index: 3; margin-inline: auto; width: 100%; max-width: var(--max); padding-inline: var(--margin); }
   .pinned h2 { font-size: var(--step-lead); }

@@ -13,6 +13,8 @@ import renewly from '../assets/projects/renewly-dashboard.jpg';
 import renewlyMembers from '../assets/projects/renewly-members.jpg';
 import dsb from '../assets/projects/dsb-home-desktop.jpg';
 import dsbAreas from '../assets/projects/dsb-areas.jpg';
+import afg from '../assets/projects/afg-home.jpg';
+import afgSources from '../assets/projects/afg-sources.jpg';
 
 export type Node = {
   id: string;
@@ -29,6 +31,8 @@ export type Node = {
   href?: string;       // live site, case study or repo
   polish: 0 | 1 | 2 | 3; // how rough the screenshot looks: 0 roughest ... 3 full colour
   hue: string;         // the project's own signature colour; lights the line, dot and year
+  home?: boolean;      // one of the (at most five) picks on the home page; every node shows on /journey
+  draft?: boolean;     // hidden everywhere until its words are in
 };
 
 export const nodes: Node[] = [
@@ -53,6 +57,7 @@ export const nodes: Node[] = [
   },
   {
     id: 'news-flux',
+    home: true,
     date: 'Nov 2025',
     title: 'News Flux',
     role: 'Team project',
@@ -73,6 +78,7 @@ export const nodes: Node[] = [
   },
   {
     id: 'hussein',
+    home: true,
     date: 'Dec 2025',
     title: 'Prof. Dr G. Hussein website',
     role: 'My own',
@@ -93,6 +99,7 @@ export const nodes: Node[] = [
   },
   {
     id: 'renewly',
+    home: true,
     date: 'Jul 2026',
     title: 'Renewly',
     role: 'Team project',
@@ -113,6 +120,7 @@ export const nodes: Node[] = [
   },
   {
     id: 'dsb',
+    home: true,
     date: 'Oct 2026',
     title: 'DSB Commercial Cleaning',
     role: 'Sole developer, real client',
@@ -131,7 +139,33 @@ export const nodes: Node[] = [
     polish: 3,
     hue: '#e9c46a', // DSB gold
   },
+  {
+    id: 'ai-field-guide',
+    home: true,
+    date: 'Nov 2026',
+    title: 'AI field guide',
+    role: 'My own',
+    stack: ['React', 'Radix', 'Cloudflare Pages'],
+    learned: 'Researching it taught me how to get more out of AI myself: a second brain in Obsidian, managing my usage and better prompts.',
+    story: [
+      'I set out to show how useful AI really is when it is used wisely. While researching it, I ended up learning how to get the most out of AI myself.',
+      'I discovered how much a second brain helps: notes in Obsidian that every new chat can start from. I learnt how to properly manage my usage and how to prompt AI better, and I checked every claim against a source, labelling how far I had read each one.',
+      'I built the site with Claude, and doing that taught me how to use Claude better, first hand. I turned that experience into guides on the site, like Manage your usage, Give AI a second brain and Build websites with AI, so other people can use what I learnt. It also took six design directions before one felt right.',
+    ],
+    more: { image: afgSources, alt: 'Sources page of the AI field guide showing how far each of the 50 sources was checked.' },
+    image: afg,
+    alt: 'AI field guide home page on a pale mint ground, with the headline "Get more out of AI, and stay sharp".',
+    host: 'musa-ai-field-guide.pages.dev',
+    href: '/projects/ai-field-guide',
+    polish: 3,
+    hue: '#cbe7c9', // field guide mint
+  },
 ];
+
+// Every node that is ready, oldest first (/journey shows all of these).
+export const published = nodes.filter((n) => !n.draft);
+// The home page keeps the timeline short: at most five picks, so nobody is stuck scrolling through it.
+export const homeNodes = published.filter((n) => n.home).slice(0, 5);
 
 // Used when a screenshot is missing: swap `image` for this and keep a truthful `alt`.
 export const missingShot = placeholder;
