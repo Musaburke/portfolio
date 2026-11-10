@@ -23,8 +23,8 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 
 ## 6. Deploy
 - [ ] Real domain in `astro.config.mjs` (line 10) and `public/robots.txt` (the Sitemap line)
-- [ ] Cloudflare Pages: build `npm run build`, output `dist`, env `NODE_VERSION=22`
-- [ ] The CSP in `public/_headers` is report-only. After deploying, open the live site with the console open. If there are no violations, rename the header to `Content-Security-Policy` to enforce it. Preview servers do not apply `_headers`, so this can only be checked live.
+- [x] Cloudflare Pages: live at https://musa-portfolio-ef2.pages.dev since 9 Nov 2026 (project `musa-portfolio`, deploys from `master`).
+- [x] CSP enforced on 10 Nov 2026, after every page showed no violations at desktop and phone width.
 
 ## 7. Journey (`src/data/journey.ts`)
 - [ ] Read the "what I learned" lines: they are condensed from your notes, so the "story" text too (`src/data/journey.ts`), and fix any that don't sound like you

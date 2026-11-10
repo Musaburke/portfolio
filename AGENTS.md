@@ -15,7 +15,7 @@ Musa Burke's portfolio. Static site: Astro 7, TypeScript (strict), Tailwind CSS 
 ## Where things live
 
 - `TODO.md`: everything Musa still has to supply (facts, screenshots, domain). Check it before saying the site is finished.
-- `public/_headers`: Cloudflare Pages security headers. The CSP is `Report-Only` until checked on the live site (preview servers ignore `_headers`).
+- `public/_headers`: Cloudflare Pages security headers, including an enforced CSP. Local dev and preview servers ignore `_headers`; Cloudflare preview deploys apply it, so check a change there with the console open before merging.
 
 - `src/data/site.ts`: name, links, email, study, location. Every personal fact. Never hard-code these in components.
 - `src/data/experience.ts`: timeline on /about. `src/data/toolkit.ts`: the toolkit list on the home page.
