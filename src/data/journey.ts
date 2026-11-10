@@ -142,13 +142,16 @@ export const nodes: Node[] = [
   {
     id: 'ai-field-guide',
     home: true,
-    draft: true, // TODO(musa): write `learned` and `story` in your words, then delete this line.
     date: 'Nov 2026',
     title: 'AI field guide',
     role: 'My own',
     stack: ['React', 'Radix', 'Cloudflare Pages'],
-    learned: 'TODO(musa): the main thing this taught you.',
-    story: ['TODO(musa): the longer version, in your words.'],
+    learned: 'Researching it taught me how to get more out of AI myself: a second brain in Obsidian, managing my usage and better prompts.',
+    story: [
+      'I set out to show how useful AI really is when it is used wisely. While researching it, I ended up learning how to get the most out of AI myself.',
+      'I discovered how much a second brain helps: notes in Obsidian that every new chat can start from. I learnt how to properly manage my usage and how to prompt AI better, and I checked every claim against a source, labelling how far I had read each one.',
+      'I built the site with Claude, and doing that taught me how to use Claude better, first hand. I turned that experience into guides on the site, like Manage your usage, Give AI a second brain and Build websites with AI, so other people can use what I learnt. It also took six design directions before one felt right.',
+    ],
     more: { image: afgSources, alt: 'Sources page of the AI field guide showing how far each of the 50 sources was checked.' },
     image: afg,
     alt: 'AI field guide home page on a pale mint ground, with the headline "Get more out of AI, and stay sharp".',
