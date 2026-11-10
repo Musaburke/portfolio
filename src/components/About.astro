@@ -29,14 +29,29 @@ import { site } from '../data/site';
 </section>
 
 <script>
+  import { whenQuiet } from '../scripts/quiet';
   const canvas = document.querySelector<HTMLCanvasElement>('[data-orb]');
   if (canvas) {
-    const io = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
+    // Building the orb (WebGL context, environment map) blocks the page for a few hundred ms.
+    // Do it a few seconds after load, after the hero globe, once the page isn't being scrolled.
+    // Scrolling near it first still mounts it straight away.
+    let mounted = false;
+    const mount = () => {
+      if (mounted) return;
+      mounted = true;
       io.disconnect();
       import('../scripts/three/orb').then((m) => m.mountOrb(canvas));
-    }, { rootMargin: '300px' });
+    };
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) mount(); }, { rootMargin: '300px' });
     io.observe(canvas);
+    const later = () => setTimeout(() => whenQuiet(mount), 3500);
+    const start = () => {
+      if (document.readyState === 'complete') later();
+      else window.addEventListener('load', later, { once: true });
+    };
+    // Same gate as the globe: wait for the preloader to finish.
+    if (document.documentElement.classList.contains('ready')) start();
+    else window.addEventListener('intro:done', start, { once: true });
   }
 </script>
 

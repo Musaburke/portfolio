@@ -98,6 +98,15 @@
     // Lub-dub: two gaussian swells, the second softer.
     const gauss = (t: number, mu: number, sig: number) => Math.exp(-((t - mu) ** 2) / (2 * sig * sig));
     const beat = (t: number) => gauss(t, 0, 90) + 0.6 * gauss(t, 290, 120);
+    // The swell is over within ~800 ms, so look it up from a 1 ms table instead of calling exp() per star per frame.
+    const BEAT_FROM = -600, BEAT_TO = 800;
+    const beatTable = Float32Array.from({ length: BEAT_TO - BEAT_FROM + 1 }, (_, i) => beat(i + BEAT_FROM));
+    const beatAt = (local: number) => {
+      const t = local > PERIOD / 2 ? local - PERIOD : local;
+      if (t < BEAT_FROM || t >= BEAT_TO) return 0;
+      const f = t - BEAT_FROM, i = f | 0;
+      return beatTable[i] + (beatTable[i + 1] - beatTable[i]) * (f - i);
+    };
 
     function frame(now: number, still = false) {
       ctx!.clearRect(0, 0, w, h);
@@ -108,7 +117,7 @@
       const px = (sx - w / 2) / w, py = (sy - h / 2) / h;
       const originX = w / 2, originY = h * 0.3 - scrollY * 0.2;
       const amp = 0.35 + boost * 0.4;
-      const beatNow = beat(((now % PERIOD) + PERIOD) % PERIOD) + beat((((now % PERIOD) + PERIOD) % PERIOD) - PERIOD);
+      const beatNow = beatAt(((now % PERIOD) + PERIOD) % PERIOD);
       (window as unknown as { __beat: number }).__beat = still ? 0 : beatNow;
       linked.length = 0;
       const wTarget = still ? 0 : (window as unknown as { __warp?: number }).__warp ?? 0;
@@ -128,7 +137,8 @@
         let near = 0;
         if (!still && pointerIn) {
           const dx = x - mouseX, dy = y - mouseY;
-          const d = Math.hypot(dx, dy);
+          const d2 = dx * dx + dy * dy;
+          const d = d2 < PUSH_RADIUS * PUSH_RADIUS ? Math.sqrt(d2) : PUSH_RADIUS;
           if (d < PUSH_RADIUS && d > 0.01) {
             near = 1 - d / PUSH_RADIUS;
             const push = near * near * 22;
@@ -146,9 +156,9 @@
         let r = s.r;
         if (!still) {
           a *= 0.62 + 0.38 * Math.sin(now * s.speed + s.phase);
-          const delay = Math.hypot(x - originX, y - originY) / BEAT_SPEED;
-          const local = (((now - delay) % PERIOD) + PERIOD) % PERIOD;
-          const pulse = beat(local) + beat(local - PERIOD);
+          const bx = x - originX, by = y - originY;
+          const delay = Math.sqrt(bx * bx + by * by) / BEAT_SPEED;
+          const pulse = beatAt((((now - delay) % PERIOD) + PERIOD) % PERIOD);
           a *= 1 + (pulse + kickExtra) * amp * (s.layer === 0 ? 1 : 1.4);
           r *= 1 + pulse * 0.25;
           a += near * 0.8;

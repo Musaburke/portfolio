@@ -32,20 +32,37 @@ const { href, title, host, cover, back } = Astro.props;
   const wide = matchMedia('(min-width: 901px)');
   const ease = (x: number) => 1 - Math.pow(1 - x, 3);
   let ticking = false;
+  const setP = (el: HTMLElement) => {
+    if (reduce.matches || !wide.matches) { el.style.setProperty('--p', '1'); return; }
+    const r = el.getBoundingClientRect();
+    // 0 while the stack enters at the bottom, 1 once its middle reaches the middle of the screen.
+    const raw = (innerHeight - r.top) / (innerHeight * 0.5 + r.height * 0.5);
+    el.style.setProperty('--p', ease(Math.min(1, Math.max(0, raw))).toFixed(4));
+  };
+  // Only stacks near the screen are measured on scroll. One measure as a stack enters or leaves keeps its state right.
+  const near = new Set<HTMLElement>();
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        const el = e.target as HTMLElement;
+        // Measure on the way in too: after a jump (a link, a resize) no scroll event may follow.
+        if (e.isIntersecting) near.add(el);
+        else near.delete(el);
+        setP(el);
+      }
+    },
+    { rootMargin: '100px 0px' }
+  );
+  isos.forEach((el) => io.observe(el));
   const update = () => {
     ticking = false;
-    for (const el of isos) {
-      if (reduce.matches || !wide.matches) { el.style.setProperty('--p', '1'); continue; }
-      const r = el.getBoundingClientRect();
-      // 0 while the stack enters at the bottom, 1 once its middle reaches the middle of the screen.
-      const raw = (innerHeight - r.top) / (innerHeight * 0.5 + r.height * 0.5);
-      el.style.setProperty('--p', ease(Math.min(1, Math.max(0, raw))).toFixed(4));
-    }
+    if (reduce.matches || !wide.matches) { isos.forEach(setP); return; }
+    near.forEach(setP);
   };
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
-  update();
+  isos.forEach(setP);
 </script>
 
 <style>
