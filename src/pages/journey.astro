@@ -1,12 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
 import Shot from '../components/Shot.astro';
-import { nodes, future } from '../data/journey';
+import { published as nodes, future } from '../data/journey';
 ---
-<Base title="Journey" description="Five projects and what each one taught Musa Burke, from a first API key to a live client site.">
+<Base title="Journey" description={`${nodes.length} projects and what each one taught Musa Burke, from a first API key to a live client site.`}>
   <section class="frame head" data-reveal>
     <h1>What each site taught me</h1>
-    <p class="lead">Five projects, oldest first, and the main thing I took from each one.</p>
+    <p class="lead">{nodes.length} projects, oldest first, and the main thing I took from each one.</p>
   </section>
 
   {nodes.map((n) => (

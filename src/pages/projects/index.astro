@@ -8,7 +8,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 <Base title="Work" description="Case studies of websites and apps built by Musa Burke.">
   <section class="frame head" data-reveal>
     <h1>Work</h1>
-    <p class="lead">Two projects, written up properly: the brief, what I built, and what I'd change.</p>
+    <p class="lead">{projects.length} projects, written up properly: the brief, what I built, and what I'd change.</p>
   </section>
   <ul class="frame list">
     {projects.map((p, i) => (
