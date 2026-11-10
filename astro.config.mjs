@@ -7,8 +7,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO(musa): set to the real domain once deployed (needed for sitemap + canonical URLs).
-  site: 'https://musaburke.dev',
+  // TODO(musa): switch to the real domain once bought (here and in public/robots.txt). Sitemap and canonical URLs use it.
+  site: 'https://musa-portfolio-ef2.pages.dev',
   devToolbar: { enabled: false },
   vite: {
     plugins: [tailwindcss()]

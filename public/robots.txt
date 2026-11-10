@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://musaburke.dev/sitemap-index.xml
+Sitemap: https://musa-portfolio-ef2.pages.dev/sitemap-index.xml
