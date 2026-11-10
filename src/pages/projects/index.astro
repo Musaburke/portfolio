@@ -20,6 +20,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
           <h2><a href={`/projects/${p.id}`}>{p.data.title}</a></h2>
           <p>{p.data.summary}</p>
           <p class="muted meta">{p.data.year} · {p.data.stack.join(' · ')}</p>
+          <p class="go"><a class="btn" href={`/projects/${p.id}`}>Read the full case study<span class="visually-hidden">: {p.data.title}</span></a></p>
         </div>
       </li>
     ))}
@@ -40,6 +41,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
   h2 a { text-decoration: none; transition: color 180ms ease; }
   h2 a:hover { color: var(--accent); }
   .meta { font-size: var(--step-small); }
+  .go { margin-top: 0.5rem; }
   @media (max-width: 900px) {
     .proj { display: block; }
     .text { margin-top: 1.75rem; }
