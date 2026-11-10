@@ -3,6 +3,7 @@ dist/
 .astro/
 .tmp/
 .taste-skill/
+second-brain/
 .env
 .env.*
 .DS_Store
