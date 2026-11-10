@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
-import { experience, education, type Entry } from '../data/experience';
+import { Image } from 'astro:assets';
+import { experience, education, certifications, type Entry } from '../data/experience';
 import { toolkit } from '../data/toolkit';
 const groups: { title: string; items: Entry[] }[] = [
   { title: 'Experience', items: experience },
@@ -13,7 +14,7 @@ const groups: { title: string; items: Entry[] }[] = [
     <h1>About</h1>
     <p class="lead">
       I'm {site.name}, a student front-end developer. I build websites that load fast, read clearly and work on a phone,
-      and I'm studying toward cyber security.
+      and I'm studying toward cyber security, with the Google Cybersecurity Certificate already done.
     </p>
     <p class="links">
       <a class="btn" href={`mailto:${site.email}`}>Email me</a>
@@ -23,22 +24,50 @@ const groups: { title: string; items: Entry[] }[] = [
     </p>
   </section>
 
-  {groups.map((g) => (
-    <section class="frame block" aria-labelledby={`h-${g.title}`}>
-      <h2 id={`h-${g.title}`}>{g.title}</h2>
-      <ol class="timeline">
-        {g.items.map((e) => (
-          <li data-reveal>
-            <p class="when muted">{e.when}</p>
-            <div>
-              <h3>{e.href ? <a class="link" href={e.href}>{e.title}</a> : e.title}</h3>
-              <p class="where muted">{e.where}</p>
-              <p class="detail">{e.detail}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </section>
+  {groups.map((g, i) => (
+    <>
+      <section class="frame block" aria-labelledby={`h-${g.title}`}>
+        <h2 id={`h-${g.title}`}>{g.title}</h2>
+        <ol class="timeline">
+          {g.items.map((e) => (
+            <li data-reveal>
+              <p class="when muted">{e.when}</p>
+              <div>
+                <h3>{e.href ? <a class="link" href={e.href}>{e.title}</a> : e.title}</h3>
+                <p class="where muted">{e.where}</p>
+                <p class="detail">{e.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+      {i === 0 && certifications.length > 0 && (
+        <section id="certifications" class="frame block" aria-labelledby="h-certs">
+          <h2 id="h-certs">Certifications</h2>
+          <ol class="timeline">
+            {certifications.map((c) => (
+              <li data-reveal>
+                <p class="when muted">{c.when}</p>
+                <div>
+                  <h3>{c.verify ? <a class="link" href={c.verify} rel="noopener">{c.title}</a> : c.title}</h3>
+                  <p class="where muted">{c.issuer}</p>
+                  <p class="topics">{c.topics.map((t) => t.replaceAll(' ', '\u00a0')).join(' · ')}</p>
+                  <p class="detail">{c.detail}</p>
+                  {c.verify && <p class="verify"><a class="btn btn-quiet" href={c.verify} rel="noopener">Verify the certificate</a></p>}
+                  {c.image && (c.verify ? (
+                    <a class="cert-link" href={c.verify} rel="noopener">
+                      <Image class="cert-img" src={c.image} alt={c.alt ?? ''} widths={[480, 720, 960, 1164]} sizes="(max-width: 760px) 100vw, 40rem" />
+                    </a>
+                  ) : (
+                    <Image class="cert-img" src={c.image} alt={c.alt ?? ''} widths={[480, 720, 960, 1164]} sizes="(max-width: 760px) 100vw, 40rem" />
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+    </>
   ))}
 
   <section class="frame block" aria-labelledby="h-skills">
@@ -64,6 +93,15 @@ const groups: { title: string; items: Entry[] }[] = [
   h3 { font-size: var(--step-lead); letter-spacing: -0.02em; }
   .where { margin-top: 0.25rem; }
   .detail { margin-top: 0.75rem; max-width: 60ch; }
+  .topics { margin-top: 1rem; font-size: var(--step-lead); line-height: 1.3; letter-spacing: -0.01em; max-width: 34ch; }
+  .verify { margin-top: 1.5rem; }
+  .cert-link { display: block; margin-top: 2.5rem; max-width: 40rem; border-radius: 10px; transition: transform 300ms var(--ease-out); }
+  .cert-link:hover { transform: translateY(-4px); }
+  .cert-link:active { transform: translateY(-1px) scale(0.99); }
+  .cert-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .cert-img { display: block; width: 100%; max-width: 40rem; height: auto; border-radius: 10px; }
+  :not(.cert-link) > .cert-img { margin-top: 2.5rem; }
+  @media (prefers-reduced-motion: reduce) { .cert-link { transition: none; } .cert-link:hover { transform: none; } }
   .when { font-variant-numeric: tabular-nums; padding-top: 0.35rem; }
   .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 3rem; }
   .skills li:nth-child(odd) { padding-right: 1rem; }

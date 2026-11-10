@@ -174,5 +174,5 @@ export const future = {
   hue: '#9fd09c', // the site's own accent
   date: 'Next',
   title: 'Security',
-  text: 'Working through TryHackMe and the Google Cybersecurity Certificate, with the aim of a career in cyber security.',
+  text: 'Google Cybersecurity Certificate done in Nov 2026. Now working through TryHackMe, with the aim of a career in cyber security.',
 };
