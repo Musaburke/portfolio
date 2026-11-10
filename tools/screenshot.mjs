@@ -44,10 +44,14 @@ try {
         }
         window.scrollTo(0, 0);
       });
-      // Wait for every image (dev server transforms images on first request).
-      await page.evaluate(() =>
-        Promise.all([...document.images].map((img) => img.complete ? 0 : new Promise((r) => { img.onload = img.onerror = r; })))
-      );
+      // Wait for every shown image (dev server transforms images on first request).
+      // Lazy images inside display:none (e.g. the stack's back cards on phones) never load, so skip them,
+      // and give up after 15 s rather than hang.
+      await page.evaluate(() => Promise.race([
+        Promise.all([...document.images].filter((img) => img.getClientRects().length)
+          .map((img) => img.complete ? 0 : new Promise((r) => { img.onload = img.onerror = r; }))),
+        new Promise((r) => setTimeout(r, 15000)),
+      ]));
       await page.waitForTimeout(900);
     }
     const file = join(outDir, `${label}-${vp.name}.${png ? 'png' : 'jpg'}`);

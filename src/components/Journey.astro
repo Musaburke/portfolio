@@ -86,7 +86,7 @@ const M = nodes.length + 1; // projects plus the future
     const w = window as unknown as { __warp?: number; __kick?: number };
     const smooth = (x: number) => { const t = Math.min(1, Math.max(0, x)); return t * t * (3 - 2 * t); };
 
-    let pinned = false, ticking = false, last = -1;
+    let pinned = false, ticking = false, last = -1, inView = true;
 
     const warpFor = (f: number) => {
       const peak = M - 1.4; // just before the last node
@@ -134,7 +134,14 @@ const M = nodes.length + 1; // projects plus the future
       w.__warp = warpFor(f);
     };
 
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    const onScroll = () => { if (inView && !ticking) { ticking = true; requestAnimationFrame(update); } };
+    // Off screen there is nothing to move: skip the layout reads. One last update as it leaves keeps the end state right.
+    new IntersectionObserver(([e]) => {
+      const was = inView;
+      inView = !!e?.isIntersecting;
+      if (was && !inView && !ticking) { ticking = true; requestAnimationFrame(update); }
+      if (inView) onScroll();
+    }, { rootMargin: '200px 0px' }).observe(root);
 
     const setMode = () => {
       pinned = wide.matches && !reduce.matches;
