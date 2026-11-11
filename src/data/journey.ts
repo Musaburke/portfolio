@@ -15,6 +15,8 @@ import dsb from '../assets/projects/dsb-home-desktop.jpg';
 import dsbAreas from '../assets/projects/dsb-areas.jpg';
 import afg from '../assets/projects/afg-home.jpg';
 import afgSources from '../assets/projects/afg-sources.jpg';
+import bta from '../assets/projects/bta-play.jpg';
+import btaDebrief from '../assets/projects/bta-debrief.jpg';
 
 export type Node = {
   id: string;
@@ -57,7 +59,6 @@ export const nodes: Node[] = [
   },
   {
     id: 'news-flux',
-    home: true,
     date: 'Nov 2025',
     title: 'News Flux',
     role: 'Team project',
@@ -159,6 +160,27 @@ export const nodes: Node[] = [
     href: '/projects/ai-field-guide',
     polish: 3,
     hue: '#cbe7c9', // field guide mint
+  },
+  {
+    id: 'break-the-ai',
+    home: true,
+    date: 'Nov 2026',
+    title: 'Break the AI',
+    role: 'My own',
+    stack: ['Cloudflare Workers', 'D1', 'Workers AI', 'Prompt injection', 'OWASP LLM Top 10'],
+    learned: 'An AI only sees text, so "I work here" is just more text. Keeping secrets away from the model beats any prompt.',
+    story: [
+      'After finishing the Google Cybersecurity Certificate, I wanted to put the attacking side of security into practice. So I built a game where you trick a made-up bank\'s AI chatbots into leaking their secrets, then a debrief explains the fix.',
+      'Building the attacks taught me how these models actually fail. Filters only catch what they were built to look for, and a prompt that says "never share it" is not a defence. The game is built so the server decides everything: secrets are worked out per player and never stored, and the shared AI allowance can\'t be drained by one person.',
+      'Playing it myself, I got stuck on level 2 and used all three hints. That taught me to test honestly on myself, so I reworked the clues, the hints and the way a blocked message shows up until it felt fair.',
+    ],
+    more: { image: btaDebrief, alt: 'Level 1 debrief of Break the AI: Level 1 cleared in huge type, the score from 2 messages and 0 hints, then what the attack was.' },
+    image: bta,
+    alt: 'Level 1 of Break the AI: an email from the bank\'s security lead and the task on the left, and the bank\'s green support chat refusing to share the staff code on the right.',
+    host: 'break-the-ai.muburke07.workers.dev',
+    href: '/projects/break-the-ai',
+    polish: 3,
+    hue: '#c6f432', // Break the AI lime
   },
 ];
 
