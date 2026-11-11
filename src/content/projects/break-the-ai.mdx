@@ -1,0 +1,63 @@
+---
+title: Break the AI
+summary: A browser game where you trick a fictional bank's AI chatbots into leaking their secrets, then learn the fix that would have stopped you.
+year: '2026'
+role: Game design, build, security and playtesting. My own project.
+stack: [Astro, TypeScript, Cloudflare Workers, D1, Workers AI, Vitest]
+order: 4
+live: https://break-the-ai.muburke07.workers.dev
+repo: https://github.com/Musaburke/break-the-ai
+host: break-the-ai.muburke07.workers.dev
+slab: '#2b1055'
+cover: ../../assets/projects/bta-play.jpg
+coverAlt: Level 1 of Break the AI. An email from the bank's security lead and the task on the left, and Penny, the bank's green support chat, refusing to share the staff discount code on the right.
+gallery:
+  - src: ../../assets/projects/bta-leaked.jpg
+    alt: The Leaked screen in lime green after winning level 1, with the extracted staff code and buttons for the next level, the debrief and back to the chat.
+  - src: ../../assets/projects/bta-debrief.jpg
+    alt: Level 1 debrief. Level 1 cleared in huge type, the score worked out from 2 messages and 0 hints, then what the attack was and why it worked.
+  - src: ../../assets/projects/bta-home.jpg
+    alt: Break the AI title screen. A huge headline, a Play button and six level tiles, three live and three marked Soon.
+  - src: ../../assets/projects/bta-about.jpg
+    alt: The How it's built page, with cards on the stack, why the prompts are public, keeping it fair and what gets logged.
+---
+
+## The brief
+
+After finishing the Google Cybersecurity Certificate, I wanted a project that puts the attacking side of security into practice. AI chatbots are everywhere now and most people have no idea how easy they are to trick, so I made a game out of it.
+
+You play a red-team contractor hired by Fernleigh Bank, a made-up bank. Each level is one of its AI products. You trick it into leaking a secret, then a debrief explains the attack, its OWASP LLM Top 10 entry and the fix.
+
+## What I built
+
+- Three levels so far, each a different attack: pretending to be staff, getting round a keyword filter, and getting a PIN past an output filter by having it spelled out one character at a time.
+- The bank's chat looks like a real product, in its own green, so it's always clear what you're attacking and what's your side.
+- An email from the bank's security lead at the start of each level, a clue and three hints you can buy, and a score that drops with every message.
+- A debrief after every level, and a shareable pentest report once you clear them all.
+- A How it's built page that explains the stack, what gets logged and the honest limits.
+
+## Keeping it from being abused
+
+A game about attacking AI is going to get attacked, and the AI runs on Cloudflare's free daily allowance that every player shares. So the server decides everything that counts. It builds the prompt, runs the filters, checks for the leak and keeps the score, and the chat history comes from its own log, not the browser.
+
+Every secret is worked out from a key on the server for each player and level, so it's never stored and the answer you find is yours alone. No model call happens without a reserved run, and one connection can only start three a day. The IP address is never saved, only a scrambled version that changes every day. What players type is wiped after 30 days by a daily job, because that's what the home page promises.
+
+## Getting the difficulty right
+
+When I first played it myself, I got stuck on level 2 and used all three hints. That's when I realised hard isn't the same as good. A filter that blocked my message looked exactly like the bot saying no, so I couldn't tell what had stopped me.
+
+So the game now tells you when a filter blocks you and which word set it off. The briefs hide a clue to the weak spot if you read closely, and the hints are real hints. The last one is a message you can just send. Clues took a few tries. First they showed on Easy only, then difficulty was locked for the whole run, which felt harsh. In the end a clue costs 250 points on the level where you see it, so you can switch difficulty whenever you like and it stays fair.
+
+## What I'd do next
+
+- Build levels 4 to 6: an email summariser you attack through an email you write, a banking agent with tools, and a boss level that stacks every defence.
+- Tighten the Content Security Policy so it no longer allows inline scripts.
+- Pick the bank's final name and check no real bank uses it.
+
+## What I learned
+
+Building the attacks taught me how these models actually fail. An AI only sees text, so "I work here" is just more text, and filters only catch what they were built to look for. The fix is almost never a stricter prompt. It's keeping the secret away from the model in the first place.
+
+Playing my own game also taught me to test on myself honestly. If I'm stuck with the answers in front of me, a player has no chance.
+
+{/* TODO(musa): check these two sections read like you, and add anything you learnt that I've missed. Screenshots are from the live game, captured 11 Nov 2026. */}
