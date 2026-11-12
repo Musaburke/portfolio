@@ -14,12 +14,12 @@ coverAlt: Level 1 of Break the AI. An email from the bank's security lead and th
 gallery:
   - src: ../../assets/projects/bta-leaked.jpg
     alt: The Leaked screen in lime green after winning level 1, with the extracted staff code and buttons for the next level, the debrief and back to the chat.
+  - src: ../../assets/projects/bta-inbox.jpg
+    alt: Level 4 of Break the AI. On the left, the email form the player writes into Priya's inbox. On the right, the bank's green staff inbox, with Inbox Assist's summary of five emails on top and the other emails' bodies hidden behind grey bars.
   - src: ../../assets/projects/bta-debrief.jpg
     alt: Level 1 debrief. Level 1 cleared in huge type, the score worked out from 2 messages and 0 hints, then what the attack was and why it worked.
   - src: ../../assets/projects/bta-home.jpg
-    alt: Break the AI title screen. A huge headline, a Play button and six level tiles, three live and three marked Soon.
-  - src: ../../assets/projects/bta-about.jpg
-    alt: The How it's built page, with cards on the stack, why the prompts are public, keeping it fair and what gets logged.
+    alt: Break the AI title screen. A huge headline, a Play button and six level tiles, four live and two marked Soon.
 ---
 
 ## The brief
@@ -30,7 +30,8 @@ You play a red-team contractor hired by Fernleigh Bank, a made-up bank. Each lev
 
 ## What I built
 
-- Three levels so far, each a different attack: pretending to be staff, getting round a keyword filter, and getting a PIN past an output filter by having it spelled out one character at a time.
+- Four levels so far, each a different attack: pretending to be staff, getting round a keyword filter, getting a PIN past an output filter by having it spelled out one character at a time, and slipping instructions into an email that the bank's AI summariser reads.
+- Level 4 has no chat at all. You write one email into a staff inbox and only see the summary the AI writes for her. Every email is wrapped in tags marked as data, and the way in is closing that tag yourself, so the lesson is that an AI reading outside text can be steered by whoever wrote it.
 - The bank's chat looks like a real product, in its own green, so it's always clear what you're attacking and what's your side.
 - An email from the bank's security lead at the start of each level, a clue and three hints you can buy, and a score that drops with every message.
 - A debrief after every level, and a shareable pentest report once you clear them all.
@@ -50,7 +51,7 @@ So the game now tells you when a filter blocks you and which word set it off. Th
 
 ## What I'd do next
 
-- Build levels 4 to 6: an email summariser you attack through an email you write, a banking agent with tools, and a boss level that stacks every defence.
+- Build levels 5 and 6: a banking agent with tools, and a boss level that stacks every defence.
 - Tighten the Content Security Policy so it no longer allows inline scripts.
 - Pick the bank's final name and check no real bank uses it.
 
