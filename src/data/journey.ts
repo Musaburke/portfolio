@@ -82,7 +82,7 @@ export const nodes: Node[] = [
     home: true,
     date: 'Dec 2025',
     title: 'Prof. Dr G. Hussein website',
-    role: 'My own',
+    role: 'Built for a client',
     stack: ['Web forms', 'CAPTCHA', 'GitHub Pages'],
     learned: "If communication with a client isn't done right, the build drags on. And reuse matters: I wrote hundreds of near-identical lines of HTML.",
     story: [
@@ -130,7 +130,7 @@ export const nodes: Node[] = [
     story: [
       'This is where I put everything together, including my past mistakes. I had a full plan and stuck to it. I asked the client all my questions at once instead of waiting, set up scheduled talks and built prototypes for them to react to.',
       "I also learnt how to use AI properly. I treat it as a co-agent: it helps me build, teaches me as I go and helps me debug when I'm stuck, and I review everything it recommends before it goes in. A lot of people use it blindly and their skills get dulled, so I made a point of using it the right way, and it went well.",
-      'It was my first time using Web3Forms, getting my own domain through Namecheap, deploying it and connecting it all through Cloudflare, after a lot of tutorials and failed deployments. It was also my first time doing proper security checks: HTTPS enforced with HSTS, a Content Security Policy, security headers and rate limiting. I set up a business email address with SPF and DMARC, used a Cloudflare Worker for email routing around launch, connected Google Search Console, and followed UK rules on handling user data.',
+      'It was my first time using Web3Forms, getting my own domain through Namecheap, deploying it and connecting it all through Cloudflare, after a lot of tutorials and failed deployments. It was also my first time doing proper security checks: HTTPS enforced with HSTS, a Content Security Policy, security headers and spam protection on the quote form. I set up a business email address with SPF and DMARC, used a Cloudflare Worker for email routing around launch, and connected Google Search Console. The form asks only for what a quote needs, and the site itself stores nothing.',
     ],
     more: { image: dsbAreas, alt: 'DSB areas page with London picked on a gold outline map of the five counties covered.' },
     image: dsb,
@@ -150,7 +150,7 @@ export const nodes: Node[] = [
     learned: 'Researching it taught me how to get more out of AI myself: a second brain in Obsidian, managing my usage and better prompts.',
     story: [
       'I set out to show how useful AI really is when it is used wisely. While researching it, I ended up learning how to get the most out of AI myself.',
-      'I discovered how much a second brain helps: notes in Obsidian that every new chat can start from. I learnt how to properly manage my usage and how to prompt AI better, and I checked every claim against a source, labelling how far I had read each one.',
+      'I discovered how much a second brain helps: notes in Obsidian that every new chat can start from. I learnt how to properly manage my usage and how to prompt AI better, and I labelled every source by how far I had read it.',
       'I built the site with Claude, and doing that taught me how to use Claude better, first hand. I turned that experience into guides on the site, like Manage your usage, Give AI a second brain and Build websites with AI, so other people can use what I learnt. It also took six design directions before one felt right.',
     ],
     more: { image: afgSources, alt: 'Sources page of the AI field guide showing how far each of the 50 sources was checked.' },

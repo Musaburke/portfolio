@@ -14,7 +14,7 @@ gallery:
   - src: ../../assets/projects/dsb-areas.jpg
     alt: Areas page with London picked on a gold outline map of the five counties covered, and a card offering Call and WhatsApp.
   - src: ../../assets/projects/dsb-reviews.jpg
-    alt: Customer reviews page showing a 5.0 average from 14 rated reviews, above three customer review cards.
+    alt: Customer reviews page showing a 5.0 average rating, above three customer review cards.
   - src: ../../assets/projects/dsb-carpet.jpg
     alt: Carpet cleaning section of the services page, with what's included, how it works and a photo of a freshly cleaned carpet.
   - src: ../../assets/projects/dsb-contact.jpg
@@ -48,4 +48,4 @@ This is where I put everything together. I had a full plan and stuck to it. I as
 
 I also learnt how to use AI properly. I treat it as a co-agent: it helps me build, teaches me as I go and helps me debug when I'm stuck, and I review everything it recommends before it goes in.
 
-It was my first time using Web3Forms, getting my own domain through Namecheap, deploying it and connecting it through Cloudflare, and my first time doing proper security checks, including rate limiting. I also set up a business email address with SPF and DMARC, used a Cloudflare Worker for email routing around launch, and followed UK rules on handling user data.
+It was my first time using Web3Forms, getting my own domain through Namecheap, deploying it and connecting it through Cloudflare, and my first time doing proper security checks, including spam protection on the quote form: a honeypot, a time trap and a cooldown, on top of Web3Forms' own rate limits. I also set up a business email address with SPF and DMARC and used a Cloudflare Worker for email routing around launch. The quote form asks only for what a quote needs and sends it straight to the business inbox; the site itself stores nothing.

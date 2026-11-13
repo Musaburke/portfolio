@@ -14,5 +14,6 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  integrations: [mdx(), sitemap()]
+  // /blog stays out of the sitemap until the first post is published.
+  integrations: [mdx(), sitemap({ filter: (page) => !page.endsWith('/blog/') })]
 });

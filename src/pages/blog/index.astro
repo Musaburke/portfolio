@@ -8,7 +8,7 @@ const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
 );
 const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
-<Base title="Writing" description="Notes on front-end development and web security by Musa Burke.">
+<Base title="Writing" noindex={posts.length === 0} description="Notes on front-end development and web security by Musa Burke.">
   <section class="frame head" data-reveal>
     <h1>Writing</h1>
     <p class="lead">Notes on building for the web, and what I'm learning about security.</p>

@@ -13,6 +13,7 @@
   --ink: #f1f1ef;
   --muted: #b4b5af;
   --accent: #9fd09c; /* brighter sage-mint so actions and highlights pop */
+  --accent-hover: #b6dcb3; /* lighter on hover, same hue */
   --accent-ink: #1c1c1c;
   --field-1: #c8c5ba;
   --field-1-ink: #1c1c1c;
@@ -89,7 +90,7 @@
   font-weight: 500; text-decoration: none;
   transition: transform 140ms var(--ease-out), background-color 180ms ease;
 }
-.btn:hover { background: #a2b8a1; }
+.btn:hover { background: var(--accent-hover); }
 .btn:active { transform: scale(0.97); }
 /* Secondary: a quiet pill for ways on, so the accent stays on the main action. */
 .btn-quiet { background: var(--surface); color: var(--ink); }
