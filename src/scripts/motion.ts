@@ -1,6 +1,8 @@
 // Shared scroll motion: section reveals, word-split headings, and the typed rotator.
 // Content is always in the DOM and visible without JS; this only adds the travel.
 
+import { isStill } from './still';
+
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Wrap each word of [data-split] elements so they can rise in one after another.
@@ -57,9 +59,15 @@ export function initReveals(root: ParentNode = document) {
 export function initRotator(el: HTMLElement) {
   const words: string[] = JSON.parse(el.dataset.words ?? '[]');
   if (!words.length || reduce) return;
-  let w = 0, c = words[0].length, deleting = false;
+  let w = 0, c = words[0].length, deleting = false, inView = true;
+  new IntersectionObserver(([e]) => { inView = !!e?.isIntersecting; }).observe(el);
   const tick = () => {
     const word = words[w];
+    // Paused (off screen, hidden tab or Pause motion): show the whole phrase and wait.
+    if (!inView || document.hidden || isStill()) {
+      el.textContent = word; c = word.length; deleting = false;
+      return setTimeout(tick, 500);
+    }
     if (!deleting) {
       c++;
       el.textContent = word.slice(0, c);

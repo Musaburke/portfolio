@@ -61,10 +61,11 @@ const person = {
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
-        var seen = false;
-        try { seen = sessionStorage.getItem('intro-seen') === '1'; } catch (e) {}
+        var seen = false, still = false;
+        try { seen = sessionStorage.getItem('intro-seen') === '1'; still = localStorage.getItem('still') === '1'; } catch (e) {}
+        if (still) d.classList.add('still');
         var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (d.hasAttribute('data-intro') && !seen && !reduce) d.classList.add('intro');
+        if (d.hasAttribute('data-intro') && !seen && !reduce && !still) d.classList.add('intro');
       })();
     </script>
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? person)} />

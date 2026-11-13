@@ -47,7 +47,8 @@ import { site } from '../data/site';
   .r2 { gap: clamp(3rem, 14vw, 13rem); }
   .r3 { gap: clamp(4rem, 26vw, 26rem); }
   .rows a, .top {
-    display: grid; justify-items: center; gap: 0.4rem;
+    display: grid; justify-items: center; align-content: center; gap: 0.4rem;
+    min-width: 44px; min-height: 44px; /* thumb-sized on phones */
     color: var(--ink); text-decoration: none; font-size: var(--step-small);
     opacity: 0; transform: translateY(20px);
     transition: opacity 500ms ease, transform 600ms var(--ease-out), color 200ms ease;

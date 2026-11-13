@@ -26,6 +26,7 @@ Musa Burke's portfolio. Static site: Astro 7, TypeScript (strict), Tailwind CSS 
   Site-wide, mounted in `Base.astro`: `Starfield` (background canvas), `Preloader` (home only, `intro` prop), `Header` (MB monogram, hamburger, side drawer), `BackToTop`, `Footer` (not on home).
   `Shot.astro` is the browser-window frame every project image goes through. `Icon.astro` holds the few inline icons.
 - `src/scripts/motion.ts`: reveals (`data-reveal`, `data-split` word rise, `.wipe` heading bar, `data-inview`) and the hero's typed rotator.
+- `src/scripts/still.ts`: one switch for holding motion still: the OS reduced-motion setting or the drawer's "Pause motion" button (`html.still`, saved in localStorage). Heavy effects check `isStill()` and listen for `motionchange`.
 - `src/scripts/three/`: `stage.ts` (shared renderer, pauses offscreen/hidden, one still frame on reduced motion), `globe.ts` (hero wireframe network), `orb.ts` (About liquid orb). Loaded with dynamic `import()` so Three.js never blocks first paint.
 - `tools/captures/`: HTML sources for images that are rendered rather than screenshotted (e.g. `security-headers.html`).
 - `src/styles/global.css`: all design tokens, buttons, links, the reveal animation, `.prose`.

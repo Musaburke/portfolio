@@ -1,8 +1,7 @@
 // Shared Three.js plumbing: renderer on a given canvas, sizing, and a loop that
 // only runs while the canvas is on screen and the tab is visible.
 import * as THREE from 'three';
-
-export const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+import { isStill } from '../still';
 
 // Heartbeat level published by Starfield.astro (0 at rest, ~1 at the peak).
 export const heartbeat = () => (window as unknown as { __beat?: number }).__beat ?? 0;
@@ -31,15 +30,17 @@ export function createStage(canvas: HTMLCanvasElement, fov = 40) {
   new ResizeObserver(resize).observe(canvas);
 
   const run = (frame: (t: number) => void) => {
-    if (reduceMotion()) { frame(0); renderer.render(scene, camera); return; }
     let raf = 0, visible = true;
     const loop = (t: number) => { frame(t); renderer.render(scene, camera); raf = requestAnimationFrame(loop); };
+    // Held still (reduced motion or the Pause motion button): one frame, redrawn if the setting changes.
     const sync = () => {
       cancelAnimationFrame(raf);
+      if (isStill()) { frame(0); renderer.render(scene, camera); return; }
       if (visible && !document.hidden) raf = requestAnimationFrame(loop);
     };
     new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); }).observe(canvas);
     document.addEventListener('visibilitychange', sync);
+    window.addEventListener('motionchange', sync);
     sync();
   };
 
