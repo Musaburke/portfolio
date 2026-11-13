@@ -68,7 +68,7 @@ const person = {
         if (d.hasAttribute('data-intro') && !seen && !reduce && !still) d.classList.add('intro');
       })();
     </script>
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? person)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? person).replace(/</g, '\\u003c')} />
   </head>
   <body>
     <Starfield />
