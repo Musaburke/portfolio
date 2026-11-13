@@ -26,7 +26,8 @@ export type Node = {
   title: string;
   role: string;        // "My own", "Team project", ...
   stack: string[];     // skills this node adds to the running list
-  learned: string;     // the key takeaway, short enough for the Journey card
+  learned: string;
+  summary?: string;      // one-line description, shown on the All work page for nodes with no case study     // the key takeaway, short enough for the Journey card
   story: string[];     // the longer version, shown on /journey
   more?: { image: ImageMetadata; alt: string }; // a second screenshot on /journey
   image: ImageMetadata;
@@ -48,6 +49,7 @@ export const nodes: Node[] = [
     role: 'Team project',
     stack: ['JavaScript', 'React', 'Tailwind CSS', 'Vite', 'Flask', 'Postman', 'Git'],
     learned: 'How to work with a collaborator: committing, pushing and building one site together. Also my first proper go at React.',
+    summary: 'A news aggregator built with a friend: they made the news page, I made the weather, currency, NASA and crypto pages and designed the site.',
     story: [
       'News Flux is a news aggregator I built with a friend. He made the news page. I made the weather, currency, NASA and crypto pages and designed the site.',
       'It taught me how to work with a collaborator, and how to commit and push. I got much more practice with API keys, which gave me trouble at first, and picked up better design techniques from templates and classes I found online and on GitHub.',
@@ -68,6 +70,7 @@ export const nodes: Node[] = [
     role: 'My own',
     stack: ['HTML', 'CSS', 'REST APIs'],
     learned: 'This taught me the very basics: what an API key is, how it works and how to use one.',
+    summary: 'My first try at building with an API: a small site of Islamic tools that includes prayer times.',
     story: [
       "This was my first real try at building something with an API. It was very low level, it wasn't technical and it didn't look good at all.",
       'It did teach me the very basics of what an API key is and how it works. Seeing that work is what made me want to build more.',
@@ -88,6 +91,7 @@ export const nodes: Node[] = [
     role: 'Built for a client',
     stack: ['Web forms', 'CAPTCHA', 'GitHub Pages'],
     learned: "If communication with a client isn't done right, the build drags on. And reuse matters: I wrote hundreds of near-identical lines of HTML.",
+    summary: 'A site for a professor: their work, achievements and history in one place.',
     story: [
       'I made this site for a professor to document his work, achievements and history. It was my first bigger solo project, and it showed.',
       "The main thing I learnt is how important it is to communicate with a client. I didn't do it well, and that made the build extremely long and dragged out.",

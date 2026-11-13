@@ -18,6 +18,7 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 - [ ] `src/content/projects/dsb-cleaning.mdx`: how the client found you, and what they had before
 - [ ] `src/content/projects/ai-field-guide.mdx`: who is it for first, and what made you start it?
 - [ ] `src/content/projects/break-the-ai.mdx`: check the last two sections read like you
+- [ ] `src/data/journey.ts`: check the one-line `summary` on News Flux, Islamic Tools Hub and the Prof Hussein site (shown on the All work page)
 - [ ] `src/content/projects/the-lure.mdx`: check it reads like you, and confirm the "about 75 brands" and "UK figures" lines
 
 ## 5. Your own screenshots (replaces the ones I captured)

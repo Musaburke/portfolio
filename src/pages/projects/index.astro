@@ -2,13 +2,19 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Shot from '../../components/Shot.astro';
+import { published } from '../../data/journey';
+import { site } from '../../data/site';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+// Journey nodes with no case study of their own (a node links to one only through its href), newest first.
+const caseHrefs = new Set(projects.map((p) => `/projects/${p.id}`));
+const others = published.filter((n) => !(n.href && caseHrefs.has(n.href))).reverse();
+const linkLabel = (href?: string) => (href?.includes('github.com') ? 'Code on GitHub' : 'Visit site');
 ---
-<Base title="Work" description="Case studies of websites and apps built by Musa Burke.">
+<Base title="All work" description="Everything Musa Burke has built so far: case studies for the main projects, then the earlier ones.">
   <section class="frame head" data-reveal>
-    <h1>Work</h1>
-    <p class="lead">{projects.length} projects, written up properly: the brief, what I built, and what I'd change.</p>
+    <h1>All work</h1>
+    <p class="lead">{projects.length} case studies, then {others.length} earlier projects. The <a class="link" href="/journey">Journey</a> shows how they fit together.</p>
   </section>
   <ul class="frame list">
     {projects.map((p, i) => (
@@ -25,6 +31,31 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
       </li>
     ))}
   </ul>
+
+  {others.length > 0 && (
+    <section class="frame more" aria-labelledby="more-title">
+      <h2 id="more-title" data-reveal>Earlier projects</h2>
+      <ul class="cards">
+        {others.map((n) => (
+          <li data-reveal>
+            <Shot src={n.image} alt={n.alt} host={n.host} sizes="(max-width: 900px) 100vw, 33vw" />
+            <h3>{n.title}</h3>
+            {n.summary && <p>{n.summary}</p>}
+            <p class="muted meta">{n.date} · {n.role} · {n.stack.join(' · ')}</p>
+            {n.href && <p><a class="link" href={n.href}>{linkLabel(n.href)}<span class="visually-hidden">: {n.title}</span></a></p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="frame end" aria-labelledby="end-title">
+    <h2 id="end-title" data-reveal>See how it fits together</h2>
+    <p class="go2" data-reveal>
+      <a class="btn btn-quiet" href="/journey">My journey</a>
+      <a class="link" href={`mailto:${site.email}`}>Email me</a>
+    </p>
+  </section>
 </Base>
 
 <style>
@@ -42,8 +73,16 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
   h2 a:hover { color: var(--accent); }
   .meta { font-size: var(--step-small); }
   .go { margin-top: 0.5rem; }
+  .more { margin-top: calc(var(--section) * 1.2); }
+  .cards { margin-top: 3rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); align-items: start; }
+  .cards li { display: grid; gap: 0.9rem; }
+  .cards h3 { margin-top: 0.5rem; font-size: var(--step-lead); letter-spacing: -0.02em; line-height: 1.15; }
+  .cards .meta { font-size: 1rem; }
+  .end { margin-top: var(--section); }
+  .go2 { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
   @media (max-width: 900px) {
     .proj { display: block; }
     .text { margin-top: 1.75rem; }
+    .cards { grid-template-columns: 1fr; }
   }
 </style>
