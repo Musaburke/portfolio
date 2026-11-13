@@ -22,7 +22,7 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/jo
 </header>
 
 <div class="scrim" data-scrim></div>
-<nav id="drawer" class="drawer glass" aria-label="Main" hidden data-drawer>
+<nav id="drawer" class="drawer glass" aria-label="Main" data-drawer>
   <ol class="links">
     {links.map((l, i) => (
       <li style={`--i:${i}`}>
@@ -31,6 +31,7 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/jo
     ))}
   </ol>
   <div class="foot" style={`--i:${links.length}`}>
+    <button type="button" class="pause" aria-pressed="false" data-pause>Pause motion</button>
     <a href={site.github} rel="me" aria-label="GitHub"><Icon name="github" /></a>
     <a href={site.linkedin} rel="me" aria-label="LinkedIn"><Icon name="linkedin" /></a>
     <a href={`mailto:${site.email}`} aria-label="Email"><Icon name="mail" /></a>
@@ -38,22 +39,34 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/jo
 </nav>
 
 <script>
+  import { setStill } from '../scripts/still';
+
   const hdr = document.querySelector<HTMLElement>('[data-hdr]')!;
   const burger = document.querySelector<HTMLButtonElement>('[data-burger]')!;
   const drawer = document.querySelector<HTMLElement>('[data-drawer]')!;
   const scrim = document.querySelector<HTMLElement>('[data-scrim]')!;
   const root = document.documentElement;
+  // Hidden from here rather than in the markup, so without JS the links stay visible (see the no-JS styles).
+  drawer.hidden = true;
+
+  const pause = document.querySelector<HTMLButtonElement>('[data-pause]')!;
+  const syncPause = () => pause.setAttribute('aria-pressed', String(root.classList.contains('still')));
+  syncPause();
+  pause.addEventListener('click', () => { setStill(!root.classList.contains('still')); syncPause(); });
 
   const onScroll = () => hdr.classList.toggle('scrolled', window.scrollY > 24);
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  const focusables = () => [burger, ...drawer.querySelectorAll<HTMLElement>('a')];
+  const focusables = () => [burger, ...drawer.querySelectorAll<HTMLElement>('a, button')];
   // The drawer is display:none while closed; it is shown a frame before the slide-in
   // starts and hidden again once the slide-out has finished.
   let hideTimer = 0;
+  // While the drawer is open, the page behind it is inert, so neither a screen reader nor Tab can reach it.
+  const behind = () => document.querySelectorAll<HTMLElement>('main, body > footer, [data-totop]');
   const setOpen = (open: boolean) => {
     clearTimeout(hideTimer);
+    behind().forEach((el) => (el.inert = open));
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     if (open) {
@@ -66,7 +79,7 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/jo
     }
   };
   burger.addEventListener('click', () => setOpen(!root.classList.contains('menu-open')));
-  scrim.addEventListener('click', () => setOpen(false));
+  scrim.addEventListener('click', () => { setOpen(false); burger.focus(); });
   drawer.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setOpen(false); });
   document.addEventListener('keydown', (e) => {
     if (!root.classList.contains('menu-open')) return;
@@ -139,6 +152,23 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/jo
     transition: transform 600ms cubic-bezier(0.77, 0, 0.175, 1);
   }
   .drawer[hidden] { display: none; }
+
+  /* No JS: the burger can't open anything, so the links sit in the bar as a plain row. */
+  :global(html:not(.js)) .burger { display: none; }
+  :global(html:not(.js)) .drawer {
+    display: flex; position: absolute; top: 0; bottom: auto; left: auto; right: var(--margin); z-index: 56;
+    width: auto; padding: 1.1rem 0; transform: none;
+    background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; box-shadow: none;
+  }
+  @media (max-width: 760px) {
+    :global(html:not(.js)) .drawer { top: 3.4rem; left: var(--margin); right: var(--margin); padding: 0; }
+    :global(html:not(.js)) .links { gap: 0 1rem; }
+    :global(html:not(.js)) .links a { padding: 0.5rem 0; }
+  }
+  :global(html:not(.js)) .links { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
+  :global(html:not(.js)) .links li { opacity: 1; transform: none; }
+  :global(html:not(.js)) .links a { font-size: var(--step-body); padding: 0.6rem 0; }
+  :global(html:not(.js)) .links a::before, :global(html:not(.js)) .foot { display: none; }
   :global(html.menu-open) .drawer { transform: none; }
   .links { display: grid; gap: 0.35rem; }
   .links li, .foot {
@@ -164,7 +194,23 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/jo
   .links a:hover { color: var(--ink); transform: translateX(4px); }
   .links a[aria-current] { color: var(--ink); }
   .links a[aria-current]::before { transform: scaleX(1); }
-  .foot { display: flex; gap: 1.25rem; }
+  .foot { display: flex; align-items: center; flex-wrap: wrap; gap: 1.25rem; }
+  .pause {
+    all: unset; cursor: pointer; flex-basis: 100%; margin-bottom: 0.5rem;
+    min-height: 44px; display: inline-flex; align-items: center; gap: 0.6rem;
+    color: var(--muted); font-size: var(--step-body);
+    transition: color 200ms ease, transform 200ms var(--ease-out);
+  }
+  .pause::before {
+    content: ''; width: 0.6rem; height: 0.6rem; border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px currentColor; /* taste-skill-ignore */
+    transition: background-color 200ms ease;
+  }
+  .pause[aria-pressed='true'] { color: var(--ink); }
+  .pause[aria-pressed='true']::before { background: var(--accent); box-shadow: none; }
+  .pause:hover { color: var(--ink); }
+  .pause:active { transform: scale(0.97); }
+  .pause:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
   .foot a { color: var(--muted); transition: color 200ms ease, transform 200ms var(--ease-out); padding: 0.4rem; margin: -0.4rem; }
   .foot a:hover { color: var(--ink); transform: translateY(-2px); }
 

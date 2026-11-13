@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 // Screenshot a page at desktop (1440) and mobile (390) widths.
 // Usage:
-//   node tools/screenshot.mjs <path-or-url> [label] [--full] [--hd] [--png] [--out <dir>]
+//   node tools/screenshot.mjs <path-or-url> [label] [--full] [--hd] [--png] [--out <dir>] [--size WxH] [--scroll <px|#id+px>]
 //   node tools/screenshot.mjs /about            -> http://localhost:4321/about
 //   node tools/screenshot.mjs https://site.com  -> any URL
 // Output: .tmp/shots/<label>-desktop.jpg and <label>-mobile.jpg (overwritten each run).
+// --size 1280x720 shoots one custom viewport (label suffix = the size) instead of desktop + mobile.
+// --scroll 2400 or --scroll #journey+900 scrolls there before a viewport shot (for pinned or scroll-driven sections).
 // Default is 1x JPEG, which is cheap to read back. --hd = 2x, --png = PNG (use both for project captures).
 // Needs Google Chrome installed (uses playwright-core with channel "chrome", no browser download).
 import { chromium } from 'playwright-core';
@@ -17,16 +19,21 @@ const hd = args.includes('--hd');
 const png = args.includes('--png');
 const outIdx = args.indexOf('--out');
 const outDir = outIdx > -1 ? args[outIdx + 1] : '.tmp/shots';
-const positional = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--out');
+const valueOf = (flag) => { const i = args.indexOf(flag); return i > -1 ? args[i + 1] : undefined; };
+const size = valueOf('--size');
+const scroll = valueOf('--scroll');
+const positional = args.filter((a, i) => !a.startsWith('--') && !['--out', '--size', '--scroll'].includes(args[i - 1]));
 const target = positional[0] ?? '/';
 const base = process.env.BASE_URL ?? 'http://localhost:4321';
 const url = /^(https?|file):\/\//.test(target) ? target : base + (target.startsWith('/') ? target : '/' + target);
 const label = positional[1] ?? (target.replace(/^https?:\/\//, '').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'home');
 
-const viewports = [
-  { name: 'desktop', width: 1440, height: 900 },
-  { name: 'mobile', width: 390, height: 844 },
-];
+const viewports = size
+  ? [{ name: size, width: Number(size.split('x')[0]), height: Number(size.split('x')[1]) }]
+  : [
+      { name: 'desktop', width: 1440, height: 900 },
+      { name: 'mobile', width: 390, height: 844 },
+    ];
 
 mkdirSync(outDir, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome' });
@@ -53,6 +60,14 @@ try {
         new Promise((r) => setTimeout(r, 15000)),
       ]));
       await page.waitForTimeout(900);
+    }
+    if (scroll) {
+      await page.evaluate((s) => {
+        const [sel, off] = s.startsWith('#') ? s.split('+') : [null, s];
+        const top = sel ? document.querySelector(sel).getBoundingClientRect().top + scrollY : 0;
+        window.scrollTo(0, top + Number(off ?? 0));
+      }, scroll);
+      await page.waitForTimeout(1200);
     }
     const file = join(outDir, `${label}-${vp.name}.${png ? 'png' : 'jpg'}`);
     await page.screenshot({ path: file, fullPage: full, ...(png ? {} : { quality: 70 }) });

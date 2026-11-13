@@ -79,6 +79,15 @@ const groups: { title: string; items: Entry[] }[] = [
       <li data-reveal><h3>Also</h3><p class="detail">Java (object-oriented coursework), Python, Git, Swift basics.</p></li>
     </ul>
   </section>
+
+  <section class="frame block" aria-labelledby="h-next">
+    <h2 id="h-next">See the work</h2>
+    <div class="go">
+      <a class="btn" href="/projects">Read the case studies</a>
+      <a class="btn btn-quiet" href="/journey">My journey</a>
+      <a class="link" href={`mailto:${site.email}`}>Email me</a>
+    </div>
+  </section>
 </Base>
 
 <style>
@@ -102,6 +111,8 @@ const groups: { title: string; items: Entry[] }[] = [
   .cert-img { display: block; width: 100%; max-width: 40rem; height: auto; border-radius: 10px; }
   :not(.cert-link) > .cert-img { margin-top: 2.5rem; }
   @media (prefers-reduced-motion: reduce) { .cert-link { transition: none; } .cert-link:hover { transform: none; } }
+  #certifications { scroll-margin-top: 6rem; } /* clear the fixed header when the home page links here */
+  .go { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
   .when { font-variant-numeric: tabular-nums; padding-top: 0.35rem; }
   .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 3rem; }
   .skills li:nth-child(odd) { padding-right: 1rem; }

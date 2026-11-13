@@ -76,6 +76,8 @@
   column-gap: clamp(1rem, 2vw, 2rem);
 }
 .muted { color: var(--muted); }
+/* Pause motion (drawer button): looping animations play once and stop. One-off entrances still finish, so nothing stays hidden. */
+html.still *, html.still *::before, html.still *::after { animation-iteration-count: 1 !important; }
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap;

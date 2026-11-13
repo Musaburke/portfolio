@@ -85,7 +85,8 @@ const M = nodes.length + 1; // projects plus the future
   const root = document.querySelector<HTMLElement>('[data-journey]');
   if (root) {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-    const wide = matchMedia('(min-width: 901px)');
+    // Pinning needs room for the card and the skills row; shorter screens (most laptops at 720) get the plain timeline.
+    const wide = matchMedia('(min-width: 901px) and (min-height: 800px)');
     const items = [...root.querySelectorAll<HTMLElement>('[data-node]')];
     const cards = items.map((el) => el.querySelector<HTMLElement>('[data-card]')!);
     const chips = [...root.querySelectorAll<HTMLElement>('[data-chip]')];
@@ -212,7 +213,7 @@ const M = nodes.length + 1; // projects plus the future
 
   /* ---------- pinned: travel down a line in space (wide screens, motion allowed) ---------- */
   .journey.pinned { height: calc(100svh + (var(--m) - 1) * 55svh); padding-block: 0; }
-  .pinned .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --gap: 34svh; --cw: min(40vw, 520px, 56svh); }
+  .pinned .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --gap: 34svh; --cw: min(40vw, 520px, calc((100svh - 600px) * 1.5)); } /* the card fits between the heading row and the skills row */
   .pinned .top { position: absolute; top: 5rem; left: 0; right: 0; z-index: 3; margin-inline: auto; width: 100%; max-width: var(--max); padding-inline: var(--margin); }
   .pinned h2 { font-size: var(--step-lead); }
   .pinned .era { display: block; font-size: clamp(2rem, 1.2rem + 2.4vw, 4rem); letter-spacing: -0.04em; color: var(--hue); line-height: 1; transition: color 600ms ease; }

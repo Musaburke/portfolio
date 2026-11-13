@@ -13,3 +13,5 @@
 - The starfield canvas is fixed, so full-page shots only show stars in the top screen. Check it live or with a viewport shot.
 - If the dev server returns 500 after a content-schema change, restart it: `npx astro dev stop`, then `npx astro dev --background`.
 - The Astro dev toolbar is disabled in `astro.config.mjs` so it doesn't show in screenshots.
+- Pinned or scroll-driven sections (the Journey) need checking at laptop heights too: `node tools/screenshot.mjs / label --size 1280x720 --scroll "#journey+1500"`. Try 720, 810, 864 and 900 tall.
+- Tailwind's base layer hides `[hidden]` with `!important`, and a layered `!important` beats anything you write. To show something without JS, leave `hidden` out of the markup and set it from the script.

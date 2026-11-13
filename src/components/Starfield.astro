@@ -16,6 +16,8 @@
 </style>
 
 <script>
+  import { isStill } from '../scripts/still';
+
   type Star = {
     x: number; y: number; r: number; base: number;
     phase: number; speed: number; layer: 0 | 1 | 2; tint: 0 | 1;
@@ -70,7 +72,7 @@
     const rand = (a: number, b: number) => a + Math.random() * (b - a);
 
     function build() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5); // a full-screen canvas: 1.5 looks the same as 2 for soft dots, at half the pixels
       w = window.innerWidth;
       h = window.innerHeight;
       canvas!.width = Math.round(w * dpr);
@@ -235,13 +237,17 @@
       }
     }
 
+    // Capped at about 60 fps. The motion is tuned per frame, so on a 120 Hz screen it would also run twice as fast.
+    let lastFrame = 0;
     function loop(now: number) {
-      frame(now);
       raf = requestAnimationFrame(loop);
+      if (now - lastFrame < 15) return;
+      lastFrame = now;
+      frame(now);
     }
     function start() {
       cancelAnimationFrame(raf);
-      if (reduce.matches) frame(0, true);
+      if (isStill()) frame(0, true);
       else raf = requestAnimationFrame(loop);
     }
 
@@ -259,8 +265,14 @@
       if (document.hidden) cancelAnimationFrame(raf);
       else start();
     });
-    reduce.addEventListener('change', start);
-    if (reduce.matches) window.addEventListener('scroll', () => frame(0, true), { passive: true });
+    window.addEventListener('motionchange', start);
+    // Held still, the one frame is redrawn on scroll (at most once a frame) so the parallax still lines up.
+    let stillQueued = false;
+    window.addEventListener('scroll', () => {
+      if (!isStill() || stillQueued) return;
+      stillQueued = true;
+      requestAnimationFrame(() => { stillQueued = false; frame(0, true); });
+    }, { passive: true });
 
     const contact = document.getElementById('contact');
     if (contact) {
