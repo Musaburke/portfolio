@@ -30,7 +30,7 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 ## 6. Deploy
 - [ ] Real domain in `astro.config.mjs` (line 10) and `public/robots.txt` (the Sitemap line)
 - [x] Cloudflare Pages: live at https://musa-portfolio-ef2.pages.dev since 9 Nov 2026 (project `musa-portfolio`, deploys from `master`).
-- [x] CSP enforced on 10 Nov 2026, after every page showed no violations at desktop and phone width. It still allows inline scripts; tightening that is its own PR.
+- [x] CSP enforced on 10 Nov 2026, after every page showed no violations at desktop and phone width. Inline scripts are allowed by hash only since 13 Nov 2026 (`npm run check` fails if one is missing).
 
 ## 7. Journey (`src/data/journey.ts`)
 - [ ] Read the "what I learned" lines: they are condensed from your notes, so the "story" text too (`src/data/journey.ts`), and fix any that don't sound like you
