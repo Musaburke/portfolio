@@ -52,6 +52,6 @@ export const certifications: Cert[] = [
       'Nine courses on how a security team works day to day. I searched logs in a SIEM to find suspicious activity, got comfortable in the Linux command line, wrote SQL queries to pull out security data and wrote Python scripts to automate the repetitive checks. It also covered how networks get attacked, managing risk with frameworks like NIST, and handling an incident from the first alert to closing it.',
     verify: 'https://coursera.org/verify/professional-cert/4DNGSYGO1PEL',
     image: googleCyber,
-    alt: 'Google Cybersecurity Professional Certificate awarded to Musa Ibraheem Burke on 5 November 2026, listing its nine courses, from Foundations of Cybersecurity to Automate Cybersecurity Tasks with Python.',
+    alt: 'Musa Burke’s Google Cybersecurity Professional Certificate, awarded on 5 November 2026, listing its nine courses, from Foundations of Cybersecurity to Automate Cybersecurity Tasks with Python.',
   },
 ];

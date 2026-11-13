@@ -47,7 +47,7 @@ Dealt by the `design-taste-frontend` skill (seed 1513686349, saved in `.taste-sk
 - Starfield (`Starfield.astro`): canvas behind everything. Twinkling stars in three depth layers, a lub-dub heartbeat pulse that ripples out from the top centre every 4.8 s (stronger while `#contact` is on screen), cursor brightens and parts nearby stars, a shooting star every 18-40 s, scroll and pointer parallax. Reduced motion draws one still frame. Tune via the constants at the top of its script.
 - Images: every project image is a `Shot` (16/10, the exact ratio of a 1440x900 capture, so nothing is cropped). Images in a row share top edges and widths; no offset or scattered placement.
 - Idea: the two shipped projects are the two doors on the dark wall in the hero.
-- Colour tokens: `--bg #1c1c1c`, `--surface #262626`, `--ink #f1f1ef`, `--muted #a3a49f`, `--accent #8fa68e` (sage, only on the primary action and active states).
+- Colour tokens: `--bg #1c1c1c`, `--surface #262626`, `--ink #f1f1ef`, `--muted #b4b5af`, `--accent #9fd09c` (sage-mint, hover `--accent-hover #b6dcb3`, only on the primary action and active states).
 - Type: Clash Grotesk 400/500 from Fontshare, one family. Steps: `--step-small`, `--step-body`, `--step-lead`, `--step-head`, `--step-hero`. No sixth size.
 - Buttons are pills (`.btn`). Margins come from `--margin`; section gaps from `--section`; home sections use `.section-screen` (min 100svh, content centred).
 - Glass (`.glass`, header once scrolled) only on: scrolled header, side drawer, contact card.
