@@ -5,7 +5,7 @@ import afgHome from '../assets/projects/afg-home.jpg';
 import dsbAreas from '../assets/projects/dsb-areas-desktop.jpg';
 import renewlyDashboard from '../assets/projects/renewly-dashboard.jpg';
 import renewlyRenewals from '../assets/projects/renewly-renewals.jpg';
-import security from '../assets/projects/dsb-security-headers.jpg';
+import security from '../assets/projects/portfolio-security-headers.jpg';
 import { toolkit, type Shot as ShotKey } from '../data/toolkit';
 
 const shots: Record<ShotKey, { src: ImageMetadata; host: string }> = {
@@ -14,7 +14,7 @@ const shots: Record<ShotKey, { src: ImageMetadata; host: string }> = {
   dsbAreas: { src: dsbAreas, host: 'dsbcommercialcleaning.co.uk/areas' },
   renewlyDashboard: { src: renewlyDashboard, host: 'Renewly · sample data' },
   renewlyRenewals: { src: renewlyRenewals, host: 'Renewly · sample data' },
-  security: { src: security, host: 'public/_headers' },
+  security: { src: security, host: 'public/_headers · this site' },
 };
 const used = [...new Set(toolkit.map((t) => t.shot))];
 const first = toolkit[0].shot;

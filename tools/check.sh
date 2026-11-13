@@ -4,6 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 npx astro check
 npx astro build
+node tools/csp-hash.mjs
 echo
 echo "== TODO(musa) still open =="
 grep -rn "TODO(musa)" src astro.config.mjs || echo "none"

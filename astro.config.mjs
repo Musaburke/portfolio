@@ -11,7 +11,9 @@ export default defineConfig({
   site: 'https://musa-portfolio-ef2.pages.dev',
   devToolbar: { enabled: false },
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    // Never inline small scripts: the CSP in public/_headers allows only same-origin scripts plus one hash.
+    build: { assetsInlineLimit: 0 }
   },
 
   // /blog stays out of the sitemap until the first post is published.

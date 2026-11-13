@@ -1,6 +1,6 @@
 # Pre-ship checklist
 
-1. `bash tools/check.sh`: 0 errors, and read the TODO(musa) list. Anything visitor-facing that still says TODO blocks launch.
+1. `bash tools/check.sh`: 0 errors, the CSP hash check passes, and read the TODO(musa) list. If the hash check fails, put the hash it prints into `script-src` in `public/_headers`, then rebuild `tools/captures/portfolio-security-headers.html` (see `workflows/add-project.md`). Anything visitor-facing that still says TODO blocks launch.
 2. `astro.config.mjs` `site` is the real domain.
 3. `npm run preview`, then screenshot every route (`/`, `/projects`, each case study, `/about`, `/blog`, `/404`) with `--full`. Read them all.
 4. Keyboard only: Tab from the top. Skip link appears, every control is reachable, focus ring visible, toolkit rows open with Enter.
