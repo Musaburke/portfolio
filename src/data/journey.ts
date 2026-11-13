@@ -39,26 +39,8 @@ export type Node = {
 
 export const nodes: Node[] = [
   {
-    id: 'islamic-tools-hub',
-    date: 'Nov 2025',
-    title: 'Islamic Tools Hub',
-    role: 'My own',
-    stack: ['HTML', 'CSS', 'REST APIs'],
-    learned: 'This taught me the very basics: what an API key is, how it works and how to use one.',
-    story: [
-      "This was my first real try at building something with an API. It was very low level, it wasn't technical and it didn't look good at all.",
-      'It did teach me the very basics of what an API key is and how it works. Seeing that work is what made me want to build more.',
-    ],
-    more: { image: prayerTimes, alt: 'Prayer Times page of Islamic Tools Hub: city, country and calculation method fields above a Get Prayer Times button.' },
-    image: prayer,
-    alt: 'Islamic Tools Hub home page: lanterns and a crescent moon behind four buttons for Prayer Times, Tasbeeh Counter, Random Hadith and Islamic Quiz.',
-    host: 'Practice_prayer_api · local run',
-    href: 'https://github.com/Musaburke/Practice_prayer_api',
-    polish: 0,
-    hue: '#f2a65a', // lantern orange
-  },
-  {
     id: 'news-flux',
+    home: true,
     date: 'Nov 2025',
     title: 'News Flux',
     role: 'Team project',
@@ -76,6 +58,25 @@ export const nodes: Node[] = [
     href: 'https://news-flux-krxg.onrender.com/',
     polish: 1,
     hue: '#4fd18b', // News Flux green
+  },
+  {
+    id: 'islamic-tools-hub',
+    date: 'Nov 2025',
+    title: 'Islamic Tools Hub',
+    role: 'My own',
+    stack: ['HTML', 'CSS', 'REST APIs'],
+    learned: 'This taught me the very basics: what an API key is, how it works and how to use one.',
+    story: [
+      "This was my first real try at building something with an API. It was very low level, it wasn't technical and it didn't look good at all.",
+      'It did teach me the very basics of what an API key is and how it works. Seeing that work is what made me want to build more.',
+    ],
+    more: { image: prayerTimes, alt: 'Prayer Times page of Islamic Tools Hub: city, country and calculation method fields above a Get Prayer Times button.' },
+    image: prayer,
+    alt: 'Islamic Tools Hub home page: lanterns and a crescent moon behind four buttons for Prayer Times, Tasbeeh Counter, Random Hadith and Islamic Quiz.',
+    host: 'Practice_prayer_api · local run',
+    href: 'https://github.com/Musaburke/Practice_prayer_api',
+    polish: 0,
+    hue: '#f2a65a', // lantern orange
   },
   {
     id: 'hussein',
@@ -186,8 +187,8 @@ export const nodes: Node[] = [
 
 // Every node that is ready, oldest first (/journey shows all of these).
 export const published = nodes.filter((n) => !n.draft);
-// The home page keeps the timeline short: at most five picks, so nobody is stuck scrolling through it.
-export const homeNodes = published.filter((n) => n.home).slice(0, 5);
+// The home page keeps the timeline short: at most six picks, so nobody is stuck scrolling through it.
+export const homeNodes = published.filter((n) => n.home).slice(0, 6);
 
 // Used when a screenshot is missing: swap `image` for this and keep a truthful `alt`.
 export const missingShot = placeholder;

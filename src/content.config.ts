@@ -12,6 +12,7 @@ const projects = defineCollection({
       role: z.string(),
       stack: z.array(z.string()),
       order: z.number(),
+      home: z.boolean().default(true), // false keeps a project off the home Work section; it still has a page and shows on /projects
       live: z.url().optional(),
       repo: z.url().optional(),
       host: z.string(),
