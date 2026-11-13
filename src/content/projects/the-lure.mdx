@@ -1,0 +1,56 @@
+---
+title: The Lure
+summary: A scroll-down dive through the ocean's depth zones. At each depth, a real deep-sea animal that survives by trickery, the scam that works the same way, and a challenge to spot the fake.
+year: '2026'
+role: Design, build, writing and sourcing. My own project.
+stack: [Astro, TypeScript, WebGL, Web Audio, Lenis, Cloudflare Pages]
+order: 5
+home: false
+live: https://the-lure.pages.dev
+repo: https://github.com/Musaburke/the-lure
+host: the-lure.pages.dev
+slab: '#0d5274'
+cover: ../../assets/projects/lure-home.jpg
+coverAlt: The first screen of The Lure. The title and a one-line promise on deep blue water, a depth readout on the left, and a glass-like bubble on the right showing two reef sharks.
+gallery:
+  - src: ../../assets/projects/lure-zone.jpg
+    alt: The mimic octopus zone at 28 metres. A photo of the octopus sits inside the floating glass lens, with the depth, pressure, water temperature and sunlight readout on the left. On the right, the text explains how the octopus survives by disguise, then that scammers use disguises too.
+  - src: ../../assets/projects/lure-challenge.jpg
+    alt: A spot-the-fake challenge at 71 metres. Three text messages that appear to come from a made-up Northway Bank, one of them a scam, under the question "Which one?" and a counter reading 1 of 10.
+  - src: ../../assets/projects/lure-practice.jpg
+    alt: The practice dive page. Switches for Normal and Hard level and for the type of scam, counters for depth, right answers, streak and deepest dive, and a ruler of real depth landmarks on the right beside a beluga photo in the lens.
+  - src: ../../assets/projects/lure-abyss.jpg
+    alt: The end of the dive at 4,450 metres. Buttons to share the site and to start a practice dive, beside a dark lens with a glowing green rim.
+---
+
+## The brief
+
+After finishing the Google Cybersecurity Certificate, I wanted a project that would be useful to people outside tech. The people most likely to take a scammer's bait are often the ones least likely to read about scams, so I wrote this for everyday adults, the kind of family member who gets a "your parcel is held" text, and made it something you would scroll through for its own sake.
+
+You sink through the ocean's real depth zones. At each one you meet a deep-sea animal that survives by tricking others, then the online scam that works the same way, then a short challenge where you pick out the fake. The mimic octopus disguises itself as more dangerous animals, so it stands for impersonation. The anglerfish's glowing lure stands for bait: fake refunds, prizes and investments.
+
+## What I built
+
+- **The lens.** One glass-like bubble stays on screen as you scroll. A WebGL shader refracts the animal's photo through it, and it leans towards your cursor and ripples when you tap it. It follows the scroll on a spring, beside each zone's text. Without WebGL a 2D version takes over.
+- **The water.** The page colour follows real light, from sunlit blue to black. A gauge shows depth, pressure, temperature and sunlight for wherever you are, from NOAA figures, and glowing plankton light up near your pointer.
+- **Spot the fake.** 60 questions as realistic texts, emails, calls, shop listings, links and profiles. Tap the fake and its giveaway lights up with a one-line reason and the name of the scam.
+- **Hard mode.** 20 harder questions on ten named real attacks, such as fake CAPTCHAs, QR code stickers and SIM swaps. Some have no fake at all.
+- **The practice dive.** An endless game. Every right answer takes you 100 metres deeper, past a ruler of sourced landmarks, towards the Challenger Deep.
+- **The link checker.** Paste a link and see its warning signs.
+- **Sound.** Optional, quiet underwater ambience made live with Web Audio, so there are no audio files. It is off until you turn it on.
+
+Every effect has a reduced-motion version, pauses when the tab is hidden, and has a no-JavaScript fallback where every fact, photo and answer is still readable. The site runs under a strict Content Security Policy with no inline scripts and no third-party code.
+
+## Keeping it honest
+
+My first link checker called amazonn.com safe, because nothing on it looked wrong. A checker can only recognise tricks it already knows, so I rebuilt it to compare each address with the real addresses of about 75 brands that scammers copy, and to never call a link safe. It names the look-alike and shows which website the link really goes to. It runs entirely in the browser and never opens or fetches the link.
+
+The same rule applies to the facts. Every animal fact and figure links to its source on a sources page, which covers NOAA, MBARI, Guinness World Records, university research, UK Finance and Ofcom. The scam brands in the examples are invented, and every phone number comes from the ranges Ofcom reserves for fiction. Tests in the repo check that each question has exactly one fake, that its giveaway is really on the card, that no real brand appears, and that the link checker catches the look-alikes it should.
+
+## Making it smooth
+
+The first version felt childish to me. I took out the cartoon creatures, so the only animals on screen are real photos, and gave every zone a step-by-step account of how one scam plays out and one or two sourced UK figures.
+
+The motion took longer. What made the lens feel fluid was two layers working together: the whole page glides with inertial scrolling, and the lens chases a goal on a spring. When I eased only the lens, or squeezed it through gaps to dodge the text, it felt stepped. The earlier lag came from measuring layout on every scroll event. Measuring it once, and drawing the plankton glow from a pre-drawn sprite, held 60 fps with the CPU slowed four times in my own test script.
+
+{/* TODO(musa): whether the "UK figures" and "about 75 brands" lines match what you want said publicly. Screenshots are from the live site, captured 13 Nov 2026. */}

@@ -18,6 +18,7 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 - [ ] `src/content/projects/dsb-cleaning.mdx`: how the client found you, and what they had before
 - [ ] `src/content/projects/ai-field-guide.mdx`: who is it for first, and what made you start it?
 - [ ] `src/content/projects/break-the-ai.mdx`: check the last two sections read like you
+- [ ] `src/content/projects/the-lure.mdx`: check it reads like you, and confirm the "about 75 brands" and "UK figures" lines
 
 ## 5. Your own screenshots (replaces the ones I captured)
 - [ ] Size: 1440x900, JPEG or PNG. Name `<project>-<page>.jpg`, put in `src/assets/projects/`.
@@ -34,6 +35,7 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 
 ## 7. Journey (`src/data/journey.ts`)
 - [ ] Read the "what I learned" lines: they are condensed from your notes, so the "story" text too (`src/data/journey.ts`), and fix any that don't sound like you
+- [ ] Check the new The Lure Journey text (`learned` and the three `story` paragraphs in `src/data/journey.ts`). It shows on /journey only, not on the home timeline.
 
 ## 8. Content
 - [ ] `src/content/blog/hello-world.mdx`: write it (description + post, then `draft: false`) or delete it
