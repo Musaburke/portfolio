@@ -17,6 +17,8 @@ import afg from '../assets/projects/afg-home.jpg';
 import afgSources from '../assets/projects/afg-sources.jpg';
 import bta from '../assets/projects/bta-play.jpg';
 import btaDebrief from '../assets/projects/bta-debrief.jpg';
+import lureHome from '../assets/journey/lure-home.jpg';
+import lureZone from '../assets/journey/lure-zone.jpg';
 
 export type Node = {
   id: string;
@@ -161,6 +163,26 @@ export const nodes: Node[] = [
     href: '/projects/ai-field-guide',
     polish: 3,
     hue: '#cbe7c9', // field guide mint
+  },
+  {
+    id: 'the-lure',
+    date: 'Nov 2026',
+    title: 'The Lure',
+    role: 'My own',
+    stack: ['WebGL', 'Web Audio', 'Astro', 'TypeScript', 'Lenis', 'Cloudflare Pages'],
+    learned: 'Smooth motion needs two layers working together, and a link checker can only recognise tricks it already knows, so it should never call a link safe.',
+    story: [
+      "The Lure is a scroll-down dive through the ocean's depth zones for everyday adults. At each depth you meet a deep-sea animal that survives by tricking others, then the online scam that works the same way, then a short challenge where you pick out the fake.",
+      'I built a glass-like lens that floats beside the text, a link checker that never calls a link safe, 60 spot-the-fake questions and an endless practice dive. Every fact links to its source, and the scam brands in the examples are invented.',
+      'The first version felt childish to me, so I took out the cartoon creatures and added sourced UK figures. The motion took the longest: it only felt fluid once the whole page glided and the lens chased a goal on a spring.',
+    ],
+    more: { image: lureZone, alt: 'The mimic octopus zone at 28 metres. A photo of the octopus sits inside the floating glass lens, with the depth, pressure, water temperature and sunlight readout on the left. On the right, the text explains how the octopus survives by disguise, then that scammers use disguises too.' },
+    image: lureHome,
+    alt: 'The first screen of The Lure. The title and a one-line promise on deep blue water, a depth readout on the left, and a glass-like bubble on the right showing two reef sharks.',
+    host: 'the-lure.pages.dev',
+    href: '/projects/the-lure',
+    polish: 3,
+    hue: '#4fe6d4', // The Lure lens-rim teal
   },
   {
     id: 'break-the-ai',
