@@ -1,20 +1,20 @@
 ---
 import Shot from './Shot.astro';
-import dsbHome from '../assets/projects/dsb-home-desktop.jpg';
 import afgHome from '../assets/projects/afg-home.jpg';
-import dsbAreas from '../assets/projects/dsb-areas-desktop.jpg';
+import btaInbox from '../assets/projects/bta-inbox.jpg';
 import renewlyDashboard from '../assets/projects/renewly-dashboard.jpg';
-import renewlyRenewals from '../assets/projects/renewly-renewals.jpg';
+import dsbContact from '../assets/projects/dsb-contact.jpg';
 import security from '../assets/projects/portfolio-security-headers.jpg';
+import btaDebrief from '../assets/projects/bta-debrief.jpg';
 import { toolkit, type Shot as ShotKey } from '../data/toolkit';
 
 const shots: Record<ShotKey, { src: ImageMetadata; host: string }> = {
-  dsbHome: { src: dsbHome, host: 'dsbcommercialcleaning.co.uk' },
   afgHome: { src: afgHome, host: 'musa-ai-field-guide.pages.dev' },
-  dsbAreas: { src: dsbAreas, host: 'dsbcommercialcleaning.co.uk/areas' },
+  btaInbox: { src: btaInbox, host: 'break-the-ai.muburke07.workers.dev' },
   renewlyDashboard: { src: renewlyDashboard, host: 'Renewly · sample data' },
-  renewlyRenewals: { src: renewlyRenewals, host: 'Renewly · sample data' },
+  dsbContact: { src: dsbContact, host: 'dsbcommercialcleaning.co.uk/contact' },
   security: { src: security, host: 'public/_headers · this site' },
+  btaDebrief: { src: btaDebrief, host: 'break-the-ai.muburke07.workers.dev' },
 };
 const used = [...new Set(toolkit.map((t) => t.shot))];
 const first = toolkit[0].shot;
@@ -35,7 +35,6 @@ const first = toolkit[0].shot;
         <li class:list={['row', { active: i === 0 }]} data-shot={t.shot}>
           <button type="button" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`kit-${i}`}>
             <span class="tool">{t.name}</span>
-            <span class="used">{t.usedIn}</span>
           </button>
           <p id={`kit-${i}`} class="detail">{t.detail}</p>
         </li>
@@ -85,9 +84,7 @@ const first = toolkit[0].shot;
   }
   button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
   .tool { font-size: clamp(1.25rem, 1rem + 0.8vw, 1.5rem); color: var(--muted); transition: color 180ms ease; letter-spacing: -0.01em; }
-  .used { font-size: 0.9375rem; color: var(--muted); text-align: right; }
   .row.active .tool { color: var(--ink); }
-  .row.active .used { color: var(--accent); }
   .detail { max-width: 38ch; font-size: 1rem; display: none; padding-bottom: 1.25rem; }
   .row.active .detail { display: block; }
 

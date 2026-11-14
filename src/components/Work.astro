@@ -1,36 +1,37 @@
 ---
-import { getCollection } from 'astro:content';
 import IsoStack from './IsoStack.astro';
+import { getWork, showDate } from '../lib/work';
 
-const projects = (await getCollection('projects', (p) => p.data.home)).sort((a, b) => a.data.order - b.data.order);
+// The case studies flagged `featured`, in case-study order. Everything else is on All work.
+const { featured: projects } = await getWork();
 ---
 <section id="work" aria-labelledby="work-title">
   <header class="frame head">
-    <h2 id="work-title" class="wipe" data-split>Selected work</h2>
-    <p class="muted" data-reveal><span>{projects.length} projects, each written up: the brief, what I built and what I learned.</span></p>
+    <h2 id="work-title" class="wipe" data-split>Featured work</h2>
+    <p class="muted" data-reveal><span>Written up in full: the brief, what I built and what I learned.</span></p>
   </header>
 
   {projects.map((p, i) => (
-    <article class:list={['project section-screen', { flip: i % 2 === 1 }]} style={`--slab:${p.data.slab}`} aria-labelledby={`p-${p.id}`} data-inview>
+    <article class:list={['project section-screen', { flip: i % 2 === 1 }]} style={`--slab:${p.caseStudy!.data.slab}`} aria-labelledby={`p-${p.id}`} data-inview>
       <div class="slab" aria-hidden="true"></div>
       <div class="frame grid">
         <div class="text" data-reveal>
-          <h3 id={`p-${p.id}`}><a href={`/projects/${p.id}`}>{p.data.title}</a></h3>
-          <p class="summary">{p.data.summary}</p>
-          <p class="stack muted">{p.data.year} · {p.data.stack.join(' · ')}</p>
+          <h3 id={`p-${p.id}`}><a href={p.href}>{p.title}</a></h3>
+          <p class="summary">{p.summary}</p>
+          <p class="stack muted">{showDate(p.date)} · {p.stack.join(' · ')}</p>
           <p class="actions">
-            <a class="btn" href={`/projects/${p.id}`}>Read the case study</a>
-            {p.data.live && <a class="link" href={p.data.live}>Visit site</a>}
-            {p.data.repo && <a class="link" href={p.data.repo}>Code</a>}
+            <a class="btn" href={p.href}>Read the case study<span class="visually-hidden">: {p.title}</span></a>
+            {p.live && <a class="link" href={p.live}>Visit site</a>}
+            {p.repo && <a class="link" href={p.repo}>Code</a>}
           </p>
         </div>
         <div class="media">
           <IsoStack
-            href={`/projects/${p.id}`}
-            title={p.data.title}
-            host={p.data.host}
-            cover={{ src: p.data.cover, alt: p.data.coverAlt }}
-            back={p.data.gallery}
+            href={p.href!}
+            title={p.title}
+            host={p.host}
+            cover={{ src: p.caseStudy!.data.cover, alt: p.caseStudy!.data.coverAlt }}
+            back={p.caseStudy!.data.gallery}
           />
         </div>
       </div>

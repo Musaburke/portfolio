@@ -2,29 +2,30 @@
 // "How my work has evolved": scroll down a line in space. On wide screens the stage pins and
 // scroll progress slides the nodes past a fixed centre point; the active project expands and
 // the skills row grows. Phones, reduced motion and no-JS get a plain vertical timeline.
-// Data lives in src/data/journey.ts. The starfield warps while you approach the last node.
-// Only the home picks show here; /journey has every project.
+// Data: entries in src/data/work.ts with a `journey` block, all shown, at the top of /journey.
+// The starfield warps while you approach the last node. Beside each card, on the empty side of
+// the line, sits its short story; the full story is on the case study.
 import Shot from './Shot.astro';
-import { published, homeNodes as nodes, future } from '../data/journey';
+import { future } from '../data/work';
+import { getWork, showDate } from '../lib/work';
 
-// Skills come from every project. One first earned at a project that isn't shown here
-// lights up at the next one that is (or at the future, if none is).
+const nodes = (await getWork()).journeyStops.map((n) => ({ ...n, date: showDate(n.date), skills: n.journey!.skills ?? n.stack }));
+// A skill lights up at the stop that first earned it.
 const skills: { name: string; at: number }[] = [];
-published.forEach((n) => {
-  const shownAt = nodes.findIndex((h) => published.indexOf(h) >= published.indexOf(n));
-  n.stack.forEach((s) => {
-    if (!skills.some((k) => k.name === s)) skills.push({ name: s, at: shownAt === -1 ? nodes.length : shownAt });
-  });
-});
+nodes.forEach((n, i) => n.skills.forEach((s) => { if (!skills.some((k) => k.name === s)) skills.push({ name: s, at: i }); }));
+const way = (n: (typeof nodes)[number]) =>
+  n.caseStudy ? { href: n.href!, label: 'Read the full case study', btn: true }
+  : n.live ? { href: n.live, label: 'Visit site', btn: false }
+  : n.repo ? { href: n.repo, label: 'Code on GitHub', btn: false } : null;
 const M = nodes.length + 1; // projects plus the future
 ---
 <section id="journey" class="journey" style={`--m:${M};--hue:${nodes[0].hue}`} aria-labelledby="journey-title" data-journey>
   <div class="stage">
     <div class="frame top">
       <div class="lead">
-        <h2 id="journey-title" class="wipe" data-split>How my work has evolved</h2>
+        <h1 id="journey-title">How my work has evolved</h1>
         <p class="ways">
-          <a class="skipj" href="#about">Skip the timeline</a>
+          <a class="skipj" href="#after-journey">Skip the timeline</a>
           <a class="link" href="/projects">See all work</a>
         </p>
       </div>
@@ -40,22 +41,23 @@ const M = nodes.length + 1; // projects plus the future
         <li class:list={['node', i % 2 ? 'left' : 'right', { active: i === 0 }]} style={`--i:${i};--hue:${n.hue}`} data-node data-date={n.date} data-hue={n.hue}>
           <p class="tag" aria-hidden="true"><span>{n.date}</span> {n.title}</p>
           <article class="card" data-reveal data-card aria-label={n.title}>
-            <div class="shotwrap" data-polish={n.polish}>
-              <Shot src={n.image} alt={n.alt} host={n.host} sizes="(max-width: 900px) 92vw, 520px" />
+            <div class="shotwrap" data-polish={n.journey!.polish}>
+              <Shot src={n.image} alt={n.alt} host={n.host} sizes="(max-width: 900px) 92vw, 760px" />
             </div>
             <div class="body">
-              <h3>{n.title}</h3>
+              <h2>{n.title}</h2>
               <p class="meta">{n.date} · {n.role}</p>
-              <p class="stack">{n.stack.join(' · ')}</p>
-              <p class="learned">{n.learned}</p>
-              {n.href && (
-                <p class="links">
-                  <a class="link" href={`/journey#${n.id}`}>Read the story</a>
-                  <a class="link" href={n.href}>{n.href.startsWith('/') ? 'Case study' : 'Visit'}</a>
-                </p>
-              )}
             </div>
           </article>
+          <div class="tale" data-tale>
+            <p class="short">{n.journey!.short}</p>
+            <p class="stack">{n.skills.join(' · ')}</p>
+            {way(n) && (
+              <p class="links">
+                <a class:list={way(n)!.btn ? 'btn btn-quiet' : 'link'} href={way(n)!.href}>{way(n)!.label}<span class="visually-hidden">: {n.title}</span></a>
+              </p>
+            )}
+          </div>
         </li>
       ))}
 
@@ -64,9 +66,9 @@ const M = nodes.length + 1; // projects plus the future
         <article class="card future-card" data-reveal data-card aria-label={`Next: ${future.title}`}>
           <div class="star" aria-hidden="true"></div>
           <div class="body">
-            <h3>Next: {future.title}</h3>
+            <h2>Next: {future.title}</h2>
             <p class="learned">{future.text}</p>
-            <p class="links"><a class="link" href="#contact">Get in touch</a><a class="link" href="/projects">See all work</a></p>
+            <p class="links"><a class="link" href="/#contact">Get in touch</a><a class="link" href="/projects">See all work</a></p>
           </div>
         </article>
       </li>
@@ -89,6 +91,7 @@ const M = nodes.length + 1; // projects plus the future
     const wide = matchMedia('(min-width: 901px) and (min-height: 800px)');
     const items = [...root.querySelectorAll<HTMLElement>('[data-node]')];
     const cards = items.map((el) => el.querySelector<HTMLElement>('[data-card]')!);
+    const tales = items.map((el) => el.querySelector<HTMLElement>('[data-tale]'));
     const chips = [...root.querySelectorAll<HTMLElement>('[data-chip]')];
     const era = root.querySelector<HTMLElement>('[data-era]')!;
     const ghost = root.querySelector<HTMLElement>('[data-ghost]')!;
@@ -98,10 +101,16 @@ const M = nodes.length + 1; // projects plus the future
 
     let pinned = false, ticking = false, last = -1, inView = true;
 
+    // The original curve was tuned on the home page's six stops (M = 7). Scale it to however many
+    // stops there are now, so the rush always covers the last third of the timeline.
+    const k = (M - 1) / 6;
+    // Between two stops the field rushes for most of the gap; landed on a stop (reading) it settles.
+    const between = (f: number) => smooth((Math.abs(f - Math.round(f)) - 0.04) / 0.14);
+    let idle = 0;
     const warpFor = (f: number) => {
-      const peak = M - 1.4; // just before the last node
-      if (f < peak) return smooth((f - (M - 3.2)) / 1.8);
-      return Math.max(0, 1 - (f - peak) / 0.4);
+      const peak = M - 1 - 0.4 * k; // just before the last node
+      if (f < peak) return smooth((f - (peak - 1.8 * k)) / (1.8 * k));
+      return Math.max(0, 1 - (f - peak) / (0.4 * k));
     };
 
     const update = () => {
@@ -121,6 +130,7 @@ const M = nodes.length + 1; // projects plus the future
           el.classList.toggle('active', i === a);
           el.classList.toggle('past', i < a);
           cards[i].inert = i !== a;
+          if (tales[i]) tales[i]!.inert = i !== a;
         });
         chips.forEach((c) => {
           const on = a >= Number(c.dataset.at);
@@ -141,7 +151,11 @@ const M = nodes.length + 1; // projects plus the future
         if (a === M - 1) w.__kick = performance.now(); // the last star ignites: the field pulses
         last = a;
       }
-      w.__warp = warpFor(f);
+      const end = warpFor(f);
+      w.__warp = Math.max(end, between(f));
+      clearTimeout(idle);
+      idle = window.setTimeout(() => { if (pinned) w.__warp = end; }, 260); // stopped scrolling: only the end build-up stays
+
     };
 
     const onScroll = () => { if (inView && !ticking) { ticking = true; requestAnimationFrame(update); } };
@@ -161,6 +175,7 @@ const M = nodes.length + 1; // projects plus the future
       else {
         w.__warp = 0;
         cards.forEach((c) => (c.inert = false));
+        tales.forEach((t) => t && (t.inert = false));
         items.forEach((el) => el.classList.remove('active', 'past'));
       }
     };
@@ -186,7 +201,7 @@ const M = nodes.length + 1; // projects plus the future
   .skipj:active { transform: scale(0.97); }
   .journey:not(.pinned) .skipj:not(:focus-visible) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; padding: 0; }
   .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; }
-  h2 { font-size: var(--step-head); }
+  h1 { font-size: var(--step-head); }
   .era, .line, .node-ring { display: none; }
   .nodes { position: relative; margin: 3.5rem auto 0; width: 100%; max-width: var(--max); padding: 0 var(--margin) 0 calc(var(--margin) + 2.25rem); display: grid; gap: 4.5rem; }
   .nodes::before { content: ''; position: absolute; left: calc(var(--margin) + 6px); top: 0.4rem; bottom: 0; width: 2px; background: rgb(159 208 156 / 0.3); }
@@ -198,13 +213,19 @@ const M = nodes.length + 1; // projects plus the future
   .shotwrap[data-polish='0'] :global(img) { filter: grayscale(0.85) contrast(0.85) brightness(0.92); }
   .shotwrap[data-polish='1'] :global(img) { filter: grayscale(0.4) contrast(0.93); }
   .shotwrap[data-polish='2'] :global(img) { filter: saturate(0.92); }
-  h3 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); }
+  h2.title, .body h2 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); }
   .meta { margin-top: 0.4rem; color: var(--muted); font-size: var(--step-small); }
   .stack { margin-top: 0.9rem; font-size: 0.9375rem; color: var(--hue, var(--accent)); }
   .ghost { display: none; }
   .learned { margin-top: 0.9rem; max-width: 42ch; }
+  /* The short story: under the card in the plain list, beside it on the far side of the line when pinned. */
+  /* The words beside each card: one paragraph in one voice (what happened, ending on the lesson), then skills and the way on. */
+  .tale { margin-top: 1.5rem; max-width: 46rem; display: grid; justify-items: start; }
+  .tale .short { font-size: var(--step-lead); line-height: 1.38; letter-spacing: -0.01em; max-width: 34ch; }
+  .tale .stack { margin-top: 1.5rem; }
+  .tale .links { margin-top: 1rem; }
   .links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
-  .body p:last-child { margin-top: 1.1rem; }
+  .future-card .links { margin-top: 1.1rem; }
   .star { width: 56px; height: 56px; border-radius: 50%; background: var(--hue, var(--accent)); }
   .skills { margin: 4rem auto 0; width: 100%; max-width: var(--max); padding: 0 var(--margin); }
   .label { color: var(--muted); font-size: var(--step-small); margin-bottom: 0.9rem; }
@@ -213,9 +234,9 @@ const M = nodes.length + 1; // projects plus the future
 
   /* ---------- pinned: travel down a line in space (wide screens, motion allowed) ---------- */
   .journey.pinned { height: calc(100svh + (var(--m) - 1) * 55svh); padding-block: 0; }
-  .pinned .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --gap: 34svh; --cw: min(40vw, 520px, calc((100svh - 600px) * 1.5)); } /* the card fits between the heading row and the skills row */
+  .pinned .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --gap: 34svh; --cw: min(calc(50vw - 60px - var(--margin)), 760px, calc((100svh - 440px) * 1.4)); --tw: min(calc(50vw - 60px - var(--margin)), 34rem); } /* the picture fits between the heading row and the skills row; the words take the other side */
   .pinned .top { position: absolute; top: 5rem; left: 0; right: 0; z-index: 3; margin-inline: auto; width: 100%; max-width: var(--max); padding-inline: var(--margin); }
-  .pinned h2 { font-size: var(--step-lead); }
+  .pinned h1 { font-size: var(--step-lead); }
   .pinned .era { display: block; font-size: clamp(2rem, 1.2rem + 2.4vw, 4rem); letter-spacing: -0.04em; color: var(--hue); line-height: 1; transition: color 600ms ease; }
   /* A huge outlined year drifting behind everything: the era you are in. */
   .pinned .ghost {
@@ -259,8 +280,9 @@ const M = nodes.length + 1; // projects plus the future
   .pinned .card {
     position: absolute; top: 0; width: var(--cw); max-width: none;
     --hold: calc(var(--d) * var(--gap) * -0.75); /* cancel most of the node's travel: the card stays near centre */
-    transform: translateY(calc(-50% + 40px + var(--hold))) rotateY(var(--swing)) scale(0.94); opacity: 0; visibility: hidden;
-    transition: opacity 600ms ease, transform 900ms var(--ease-out), visibility 0s linear 600ms;
+    translate: 0 calc(-50% + var(--hold)); /* follows the scroll exactly: no lag, no drop */
+    transform: rotateY(var(--swing)) scale(0.96); opacity: 0; visibility: hidden;
+    transition: opacity 300ms ease, transform 400ms var(--ease-out), visibility 0s linear 300ms;
   }
   .pinned .right .card { --swing: -14deg; transform-origin: left center; }
   .pinned .left .card { --swing: 14deg; transform-origin: right center; }
@@ -268,12 +290,26 @@ const M = nodes.length + 1; // projects plus the future
   .pinned .active .shotwrap { border-radius: 10px; box-shadow: 0 0 0 1.5px var(--hue), 0 30px 80px -30px var(--hue); /* taste-skill-ignore */ }
   .pinned .right .card { left: 60px; }
   .pinned .left .card { right: 60px; }
-  .pinned .active .card { transform: translateY(calc(-50% + var(--hold))); opacity: 1; visibility: visible; transition-delay: 120ms, 120ms, 0s; }
+  .pinned .active .card { transform: none; opacity: 1; visibility: visible; transition-delay: 0s; }
   .pinned .card > :global(*) { opacity: 1 !important; transform: none !important; } /* reveal effect is for the list layout */
   .pinned .card { gap: 1rem; }
-  .pinned h3 { font-size: clamp(1.375rem, 1rem + 1vw, 2rem); }
-  .pinned .learned, .pinned .stack { margin-top: 0.5rem; font-size: 1rem; }
-  .pinned .body p:last-child { margin-top: 0.75rem; }
+  .pinned .links :global(.btn) { min-height: 2.5rem; padding-left: 1.1rem; }
+  .pinned .tale {
+    position: absolute; top: 0; width: var(--tw); margin: 0;
+    --hold: calc(var(--d) * var(--gap) * -0.75);
+    translate: 0 calc(-50% + var(--hold));
+    opacity: 0; visibility: hidden;
+    transition: opacity 300ms ease, visibility 0s linear 300ms;
+  }
+  .pinned .right .tale { right: 60px; }
+  .pinned .left .tale { left: 60px; }
+  .pinned .active .tale { opacity: 1; visibility: visible; transition-delay: 0s; }
+  .pinned .tale .short { font-size: clamp(1.1875rem, 0.9rem + 0.65vw, 1.5rem); }
+  .pinned .tale .stack { margin-top: clamp(1rem, 2.4svh, 1.75rem); font-size: 0.9375rem; }
+  .pinned .tale .links { margin-top: 0.85rem; }
+  .pinned .body h2 { font-size: clamp(1.625rem, 1.1rem + 1.4vw, 2.5rem); line-height: 1.05; }
+  .pinned .future-card .learned { margin-top: 0.5rem; font-size: 1.0625rem; }
+  .pinned .future-card .links { margin-top: 0.75rem; }
   .pinned .meta { margin-top: 0.25rem; }
   .pinned .future-card { grid-template-columns: auto 1fr; align-items: center; gap: 1.5rem; }
 
@@ -284,7 +320,7 @@ const M = nodes.length + 1; // projects plus the future
 
   .pinned .skills { position: absolute; bottom: 1.25rem; left: 0; right: 0; margin: 0 auto; z-index: 3; padding-right: calc(var(--margin) + 64px); } /* clear of the back-to-top button */
   .pinned .skills ul { gap: 0.4rem; }
-  .pinned .chip { padding: 0.3rem 0.7rem; font-size: 0.9375rem; opacity: 0; transform: translateY(10px) scale(0.92); transition: opacity 400ms ease, transform 500ms var(--ease-out); }
+  .pinned .chip { padding: 0.25rem 0.65rem; font-size: 0.875rem; opacity: 0; transform: translateY(10px) scale(0.92); transition: opacity 400ms ease, transform 500ms var(--ease-out); }
   .pinned .chip.on { opacity: 1; transform: none; }
   .pinned .chip.fresh { animation: earn 1400ms var(--ease-out); }
   @keyframes earn { 0% { background: var(--flash); color: #111; transform: scale(1.12); } 60% { background: var(--flash); color: #111; } 100% { transform: none; } }

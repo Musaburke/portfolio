@@ -1,43 +1,37 @@
-// The toolkit list on the home page. Each row lights up a picture of where it was used.
+// The toolkit list on the home page. Each row lights up a picture of where it was used, a different one per row.
 // `shot` must be a key in the `shots` map in src/components/Toolkit.astro.
-export type Shot = 'afgHome' | 'dsbHome' | 'dsbAreas' | 'renewlyDashboard' | 'renewlyRenewals' | 'security';
-export type Tool = { name: string; usedIn: string; detail: string; shot: Shot };
+export type Shot = 'afgHome' | 'btaInbox' | 'renewlyDashboard' | 'dsbContact' | 'security' | 'btaDebrief';
+export type Tool = { name: string; detail: string; shot: Shot };
 
 export const toolkit: Tool[] = [
   {
     name: 'Astro',
-    usedIn: 'AI field guide, DSB',
     detail: "Static pages built from data: the field guide's ten guides and 50 sources, and DSB's services, reviews and FAQs. This portfolio too.",
     shot: 'afgHome',
   },
   {
     name: 'TypeScript',
-    usedIn: 'DSB, Renewly',
     detail: 'Typed site data and components, so facts live in one file and the build catches mistakes.',
-    shot: 'renewlyRenewals',
+    shot: 'btaInbox',
   },
   {
     name: 'Next.js & Supabase',
-    usedIn: 'Renewly',
     detail: 'App Router, Postgres with Row Level Security, and TanStack Query for server state.',
     shot: 'renewlyDashboard',
   },
   {
     name: 'React',
-    usedIn: 'DSB, Renewly',
     detail: 'Interactive parts only where needed: the quote form, the filterable gallery, the dashboard.',
-    shot: 'dsbAreas',
+    shot: 'dsbContact',
   },
   {
     name: 'Web security',
-    usedIn: 'DSB Cleaning',
     detail: 'An enforced Content Security Policy, security headers, and a form with a honeypot, time trap and length limits.',
     shot: 'security',
   },
   {
     name: 'Cyber security',
-    usedIn: 'Google certificate',
     detail: 'Google Cybersecurity Certificate, Nov 2026: SIEM tools, Linux, SQL and Python automation. Now on TryHackMe, alongside my BSc.',
-    shot: 'security',
+    shot: 'btaDebrief',
   },
 ];
