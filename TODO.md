@@ -18,7 +18,7 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 - [ ] `src/content/projects/dsb-cleaning.mdx`: how the client found you, and what they had before
 - [ ] `src/content/projects/ai-field-guide.mdx`: who is it for first, and what made you start it?
 - [ ] `src/content/projects/break-the-ai.mdx`: check the last two sections read like you
-- [ ] `src/data/journey.ts`: check the one-line `summary` on News Flux, Islamic Tools Hub and the Prof Hussein site (shown on the All work page)
+- [ ] `src/data/work.ts`: check the one-line `summary` on News Flux, Islamic Tools Hub, the Prof Hussein site and the Design gallery (shown on the All work page; the Design gallery line is a draft from your Brain note)
 - [ ] `src/content/projects/the-lure.mdx`: check it reads like you, and confirm the "about 75 brands" and "UK figures" lines
 
 ## 5. Your own screenshots (replaces the ones I captured)
@@ -34,9 +34,10 @@ Everything the site still needs from you. Search the code for `TODO(musa)` for t
 - [x] Cloudflare Pages: live at https://musa-portfolio-ef2.pages.dev since 9 Nov 2026 (project `musa-portfolio`, deploys from `master`).
 - [x] CSP enforced on 10 Nov 2026, after every page showed no violations at desktop and phone width. Inline scripts are allowed by hash only since 13 Nov 2026 (`npm run check` fails if one is missing).
 
-## 7. Journey (`src/data/journey.ts`)
-- [ ] Read the "what I learned" lines: they are condensed from your notes, so the "story" text too (`src/data/journey.ts`), and fix any that don't sound like you
-- [ ] Check the new The Lure Journey text (`learned` and the three `story` paragraphs in `src/data/journey.ts`). It shows on /journey only, not on the home timeline.
+## 7. Journey (`src/data/work.ts`)
+- [ ] Check the timeline paragraphs (`short`, beside each card on /journey). Each joins your own story and learned text into one paragraph with nothing added; reword any that don't sound like you
+- [ ] Read the "what I learned" lines: they are condensed from your notes, so the "story" text too (`src/data/work.ts`), and fix any that don't sound like you
+- [ ] Check the new The Lure Journey text (`learned` and the three `story` paragraphs in `src/data/work.ts`). It shows on /journey.
 
 ## 8. Content
 - [ ] `src/content/blog/hello-world.mdx`: write it (description + post, then `draft: false`) or delete it

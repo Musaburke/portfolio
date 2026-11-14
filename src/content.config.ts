@@ -6,16 +6,10 @@ const projects = defineCollection({
   loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
   schema: ({ image }) =>
     z.object({
-      title: z.string(),
-      summary: z.string(),
-      year: z.string(),
-      role: z.string(),
-      stack: z.array(z.string()),
-      order: z.number(),
-      home: z.boolean().default(true), // false keeps a project off the home Work section; it still has a page and shows on /projects
-      live: z.url().optional(),
-      repo: z.url().optional(),
-      host: z.string(),
+      // Title, summary, date, stack, links and host live in src/data/work.ts (same id as the filename).
+      role: z.string(), // the longer "what I did" line shown on the case study
+      order: z.number(), // position among case studies: on the home page and in the "next" loop
+      featured: z.boolean().default(false), // true puts it in Featured work on the home page (keep it to 3 or 4)
       slab: z.string().default('#262626'), // flat colour block behind the home-page stack, from the product's own palette
       cover: image(),
       coverAlt: z.string(),

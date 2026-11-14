@@ -122,7 +122,7 @@
       (window as unknown as { __beat: number }).__beat = still ? 0 : beatNow;
       linked.length = 0;
       const wTarget = still ? 0 : (window as unknown as { __warp?: number }).__warp ?? 0;
-      warpS += (wTarget - warpS) * 0.08;
+      warpS += (wTarget - warpS) * (wTarget > warpS ? 0.3 : 0.06); // kicks in almost at once, eases off slowly
       warpPos += warpS * 9;
       const kick = (window as unknown as { __kick?: number }).__kick ?? -1e9;
       const kickExtra = !still && now >= kick ? Math.exp(-(now - kick) / 500) * 2 : 0;

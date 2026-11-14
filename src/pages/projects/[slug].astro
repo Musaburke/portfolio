@@ -1,38 +1,51 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Shot from '../../components/Shot.astro';
+import { getWork, showDate } from '../../lib/work';
 
 export async function getStaticPaths() {
-  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  const { caseStudies } = await getWork();
   // Each case study ends by pointing at the next one (the last loops to the first).
-  return projects.map((p, i) => ({ params: { slug: p.id }, props: { p, next: projects[(i + 1) % projects.length]! } }));
+  return caseStudies.map((p, i) => ({ params: { slug: p.id }, props: { p, next: caseStudies[(i + 1) % caseStudies.length]! } }));
 }
 const { p, next } = Astro.props;
-const { Content } = await render(p);
-const d = p.data;
+const { Content } = await render(p.caseStudy!);
+const d = p.caseStudy!.data;
 ---
-<Base title={d.title} description={d.summary}>
+<Base title={p.title} description={p.summary}>
   <article class="frame case">
     <header class="top" data-reveal>
       <p class="back"><a class="link muted" href="/projects">All work</a></p>
-      <h1>{d.title}</h1>
-      <p class="lead">{d.summary}</p>
+      <h1>{p.title}</h1>
+      <p class="lead">{p.summary}</p>
+      <p class="proof-links">
+        {p.live && <a class="btn btn-quiet" href={p.live}>Visit the live site</a>}
+        {p.repo ? <a class="btn btn-quiet" href={p.repo}>Code on GitHub</a> : p.repoNote && <span class="muted">Code: {p.repoNote.toLowerCase()}</span>}
+      </p>
     </header>
 
     <div class="cover" data-reveal>
-      <Shot src={d.cover} alt={d.coverAlt} host={d.host} sizes="(max-width: 1440px) 100vw, 1376px" eager />
+      <Shot src={d.cover} alt={d.coverAlt} host={p.host} sizes="(max-width: 1440px) 100vw, 1376px" eager />
     </div>
 
     <div class="body">
       <dl class="meta">
-        <div><dt>Year</dt><dd>{d.year}</dd></div>
+        <div><dt>Date</dt><dd>{showDate(p.date)}</dd></div>
         <div><dt>Role</dt><dd>{d.role}</dd></div>
-        <div><dt>Stack</dt><dd>{d.stack.join(', ')}</dd></div>
-        {d.live && <div><dt>Live</dt><dd><a class="link" href={d.live}>{new URL(d.live).hostname}</a></dd></div>}
-        {d.repo && <div><dt>Code</dt><dd><a class="link" href={d.repo}>GitHub</a></dd></div>}
+        <div><dt>Stack</dt><dd>{p.stack.join(', ')}</dd></div>
+        {p.live && <div><dt>Live</dt><dd><a class="link" href={p.live}>{new URL(p.live).hostname}</a></dd></div>}
+        {p.repo ? <div><dt>Code</dt><dd><a class="link" href={p.repo}>GitHub</a></dd></div> : p.repoNote && <div><dt>Code</dt><dd>{p.repoNote}</dd></div>}
       </dl>
-      <div class="prose"><Content /></div>
+      <div class="prose">
+        <Content />
+        {p.journey && (
+          <section aria-labelledby="changed-title">
+            <h2 id="changed-title">How it changed me</h2>
+            {p.journey.story.map((para) => <p>{para}</p>)}
+          </section>
+        )}
+      </div>
     </div>
 
     {d.gallery.length > 0 && (
@@ -41,25 +54,34 @@ const d = p.data;
         <div class="grid">
           {d.gallery.map((g) => (
             <figure data-reveal>
-              <Shot src={g.src} alt={g.alt} host={d.host} sizes="(max-width: 900px) 100vw, 50vw" />
+              <Shot src={g.src} alt={g.alt} host={p.host} sizes="(max-width: 900px) 100vw, 50vw" />
               <figcaption class="muted">{g.alt}</figcaption>
             </figure>
           ))}
         </div>
       </section>
     )}
+    {(p.live || p.repo) && (
+      <section class="proof" aria-labelledby="proof-title" data-reveal>
+        <h2 id="proof-title">See it for yourself</h2>
+        <p class="proof-links">
+          {p.live && <a class="btn btn-quiet" href={p.live}>Visit the live site</a>}
+          {p.repo ? <a class="btn btn-quiet" href={p.repo}>Code on GitHub</a> : p.repoNote && <span class="muted">Code: {p.repoNote.toLowerCase()}</span>}
+        </p>
+      </section>
+    )}
     {next.id !== p.id && (
       <section class="next" aria-labelledby="next-title">
         <div class="next-text" data-reveal>
-          <h2 id="next-title">Next: {next.data.title}</h2>
-          <p class="lead">{next.data.summary}</p>
+          <h2 id="next-title">Next: {next.title}</h2>
+          <p class="lead">{next.summary}</p>
           <p class="next-go">
             <a class="btn" href={`/projects/${next.id}`}>Read the case study</a>
             <a class="link" href="/projects">All work</a>
           </p>
         </div>
         <a class="next-pic" href={`/projects/${next.id}`} tabindex="-1" aria-hidden="true" data-reveal>
-          <Shot src={next.data.cover} alt="" host={next.data.host} sizes="(max-width: 900px) 100vw, 50vw" />
+          <Shot src={next.caseStudy!.data.cover} alt="" host={next.host} sizes="(max-width: 900px) 100vw, 50vw" />
         </a>
       </section>
     )}
@@ -68,6 +90,9 @@ const d = p.data;
 
 <style>
   .top { padding-top: 4rem; max-width: 52rem; }
+  .proof-links { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; }
+  .proof { margin-top: var(--section); }
+  .proof h2 { font-size: var(--step-head); }
   .back { font-size: var(--step-small); margin-bottom: 2rem; }
   h1 { font-size: clamp(2.5rem, 1.1rem + 4.6vw, 5.25rem); letter-spacing: -0.04em; line-height: 1; }
   .lead { margin-top: 1.5rem; font-size: var(--step-lead); line-height: 1.3; max-width: 40ch; }
