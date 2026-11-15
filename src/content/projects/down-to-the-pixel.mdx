@@ -1,0 +1,56 @@
+---
+order: 6
+featured: true
+role: Concept, 3D, design and build. My own project.
+slab: '#4b3725'
+cover: ../../assets/projects/dtp-desk.jpg
+coverAlt: The first screen of Down to the pixel. A walnut keyboard on an oak desk at night, lit by a brass lamp and a candle beside a mug, with the title "Down to the pixel" on the left and the six stops listed along the bottom.
+gallery:
+  - src: ../../assets/projects/dtp-switch.jpg
+    alt: The switch stop. The key's switch pulled apart in mid-air, keycap above, housing below, with labels pointing to the stem, the spring ("45 cN to press") and the contacts ("touch at 2 mm"), beside the words "The switch closes a circuit".
+  - src: ../../assets/projects/dtp-pixels.jpg
+    alt: The graphics stop. The letter M built from a 20 by 20 grid of glossy tiles, cream where the letter covers a pixel, caramel where it only partly covers one and dark brown where it doesn't, with labels for "A grid of pixels" and "An edge pixel, partly lit".
+  - src: ../../assets/projects/dtp-processor.jpg
+    alt: The processor stop. A circuit board in warm light with small parts, printed labels and power components, and in the middle the processor with its lid off, the silicon glowing block by block, labelled "The silicon, lit where the code is read" and "Capacitors, steadying its power".
+  - src: ../../assets/projects/dtp-lights.jpg
+    alt: The pixel stop. One pixel seen up close as three rounded stripes of light, red, green and blue, labelled "Red light", "Green light" and "Blue light", with the neighbouring pixels dimmed around it.
+  - src: ../../assets/projects/dtp-ending.jpg
+    alt: The ending. The whole letter M in warm pixels on a dark screen with a text cursor blinking after it, beside the words "From a press to a pixel" and a cream keycap-shaped button reading "Press it again".
+---
+
+## The brief
+
+Pressing a key feels instant, but a lot happens before the letter shows up. I wanted to show all of it in one go, without a single diagram: one scroll, one camera move, and parts that look real all the way down, so you could follow one press of the M key from your fingertip to the pixel it lights.
+
+It's written for curious people, not engineers. Each stop says what is happening in a sentence or two, and there's more for anyone who wants it: a "Go deeper" panel at every stop, and a short definition behind every labelled part.
+
+## What I built
+
+- **The desk.** A walnut keyboard built entirely in code, with sculpted keycaps, a legend on every key, real wood textures and a little wear on the most-used keys. A brass lamp and a slow-flickering candle light it, and everything past the desk falls into the dark.
+- **The key and the switch.** The M goes down 2 mm and the press registers, then the switch comes apart to show the stem, the spring and the two contacts closing. The figures come from CHERRY's published specs for the MX Red.
+- **The cable.** The camera drops down the lead. The braid, the jacket and the foil are cut back in steps to show the twisted data pair, with the message running along it as two opposite signals.
+- **The processor.** The plug goes into a main board covered in small parts and printed labels. The copper tracks carry the message to the processor, its metal lid lifts off, and the silicon underneath lights up block by block.
+- **The graphics and the pixel.** The camera dives through the chip's light into the dark. The M's outline is traced from the real typeface, a grid of pixels is laid over it, and each pixel lights by how much of the letter really covers it, so the edges are only partly lit. Then one pixel opens into its red, green and blue lights.
+- **Ways through it.** The stop list jumps anywhere, and the arrow keys step through the story one moment at a time: a tap glides to the next moment, holding cruises at a steady speed, and letting go slows down gently onto the next one.
+
+With reduced motion it shows still frames. Without WebGL or JavaScript, the words read as a plain article. It runs under a strict Content Security Policy with no third-party code.
+
+## Holding 60 fps
+
+At one point the site felt laggy, and my first measurements agreed: every frame took 33 milliseconds, half the speed it should run. The cause was my laptop. Low Power Mode caps the browser at 30 frames a second, so even a blank page measured the same. Then a test with the frame cap removed showed big stalls that weren't real either: they came from the test itself backing up the graphics card.
+
+Once I measured it the way people actually use it, there was one real problem left. Each stop only exists once you scroll to it, and the graphics card set up every new part the first time it appeared, which froze the screen for up to 300 milliseconds at a time. So while you're still looking at the desk, the site now quietly draws every later part once, off screen, and sends their textures over one per frame. Now it holds a steady 60 fps, with 99% of frames under 18 milliseconds.
+
+## Cutting what didn't hold up
+
+The first version had a whole room, and it looked like Roblox. I cut it and kept one small desk corner that holds up close. Anything that couldn't look real at that distance went, a potted plant and the edge of a monitor included. I'd rather show an empty, well-lit desk than a cheap prop.
+
+I held the facts to the same standard. Every number on the page links to a source, and anything I couldn't source isn't there.
+
+## What I'd do next
+
+- Bring the labels and their definitions to phones. Right now they only show on larger screens, so phones get the stops and the Go deeper panels without them.
+- Test it on real iPhones and in Safari, not just in Chrome on my laptop.
+- Let you type any key and follow that one instead. The pixels are drawn from the real typeface, so any letter would work.
+
+{/* TODO(musa): every line here and the Journey story were drafted from our build chats in your voice; change anything that doesn't sound like you. Screenshots are from the build, captured 15 Nov 2026. */}

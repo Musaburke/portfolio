@@ -15,6 +15,7 @@ import gallery from '../assets/projects/gallery-home.jpg';
 import afg from '../assets/projects/afg-home.jpg';
 import bta from '../assets/projects/bta-play.jpg';
 import lureHome from '../assets/journey/lure-home.jpg';
+import dtpDesk from '../assets/projects/dtp-desk.jpg';
 
 export type Work = {
   id: string;          // also the case study's filename (src/content/projects/<id>.mdx), if it has one
@@ -247,6 +248,31 @@ export const work: Work[] = [
         'Playing it myself, I got stuck on level 2 and used all three hints. That taught me to test honestly on myself, so I reworked the clues, the hints and the way a blocked message shows up until it felt fair.',
       ],
       skills: ['Cloudflare Workers', 'D1', 'Workers AI', 'Prompt injection', 'OWASP LLM Top 10'],
+      polish: 3,
+    },
+  },
+  {
+    id: 'down-to-the-pixel',
+    date: '2026-11',
+    title: 'Down to the pixel',
+    role: 'My own',
+    summary: 'One press of the M key, followed in a single scroll through the switch, the cable, the processor and the graphics, down to the one pixel it lights.',
+    stack: ['Astro', 'TypeScript', 'Three.js', 'GLSL', 'Cloudflare Pages'],
+    image: dtpDesk,
+    alt: 'The first screen of Down to the pixel. A walnut keyboard on an oak desk at night, lit by a brass lamp and a candle beside a mug, with the title "Down to the pixel" on the left and the six stops listed along the bottom.',
+    host: 'down-to-the-pixel.pages.dev',
+    live: 'https://down-to-the-pixel.pages.dev',
+    repo: 'https://github.com/Musaburke/down-to-the-pixel',
+    hue: '#ae9357', // Down to the pixel gold
+    journey: {
+      learned: "If something can't look real, cut it. And the scene has to move the same way as the scroll, or it feels wrong even when it looks right.",
+      short: "I followed one key press from my fingertip down to a single lit pixel, through the switch, the cable, the processor and the graphics, in one scroll. It taught me to cut anything that can't look real, and that the scene has to move the same way as the scroll, or it feels wrong even when it looks right.",
+      story: [
+        'I wanted to show what actually happens when you press a key, all the way down. You scroll, and the camera follows the M key down through the switch, along the cable as a coded message, across the main board into the processor, through the graphics, and out as one lit pixel on a screen.',
+        "My first scene was a whole room, and it looked like Roblox. I cut it and kept one desk corner: a walnut keyboard, a brass lamp, a candle and a mug, with everything else falling to dark. Anything that couldn't look real at that distance went, a plant and a monitor included. The cable taught me the other lesson. It ran sideways while the page went down, and even though it looked fine, it felt wrong. Once the camera moved with the scroll, it worked.",
+        "At one point it felt laggy, and the first numbers said every frame took 33 milliseconds. That was my laptop's Low Power Mode capping the browser, not the site. The real problem was smaller: the graphics card set up each new part the first time it appeared, so now every part is drawn once while you're still on the desk. It holds 60 fps, and every number on the page links to its source.",
+      ],
+      skills: ['Three.js', 'GLSL shaders', 'Scroll animation', 'Performance profiling'],
       polish: 3,
     },
   },
