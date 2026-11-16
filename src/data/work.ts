@@ -177,6 +177,17 @@ export const work: Work[] = [
     live: 'https://musa-design-gallery.pages.dev',
     repo: 'https://github.com/Musaburke/design-gallery',
     hue: '#8fd19e', // gallery logo green
+    journey: {
+      learned: 'Pulling every piece out of my sites showed me which ones were really reusable, and putting the real code beside each demo keeps me honest.',
+      short: 'A gallery of the backgrounds, effects and building blocks from my sites, each running live with its code. It showed me which of my pieces were really reusable, and that putting the real code beside each demo keeps me honest.',
+      story: [
+        "I'd built the same kinds of pieces across my sites: a starfield, a glass orb, a drawer menu, a link pyramid. I wanted them all in one place, each running live with its code a click away, so I could reuse them and show how they work.",
+        "Getting each piece out of its site was harder than I expected. Every one had to fill whatever box it's put in instead of the whole window, work with several on one page, stop when it's off screen and respect reduced motion. The code panels read the same files the demos run, so the code on the page can never drift from what you see.",
+        'I also used it to compare design skills: one made-up product, built once with each skill and once with none, side by side with what each one cost. It showed me how much a skill changes what gets built from the same brief.',
+      ],
+      skills: ['Component design', 'Three.js', 'Content Security Policy'],
+      polish: 3,
+    },
   },
   {
     id: 'ai-field-guide',
