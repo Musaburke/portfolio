@@ -1,0 +1,33 @@
+---
+order: 9
+role: Built with a friend. I made the weather, currency, NASA and crypto pages and designed the site; he made the news page.
+slab: '#16341f'
+cover: ../../assets/projects/nf-home.jpg
+coverAlt: The News Flux daily dashboard on black. A weather card for London with the next four days, the top currencies against the pound, the top five cryptocurrencies, and the start of the headlines and astronomy cards below.
+gallery:
+  - src: ../../assets/journey/newsflux.jpg
+    alt: The News Flux weather page for Madrid, with a five-day forecast, beside the top currencies and the top five cryptocurrencies.
+---
+
+## The brief
+
+A friend and I wanted one page that pulled the useful bits of the day together: the news, the weather, exchange rates, space and crypto. He took the news page. I took the weather, currency, NASA and crypto pages, and the design of the whole site.
+
+## What I built
+
+- **The dashboard.** A home page of cards, each a small version of one page: today's weather and the next few days, the top currencies, the top five cryptocurrencies, the headlines and NASA's astronomy picture of the day.
+- **The pages behind it.** A full page each for weather, currency, NASA and crypto, reached from the cards or the bar along the top.
+- **The back end.** A small Flask app with one controller and one route per data source, which calls the outside APIs and hands clean data to the front end.
+- **The front end.** React with Vite and Tailwind. The built React app is served by the same Flask app, so the whole thing runs from one address on Render.
+
+## Keeping the keys on the server
+
+This was the project where API keys finally clicked for me, after a lot of trouble at the start. Every key lives in the Flask app's settings on the server, and the browser only ever talks to our own routes. Nobody can open the page source and lift a key. I tested each route in Postman before wiring it to the front end, which was the first time I'd used it.
+
+## What I'd do next
+
+- Finish the pages that only half work. Some of the data sources now need a paid plan or have changed, so a few cards load slowly or not at all.
+- Cache the responses on the server, so a busy hour doesn't burn through the free API limits.
+- Tidy the design. It was the first thing I made that I thought looked good, but I can see the rough edges now.
+
+{/* TODO(musa): drafted from your own story for this project plus the repo; check it sounds like you and that the "what I'd do next" points are right. Screenshot from the live site, 16 Nov 2026. */}

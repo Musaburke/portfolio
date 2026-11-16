@@ -15,6 +15,7 @@ import gallery from '../assets/projects/gallery-home.jpg';
 import afg from '../assets/projects/afg-home.jpg';
 import bta from '../assets/projects/bta-play.jpg';
 import lureHome from '../assets/journey/lure-home.jpg';
+import dtpDesk from '../assets/projects/dtp-desk.jpg';
 
 export type Work = {
   id: string;          // also the case study's filename (src/content/projects/<id>.mdx), if it has one
@@ -71,7 +72,7 @@ export const work: Work[] = [
     title: 'Islamic Tools Hub',
     role: 'My own',
     summary: 'My first try at building with an API: a small site of Islamic tools that includes prayer times.',
-    stack: ['HTML', 'CSS', 'REST APIs'],
+    stack: ['React', 'Flask', 'REST APIs'],
     image: prayer,
     alt: 'Islamic Tools Hub home page: lanterns and a crescent moon behind four buttons for Prayer Times, Tasbeeh Counter, Random Hadith and Islamic Quiz.',
     host: 'Practice_prayer_api · local run',
@@ -84,6 +85,7 @@ export const work: Work[] = [
         "This was my first real try at building something with an API. It was very low level, it wasn't technical and it didn't look good at all.",
         'It did teach me the very basics of what an API key is and how it works. Seeing that work is what made me want to build more.',
       ],
+      skills: ['HTML', 'CSS', 'REST APIs'],
       polish: 0,
     },
   },
@@ -175,6 +177,17 @@ export const work: Work[] = [
     live: 'https://musa-design-gallery.pages.dev',
     repo: 'https://github.com/Musaburke/design-gallery',
     hue: '#8fd19e', // gallery logo green
+    journey: {
+      learned: 'Pulling every piece out of my sites showed me which ones were really reusable, and putting the real code beside each demo keeps me honest.',
+      short: 'A gallery of the backgrounds, effects and building blocks from my sites, each running live with its code. It showed me which of my pieces were really reusable, and that putting the real code beside each demo keeps me honest.',
+      story: [
+        "I'd built the same kinds of pieces across my sites: a starfield, a glass orb, a drawer menu, a link pyramid. I wanted them all in one place, each running live with its code a click away, so I could reuse them and show how they work.",
+        "Getting each piece out of its site was harder than I expected. Every one had to fill whatever box it's put in instead of the whole window, work with several on one page, stop when it's off screen and respect reduced motion. The code panels read the same files the demos run, so the code on the page can never drift from what you see.",
+        'I also used it to compare design skills: one made-up product, built once with each skill and once with none, side by side with what each one cost. It showed me how much a skill changes what gets built from the same brief.',
+      ],
+      skills: ['Component design', 'Three.js', 'Content Security Policy'],
+      polish: 3,
+    },
   },
   {
     id: 'ai-field-guide',
@@ -247,6 +260,31 @@ export const work: Work[] = [
         'Playing it myself, I got stuck on level 2 and used all three hints. That taught me to test honestly on myself, so I reworked the clues, the hints and the way a blocked message shows up until it felt fair.',
       ],
       skills: ['Cloudflare Workers', 'D1', 'Workers AI', 'Prompt injection', 'OWASP LLM Top 10'],
+      polish: 3,
+    },
+  },
+  {
+    id: 'down-to-the-pixel',
+    date: '2026-11',
+    title: 'Down to the pixel',
+    role: 'My own',
+    summary: 'One press of the M key, followed in a single scroll through the switch, the cable, the processor and the graphics, down to the one pixel it lights.',
+    stack: ['Astro', 'TypeScript', 'Three.js', 'GLSL', 'Cloudflare Pages'],
+    image: dtpDesk,
+    alt: 'The first screen of Down to the pixel. A walnut keyboard on an oak desk at night, lit by a brass lamp and a candle beside a mug, with the title "Down to the pixel" on the left and the six stops listed along the bottom.',
+    host: 'down-to-the-pixel.pages.dev',
+    live: 'https://down-to-the-pixel.pages.dev',
+    repo: 'https://github.com/Musaburke/down-to-the-pixel',
+    hue: '#ae9357', // Down to the pixel gold
+    journey: {
+      learned: "If something can't look real, cut it. And the scene has to move the same way as the scroll, or it feels wrong even when it looks right.",
+      short: "My first time working with 3D: I followed one key press from my fingertip down to a single lit pixel, through the switch, the cable, the processor and the graphics, in one scroll. It taught me to cut anything that can't look real, and that the scene has to move the same way as the scroll, or it feels wrong even when it looks right.",
+      story: [
+        'I wanted to show what actually happens when you press a key, all the way down. You scroll, and the camera follows the M key down through the switch, along the cable as a coded message, across the main board into the processor, through the graphics, and out as one lit pixel on a screen. It was my first time working with 3D models. Everything in it, from the walnut keyboard to the chip, is built in code with Three.js, so I had to learn how light, materials and a moving camera actually work.',
+        "My first scene was a whole room, and it looked like Roblox. I cut it and kept one desk corner: a walnut keyboard, a brass lamp, a candle and a mug, with everything else falling to dark. Anything that couldn't look real at that distance went, a plant and a monitor included. The cable taught me the other lesson. It ran sideways while the page went down, and even though it looked fine, it felt wrong. Once the camera moved with the scroll, it worked.",
+        "At one point it felt laggy, and the first numbers said every frame took 33 milliseconds. That was my laptop's Low Power Mode capping the browser, not the site. The real problem was smaller: the graphics card set up each new part the first time it appeared, so now every part is drawn once while you're still on the desk. It holds 60 fps, and every number on the page links to its source.",
+      ],
+      skills: ['Three.js', 'GLSL shaders', 'Scroll animation', 'Performance profiling'],
       polish: 3,
     },
   },

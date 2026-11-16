@@ -13,10 +13,11 @@ const nodes = (await getWork()).journeyStops.map((n) => ({ ...n, date: showDate(
 // A skill lights up at the stop that first earned it.
 const skills: { name: string; at: number }[] = [];
 nodes.forEach((n, i) => n.skills.forEach((s) => { if (!skills.some((k) => k.name === s)) skills.push({ name: s, at: i }); }));
-const way = (n: (typeof nodes)[number]) =>
-  n.caseStudy ? { href: n.href!, label: 'Read the full case study', btn: true }
-  : n.live ? { href: n.live, label: 'Visit site', btn: false }
-  : n.repo ? { href: n.repo, label: 'Code on GitHub', btn: false } : null;
+// Each stop's ways on: its case study, then the live site (or the code when there is no site).
+const ways = (n: (typeof nodes)[number]) => [
+  n.caseStudy && { href: n.href!, label: 'Read the full case study', btn: true },
+  n.live ? { href: n.live, label: 'Visit site', btn: false } : n.repo ? { href: n.repo, label: 'Code on GitHub', btn: false } : null,
+].filter((w): w is { href: string; label: string; btn: boolean } => !!w);
 const M = nodes.length + 1; // projects plus the future
 ---
 <section id="journey" class="journey" style={`--m:${M};--hue:${nodes[0].hue}`} aria-labelledby="journey-title" data-journey>
@@ -52,9 +53,9 @@ const M = nodes.length + 1; // projects plus the future
           <div class="tale" data-tale>
             <p class="short">{n.journey!.short}</p>
             <p class="stack">{n.skills.join(' · ')}</p>
-            {way(n) && (
+            {ways(n).length > 0 && (
               <p class="links">
-                <a class:list={way(n)!.btn ? 'btn btn-quiet' : 'link'} href={way(n)!.href}>{way(n)!.label}<span class="visually-hidden">: {n.title}</span></a>
+                {ways(n).map((w) => <a class:list={w.btn ? 'btn btn-quiet' : 'link'} href={w.href}>{w.label}<span class="visually-hidden">: {n.title}</span></a>)}
               </p>
             )}
           </div>

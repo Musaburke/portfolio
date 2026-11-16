@@ -1,0 +1,41 @@
+---
+order: 7
+role: Concept, design and build. My own project.
+slab: '#1f3324'
+cover: ../../assets/projects/dg-home.jpg
+coverAlt: The design gallery home page. The headline "Everything my sites are made of" beside a list of the groups (backgrounds, motion and effects, navigation, page sections, surfaces and skill demos), above live previews of a starfield and a glass orb.
+gallery:
+  - src: ../../assets/projects/dg-group.jpg
+    alt: The motion and effects group page, a grid of live previews starting with the liquid glass orb and a preloader.
+  - src: ../../assets/projects/dg-detail.jpg
+    alt: The scroll camera page. A cluster of keycaps on a walnut plate, seen wide from above, with the caption "Wide" for the first of four camera shots.
+  - src: ../../assets/projects/dg-skills.jpg
+    alt: The skill demos page. Chips to pick a version of the same made-up product, built with no skill or with one design skill, with its cost, the tokens written and the time it took, above a preview of that version.
+---
+
+## The brief
+
+Across my sites I'd built the same kinds of pieces again and again: a starfield, a glass orb, a drawer menu, a link pyramid, a camera that moves with the scroll. I wanted every one of them in one place, running live, with its code a click away, so I could reuse them and so anyone could see how they work.
+
+## What I built
+
+- **Groups.** Backgrounds, motion and effects, navigation, page sections and surfaces, each a grid of live previews, with a landing page led by one standout demo from each group.
+- **A page per component.** The full demo with every file it needs, in order, ready to copy.
+- **Previews that behave.** A demo in a grid card only plays itself while it's on screen, the tab is visible and nobody is pointing at it, so the page stays calm and you can always take over.
+- **Pieces from my latest work.** A camera that glides between shots around a 3D model as you scroll, a letter turned into pixels in front of you, a stop list that jumps anywhere in a long page, arrow keys that move through sections with momentum, and a figure whose labels explain themselves.
+- **Skill demos.** One made-up product, built once with each design skill and once with none, side by side on desktop and phone, with what each version cost.
+
+Every demo uses placeholder content, with no client logos or personal details. It runs on Cloudflare Pages under a strict Content Security Policy, and merging into the main branch deploys it.
+
+## The code can't drift
+
+The code panels and the demos read the same files. Each page loads a component's files once, runs them, and shows their raw text beside the demo, so there's no copy of the code to fall out of date. If I change a demo, the code on the page changes with it.
+
+Getting each piece out of its site was the real work. Every one had to fill whatever box it's put in instead of the whole window, work with several on one page, stop when it's off screen, and respect reduced motion.
+
+## What I'd do next
+
+- Add the five pieces waiting on a branch: living water, a glass lens, ambient sound, a spot-the-fake quiz and a support chat.
+- A search box and tags once there are enough components to need them.
+
+{/* TODO(musa): drafted from what we built and the gallery's README, in your voice; check it sounds like you. Screenshots from the live site, 16 Nov 2026. */}
