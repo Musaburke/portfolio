@@ -4,15 +4,14 @@ import Shot from '../../components/Shot.astro';
 import { getWork, showDate } from '../../lib/work';
 import { site } from '../../data/site';
 
-// Every project, newest first, one equal card each. A card links to one place: the case study if there is one.
+// Every project, newest first, one equal card each. The card links to its case study; beside that, the live site, or
+// the code when there is no site (or a note when the code can't be public).
 const { allWork } = await getWork();
-const label = (p: (typeof allWork)[number]) =>
-  p.caseStudy ? 'Read the case study' : p.href?.includes('github.com') ? 'Code on GitHub' : 'Visit site';
 ---
-<Base title="All work" description="Everything Musa Burke has built, newest first, with a full case study for the main projects.">
+<Base title="All work" description="Everything Musa Burke has built, newest first, each with a case study and a link to the site or the code.">
   <section class="frame head" data-reveal>
     <h1>All work</h1>
-    <p class="lead">Everything I've built, newest first. The ones marked case study have the full write-up.</p>
+    <p class="lead">Everything I've built, newest first, each with the full story of what I made and what it taught me.</p>
   </section>
 
   <section class="frame" aria-labelledby="list-title">
@@ -28,9 +27,14 @@ const label = (p: (typeof allWork)[number]) =>
             <Shot src={p.image} alt={p.alt} host={p.host} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" />
           )}
           <h3>{p.href ? <a href={p.href}>{p.title}</a> : p.title}</h3>
-          <p class="meta">{showDate(p.date)}{p.caseStudy && <span class="badge">Case study</span>}</p>
+          <p class="meta">{showDate(p.date)} · {p.role}</p>
           <p class="summary">{p.summary}</p>
-          {p.href && <p class="go"><a class="link" href={p.href}>{label(p)}<span class="visually-hidden">: {p.title}</span></a></p>}
+          <p class="go">
+            {p.caseStudy && <a class="link" href={p.href}>Read the case study<span class="visually-hidden">: {p.title}</span></a>}
+            {p.live ? <a class="link quiet" href={p.live}>Visit site<span class="visually-hidden">: {p.title}</span></a>
+              : p.repo ? <a class="link quiet" href={p.repo}>Code on GitHub<span class="visually-hidden">: {p.title}</span></a>
+              : p.repoNote && <span class="note">{p.repoNote}</span>}
+          </p>
         </li>
       ))}
     </ul>
@@ -58,7 +62,10 @@ const label = (p: (typeof allWork)[number]) =>
   h3 a:hover { color: var(--accent); }
   h3 a:active { opacity: 0.8; }
   .meta { display: flex; align-items: center; gap: 0.75rem; color: var(--muted); font-size: var(--step-small); }
-  .badge { background: var(--surface); color: var(--ink); padding: 0.2rem 0.7rem; border-radius: 999px; font-size: 0.9375rem; }
+  .go { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1.5rem; }
+  .go .quiet { color: var(--muted); }
+  .go .quiet:hover { color: var(--ink); }
+  .go .note { color: var(--muted); font-size: var(--step-small); }
   .summary { max-width: 46ch; }
   .end { margin-top: var(--section); padding-bottom: var(--section); }
   .end h2 { font-size: var(--step-head); }

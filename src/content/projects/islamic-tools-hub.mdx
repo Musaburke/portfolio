@@ -1,0 +1,37 @@
+---
+order: 11
+role: My own project, built to learn how APIs work.
+slab: '#3a2412'
+cover: ../../assets/projects/itn-home.jpg
+coverAlt: The Islamic Tools Hub home page. Lanterns and a crescent moon on a dark background behind the title and four buttons for Prayer Times, Tasbeeh Counter, Random Hadith and Islamic Quiz.
+gallery:
+  - src: ../../assets/projects/itn-tasbeeh.jpg
+    alt: The tasbeeh counter over a mosque at dusk. Three counters for SubhanAllah, Alhamdulillah and Allahu Akbar at 33, 21 and 9, with buttons to add one to all and to reset.
+  - src: ../../assets/projects/itn-prayer.jpg
+    alt: The prayer times page. A form asking for a city and a country, with London and United Kingdom filled in, a choice of calculation method and a button to get today's prayer times.
+---
+
+## The brief
+
+This was my first real try at building something with an API. I wanted a small hub of everyday Islamic tools in one place: prayer times for your city, a tasbeeh counter, a random hadith and a quiz.
+
+## What I built
+
+- **The home page.** Four buttons over lanterns and a crescent moon, one for each tool.
+- **Prayer times.** You type your city and country and pick a calculation method, and it asks a public prayer-times API for today's times.
+- **The tasbeeh counter.** Three counters for SubhanAllah, Alhamdulillah and Allahu Akbar, with a button that adds one to all three and another that resets them.
+- **A small back end.** A Flask app with a route each for prayer times, hadith and the quiz, which is where the calls to the outside APIs live.
+
+The front end is React. It's very low level, it isn't technical and it doesn't look good, and not every part got joined up: running it again now, the prayer page's form and the server's prayer route never quite meet in the middle.
+
+## The part that worked
+
+What this project gave me was the very basics of how an API works: you send a request with the right details, sometimes a key, and you get data back to put on the page. Seeing prayer times come back for a city I'd typed in is what made me want to build more, and every project after this one started from there.
+
+## What I'd do next
+
+- Connect the prayer page to the server route so the times show on the page.
+- Finish the hadith and quiz tools, which need a working source of hadith.
+- Rebuild it with the design skills I've picked up since.
+
+{/* TODO(musa): drafted from your own story for this project plus the repo; check it sounds like you. Screenshots from a local run of the repo, 16 Nov 2026. */}
