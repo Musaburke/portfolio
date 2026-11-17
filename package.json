@@ -27,6 +27,6 @@
     "@astrojs/check": "^0.9.12",
     "@types/three": "^0.186.0",
     "playwright-core": "^1.64.1",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   }
 }
