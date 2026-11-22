@@ -222,7 +222,7 @@ const M = nodes.length + 1; // projects plus the future
   /* The short story: under the card in the plain list, beside it on the far side of the line when pinned. */
   /* The words beside each card: one paragraph in one voice (what happened, ending on the lesson), then skills and the way on. */
   .tale { margin-top: 1.5rem; max-width: 46rem; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
-  .tale .short { font-size: var(--step-lead); line-height: 1.38; letter-spacing: -0.01em; max-width: 34ch; }
+  .tale .short { font-size: var(--step-lead); line-height: 1.38; letter-spacing: -0.01em; max-width: min(34ch, 100%); } /* 100%: a long URL wraps instead of widening the page */
   .tale .stack { margin-top: 1.5rem; }
   .tale .links { margin-top: 1rem; }
   .links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
