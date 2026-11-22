@@ -6,8 +6,10 @@ import HowIGotHere from '../components/HowIGotHere.astro';
 import About from '../components/About.astro';
 import Toolkit from '../components/Toolkit.astro';
 import Contact from '../components/Contact.astro';
+import { site } from '../data/site';
+const webSite = [{ '@type': 'WebSite', name: `${site.name}, portfolio`, url: new URL('/', Astro.site).toString(), inLanguage: 'en-GB', author: { '@id': new URL('/#musa', Astro.site).toString() } }];
 ---
-<Base intro footer={false}>
+<Base intro footer={false} jsonLd={webSite}>
   <Hero />
   <Work />
   <HowIGotHere />

@@ -12,8 +12,29 @@ export async function getStaticPaths() {
 const { p, next } = Astro.props;
 const { Content } = await render(p.caseStudy!);
 const d = p.caseStudy!.data;
+const site = Astro.site!;
+const jsonLd = [
+  {
+    '@type': 'CreativeWork',
+    '@id': new URL(`/projects/${p.id}/#work`, site).toString(),
+    name: p.title,
+    description: p.summary,
+    url: new URL(`/projects/${p.id}/`, site).toString(),
+    dateCreated: p.date,
+    keywords: p.stack.join(', '),
+    author: { '@id': new URL('/#musa', site).toString() },
+    ...(p.live && { sameAs: p.live }),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'All work', item: new URL('/projects/', site).toString() },
+      { '@type': 'ListItem', position: 2, name: p.title },
+    ],
+  },
+];
 ---
-<Base title={p.title} description={p.summary}>
+<Base title={p.title} description={p.summary} jsonLd={jsonLd}>
   <article class="frame case">
     <header class="top" data-reveal>
       <p class="back"><a class="link muted" href="/projects">All work</a></p>
