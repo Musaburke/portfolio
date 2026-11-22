@@ -47,9 +47,10 @@ import Icon from './Icon.astro';
     display: grid; place-items: center; color: var(--ink);
     background: rgb(30 30 30 / 0.85);
     opacity: 0; transform: translateY(16px) scale(0.9); pointer-events: none;
-    transition: opacity 300ms ease, transform 400ms var(--ease-out);
+    visibility: hidden; /* out of the accessibility tree while it is invisible */
+    transition: opacity 300ms ease, transform 400ms var(--ease-out), visibility 0s linear 300ms;
   }
-  .totop.show { opacity: 1; transform: none; pointer-events: auto; }
+  .totop.show { opacity: 1; transform: none; pointer-events: auto; visibility: visible; transition-delay: 0s; }
   .totop:hover :global(svg:not(.progress)) { transform: translateY(-3px); }
   .totop :global(svg:not(.progress)) { transition: transform 300ms var(--ease-out); }
   .totop:active { transform: scale(0.94); }
@@ -58,5 +59,5 @@ import Icon from './Icon.astro';
   .progress circle { fill: none; stroke-width: 1.5; }
   .track { stroke: rgb(255 255 255 / 0.12); }
   .fill { stroke: var(--accent); stroke-dasharray: 1; stroke-dashoffset: 1; stroke-linecap: round; }
-  @media (prefers-reduced-motion: reduce) { .totop { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .totop, .totop.show { transition: none; } }
 </style>

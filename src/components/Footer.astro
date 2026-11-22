@@ -19,6 +19,8 @@ const year = new Date().getFullYear();
     font-size: var(--step-small);
   }
   ul { display: flex; gap: 1.5rem; }
+  /* 44px-tall tap area without moving the text */
+  ul :global(a) { display: inline-block; padding-block: 0.8rem; margin-block: -0.8rem; }
   .end { text-align: right; }
   @media (max-width: 760px) {
     .foot { grid-template-columns: 1fr; gap: 0.5rem; margin-top: 3rem; padding-bottom: 1.5rem; }
