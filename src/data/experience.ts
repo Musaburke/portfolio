@@ -38,9 +38,7 @@ export type Cert = {
   topics: string[];   // what it covered, shown as one line
   detail: string;     // what Musa took from it, in his words
   verify?: string;    // the issuer's public verification page
-  image?: ImageMetadata;
-  alt?: string;
-};
+} & ({ image: ImageMetadata; alt: string } | { image?: undefined; alt?: undefined }); // an image always comes with its alt text
 
 export const certifications: Cert[] = [
   {

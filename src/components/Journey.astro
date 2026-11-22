@@ -9,7 +9,7 @@ import Shot from './Shot.astro';
 import { future } from '../data/work';
 import { getWork, showDate } from '../lib/work';
 
-const nodes = (await getWork()).journeyStops.map((n) => ({ ...n, date: showDate(n.date), skills: n.journey!.skills ?? n.stack }));
+const nodes = (await getWork()).journeyStops.map((n) => ({ ...n, date: showDate(n.date), skills: n.journey.skills ?? n.stack }));
 // A skill lights up at the stop that first earned it.
 const skills: { name: string; at: number }[] = [];
 nodes.forEach((n, i) => n.skills.forEach((s) => { if (!skills.some((k) => k.name === s)) skills.push({ name: s, at: i }); }));
@@ -42,7 +42,7 @@ const M = nodes.length + 1; // projects plus the future
         <li class:list={['node', i % 2 ? 'left' : 'right', { active: i === 0 }]} style={`--i:${i};--hue:${n.hue}`} data-node data-date={n.date} data-hue={n.hue}>
           <p class="tag" aria-hidden="true"><span>{n.date}</span> {n.title}</p>
           <article class="card" data-reveal data-card aria-label={n.title}>
-            <div class="shotwrap" data-polish={n.journey!.polish}>
+            <div class="shotwrap" data-polish={n.journey.polish}>
               <Shot src={n.image} alt={n.alt} host={n.host} sizes="(max-width: 900px) 92vw, 760px" />
             </div>
             <div class="body">
@@ -51,7 +51,7 @@ const M = nodes.length + 1; // projects plus the future
             </div>
           </article>
           <div class="tale" data-tale>
-            <p class="short">{n.journey!.short}</p>
+            <p class="short">{n.journey.short}</p>
             <p class="stack">{n.skills.join(' · ')}</p>
             {ways(n).length > 0 && (
               <p class="links">
@@ -97,7 +97,6 @@ const M = nodes.length + 1; // projects plus the future
     const era = root.querySelector<HTMLElement>('[data-era]')!;
     const ghost = root.querySelector<HTMLElement>('[data-ghost]')!;
     const M = items.length;
-    const w = window as unknown as { __warp?: number; __kick?: number };
     const smooth = (x: number) => { const t = Math.min(1, Math.max(0, x)); return t * t * (3 - 2 * t); };
 
     let pinned = false, ticking = false, last = -1, inView = true;
@@ -149,13 +148,13 @@ const M = nodes.length + 1; // projects plus the future
         for (const el of [era, ghost]) { el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); }
         root.style.setProperty('--hue', items[a].dataset.hue ?? '');
         root.classList.toggle('at-end', a === M - 1);
-        if (a === M - 1) w.__kick = performance.now(); // the last star ignites: the field pulses
+        if (a === M - 1) window.__kick = performance.now(); // the last star ignites: the field pulses
         last = a;
       }
       const end = warpFor(f);
-      w.__warp = Math.max(end, between(f));
+      window.__warp = Math.max(end, between(f));
       clearTimeout(idle);
-      idle = window.setTimeout(() => { if (pinned) w.__warp = end; }, 260); // stopped scrolling: only the end build-up stays
+      idle = window.setTimeout(() => { if (pinned) window.__warp = end; }, 260); // stopped scrolling: only the end build-up stays
 
     };
 
@@ -174,7 +173,7 @@ const M = nodes.length + 1; // projects plus the future
       last = -1;
       if (pinned) update();
       else {
-        w.__warp = 0;
+        window.__warp = 0;
         cards.forEach((c) => (c.inert = false));
         tales.forEach((t) => t && (t.inert = false));
         items.forEach((el) => el.classList.remove('active', 'past'));

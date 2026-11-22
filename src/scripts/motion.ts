@@ -35,6 +35,12 @@ function splitWords(el: HTMLElement) {
   walk(el);
 }
 
+// Back to top, then park focus on the monogram. Shared by the back-to-top button and the pyramid.
+export function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  document.querySelector<HTMLElement>('.mono')?.focus({ preventScroll: true });
+}
+
 export function initReveals(root: ParentNode = document) {
   root.querySelectorAll<HTMLElement>('[data-split]').forEach(splitWords);
   const targets = root.querySelectorAll<HTMLElement>('[data-reveal], [data-split], .wipe, [data-pyramid], [data-inview]');

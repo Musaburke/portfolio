@@ -25,11 +25,8 @@ import { site } from '../data/site';
 </nav>
 
 <script>
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelector('[data-top]')?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-    document.querySelector<HTMLElement>('.mono')?.focus({ preventScroll: true });
-  });
+  import { scrollToTop } from '../scripts/motion';
+  document.querySelector('[data-top]')?.addEventListener('click', scrollToTop);
 </script>
 
 <style>

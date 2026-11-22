@@ -7,6 +7,8 @@ export type Project = Work & {
   caseStudy?: CollectionEntry<'projects'>;
   href?: string; // where every link to this project goes: its case study, else the live site, else the code
 };
+export type CaseStudyProject = Project & { caseStudy: CollectionEntry<'projects'>; href: string };
+export type JourneyProject = Project & { journey: NonNullable<Work['journey']> };
 
 const monthYear = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' });
 // '2025-11' -> 'Nov 2025'
@@ -28,12 +30,12 @@ export async function getWork() {
       const caseStudy = studies.find((s) => s.id === w.id);
       return { ...w, caseStudy, href: caseStudy ? `/projects/${w.id}` : w.live ?? w.repo };
     });
-  const byOrder = projects.filter((p) => p.caseStudy).sort((a, b) => a.caseStudy!.data.order - b.caseStudy!.data.order);
+  const byOrder = projects.filter((p): p is CaseStudyProject => !!p.caseStudy).sort((a, b) => a.caseStudy.data.order - b.caseStudy.data.order);
 
   return {
     allWork: [...projects].reverse(), // newest first
-    journeyStops: projects.filter((p) => p.journey), // oldest first
+    journeyStops: projects.filter((p): p is JourneyProject => !!p.journey), // oldest first
     caseStudies: byOrder,
-    featured: byOrder.filter((p) => p.caseStudy!.data.featured),
+    featured: byOrder.filter((p) => p.caseStudy.data.featured),
   };
 }
