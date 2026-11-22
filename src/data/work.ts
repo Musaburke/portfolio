@@ -107,7 +107,7 @@ export const work: Work[] = [
       story: [
         'I made this site for a professor to document his work, achievements and history. It was my first bigger solo project, and it showed.',
         "The main thing I learnt is that communicating with a client is a massively overlooked skill. I didn't do it well, and the site took far longer to make than it should have.",
-        'I also learnt the value of reusability. I built it almost entirely in HTML and some CSS, which meant hundreds of similar, redundant lines. Libraries would have made it far easier, and I'd never build a site in just HTML again. It was also my first time with web forms, email routing, CAPTCHA, a navbar and 15+ blog posts with templates I designed myself. Not all of it went perfectly, but I got it running and I was really proud of it.',
+        "I also learnt the value of reusability. I built it almost entirely in HTML and some CSS, which meant hundreds of similar, redundant lines. Libraries would have made it far easier, and I'd never build a site in just HTML again. It was also my first time with web forms, email routing, CAPTCHA, a navbar and 15+ blog posts with templates I designed myself. Not all of it went perfectly, but I got it running and I was really proud of it.",
       ],
       skills: ['Web forms', 'CAPTCHA', 'GitHub Pages'],
       polish: 1,
