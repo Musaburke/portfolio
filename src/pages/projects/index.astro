@@ -21,10 +21,10 @@ const { allWork } = await getWork();
         <li class="card" data-reveal>
           {p.href ? (
             <a class="pic" href={p.href} tabindex="-1" aria-hidden="true">
-              <Shot src={p.image} alt="" host={p.host} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" eager={i < 3} />
+              <Shot src={p.image} alt="" host={p.host} sizes="(max-width: 700px) calc(100vw - 32px), (max-width: 1100px) 50vw, 33vw" eager={i < 3} />
             </a>
           ) : (
-            <Shot src={p.image} alt={p.alt} host={p.host} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" />
+            <Shot src={p.image} alt={p.alt} host={p.host} sizes="(max-width: 700px) calc(100vw - 32px), (max-width: 1100px) 50vw, 33vw" />
           )}
           <h3>{p.href ? <a href={p.href}>{p.title}</a> : p.title}</h3>
           <p class="meta">{showDate(p.date)} · {p.role}</p>
