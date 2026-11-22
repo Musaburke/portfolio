@@ -83,7 +83,7 @@ export const work: Work[] = [
       short: "My first real try at building something with an API. It was very low level and didn't look good at all, but it taught me the very basics: what an API key is, how it works and how to use one. I learnt a lot, and it made me want to do more.",
       story: [
         "This was my first real try at building something with an API. It was very low level, it wasn't technical and it didn't look good at all.",
-        'It did teach me the very basics of what an API key is and how it works. I learnt a lot from it, and it lit a passion in me to do more work like it.',
+        'It did teach me the very basics of what an API key is and how it works. I learnt a lot from it, and it ignited a passion in me to do more work like it.',
       ],
       skills: ['HTML', 'CSS', 'REST APIs'],
       polish: 0,
