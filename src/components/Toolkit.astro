@@ -87,6 +87,8 @@ const first = toolkit[0].shot;
   .row.active .tool { color: var(--ink); }
   .detail { max-width: 38ch; font-size: 1rem; display: none; padding-bottom: 1.25rem; }
   .row.active .detail { display: block; }
+  /* No JS: the rows can't open, so every detail stays readable. */
+  :global(html:not(.js)) .detail { display: block; }
 
   @media (max-width: 900px) {
     .kit { display: block; }

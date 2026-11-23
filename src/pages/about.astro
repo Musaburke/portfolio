@@ -9,7 +9,7 @@ const groups: { title: string; items: Entry[] }[] = [
   { title: 'Education', items: education },
 ];
 ---
-<Base title="About" description={site.description}>
+<Base title="About" description={`About Musa Burke: ${site.study} student in ${site.location.split(',')[0]}, building fast, accessible websites and studying toward cyber security. Open to ${site.openTo.toLowerCase()}.`}>
   <section class="frame head" data-reveal>
     <h1>About</h1>
     <p class="lead">

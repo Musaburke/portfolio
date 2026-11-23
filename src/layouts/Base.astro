@@ -11,19 +11,21 @@ import { certifications } from '../data/experience';
 interface Props {
   title?: string;
   description?: string;
-  jsonLd?: Record<string, unknown>;
+  jsonLd?: Record<string, unknown>[]; // extra schema.org nodes, added beside the Person
   intro?: boolean;  // first-visit preloader (home only)
   footer?: boolean; // the home page ends with the contact pyramid instead
   noindex?: boolean; // keep the page out of search (404, empty pages)
 }
-const { title, description = site.description, jsonLd, intro = false, footer = true, noindex = false } = Astro.props;
+const { title, description = site.description, jsonLd = [], intro = false, footer = true, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name}, ${site.role.toLowerCase()}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const personId = new URL('/#musa', Astro.site).toString();
 const person = {
-  '@context': 'https://schema.org',
   '@type': 'Person',
+  '@id': personId,
   name: site.name,
   jobTitle: site.role,
+  description: site.description,
   url: Astro.site?.toString(),
   sameAs: [site.github, site.linkedin],
   hasCredential: certifications.map((c) => ({
@@ -34,6 +36,8 @@ const person = {
     ...(c.verify && { url: c.verify }),
   })),
 };
+const graph = { '@context': 'https://schema.org', '@graph': [person, ...jsonLd] };
+const ogAlt = 'Hello, I\'m Musa. A wireframe globe of connected points on a dark starfield, with the line "I build fast, accessible websites with Astro, TypeScript and React."';
 ---
 <!doctype html>
 <html lang="en-GB" data-intro={intro ? '' : undefined}>
@@ -51,6 +55,8 @@ const person = {
     <meta name="theme-color" content="#1c1c1c" />
     <meta name="color-scheme" content="dark" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_GB" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -59,7 +65,9 @@ const person = {
     <meta property="og:image" content={new URL('/og.jpg', Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta name="twitter:image" content={new URL('/og.jpg', Astro.site)} />
+    <meta name="twitter:image:alt" content={ogAlt} />
     <script is:inline>
       (function () {
         var d = document.documentElement;
@@ -71,7 +79,7 @@ const person = {
         if (d.hasAttribute('data-intro') && !seen && !reduce && !still) d.classList.add('intro');
       })();
     </script>
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? person).replace(/</g, '\\u003c')} />
+    <script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g, '\\u003c')} />
   </head>
   <body>
     <Starfield />
