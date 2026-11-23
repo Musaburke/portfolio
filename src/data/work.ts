@@ -61,7 +61,7 @@ export const work: Work[] = [
       story: [
         'News Flux is a news aggregator I built with a friend. He made the news page. I made the weather, currency, NASA and crypto pages and designed the site.',
         'It taught me how to work with a collaborator, and how to commit and push. I got much more practice with API keys, which gave me trouble at first, and picked up better design techniques from templates and classes I found online and on GitHub.',
-        'It was the first project where I properly used JavaScript in a website, along with Tailwind, React, Vite and Flask, and the first time I tested with Postman. It still had plenty of issues, but it was the first thing I made that I thought looked good.',
+        'It was the first project where I properly used JavaScript in a website, along with Tailwind, React, Vite and Flask, and the first time I tested with Postman. It still had plenty of issues, but it was fun, and it was the first time I made a page that looked good to me.',
       ],
       polish: 1,
     },
@@ -80,10 +80,10 @@ export const work: Work[] = [
     hue: '#f2a65a', // lantern orange
     journey: {
       learned: 'This taught me the very basics: what an API key is, how it works and how to use one.',
-      short: "My first real try at building something with an API. It was very low level and didn't look good at all, but it taught me the very basics: what an API key is, how it works and how to use one. Seeing that work is what made me want to build more.",
+      short: "My first real try at building something with an API. It was very low level and didn't look good at all, but it taught me the very basics: what an API key is, how it works and how to use one. I learnt a lot, and it made me want to do more.",
       story: [
         "This was my first real try at building something with an API. It was very low level, it wasn't technical and it didn't look good at all.",
-        'It did teach me the very basics of what an API key is and how it works. Seeing that work is what made me want to build more.',
+        'It did teach me the very basics of what an API key is and how it works. I learnt a lot from it, and it ignited a passion in me to do more work like it.',
       ],
       skills: ['HTML', 'CSS', 'REST APIs'],
       polish: 0,
@@ -102,12 +102,12 @@ export const work: Work[] = [
     live: 'https://musaburke.github.io/Prof.-Dr-G.-Hussein-Website/',
     hue: '#5cc8d6', // site teal
     journey: {
-      learned: "If communication with a client isn't done right, the build drags on. And reuse matters: I wrote hundreds of near-identical lines of HTML.",
-      short: "A site for a professor to document his work, achievements and history: my first bigger solo project. I learnt that if communication with a client isn't done right, the build drags on, and that reuse matters: I wrote hundreds of near-identical lines of HTML.",
+      learned: "Communication with a client is a massively overlooked skill: without it, the build drags on. And reuse matters: I wrote hundreds of near-identical lines of HTML.",
+      short: "A site for a professor to document his work, achievements and history: my first bigger solo project. I learnt that communication with a client is a massively overlooked skill, because without it the build drags on, and that reuse matters: I wrote hundreds of near-identical lines of HTML.",
       story: [
         'I made this site for a professor to document his work, achievements and history. It was my first bigger solo project, and it showed.',
-        "The main thing I learnt is how important it is to communicate with a client. I didn't do it well, and that made the build extremely long and dragged out.",
-        'I also learnt the value of reusability. I built it almost entirely in HTML and some CSS, which meant hundreds of similar, redundant lines. Libraries would have made it far easier. It was also my first time with web forms, email routing, CAPTCHA, a navbar and 15+ blog posts with templates I designed myself. Not all of it went perfectly, but I got it running and I was really proud of it.',
+        "The main thing I learnt is that communicating with a client is a massively overlooked skill. I didn't do it well, and the site took far longer to make than it should have.",
+        "I also learnt the value of reusability. I built it almost entirely in HTML and some CSS, which meant hundreds of similar, redundant lines. Libraries would have made it far easier, and I'd never build a site in just HTML again. It was also my first time with web forms, email routing, CAPTCHA, a navbar and 15+ blog posts with templates I designed myself. Not all of it went perfectly, but I got it running and I was really proud of it.",
       ],
       skills: ['Web forms', 'CAPTCHA', 'GitHub Pages'],
       polish: 1,
@@ -130,7 +130,7 @@ export const work: Work[] = [
       learned: 'Working with a database and real users means security comes first: who can see what, and what the frontend never gets to touch.',
       short: "My first big collaborative project, and my first time with a database, a login system and a user base. It taught me that with real users, security comes first: who can see what, and what the frontend never gets to touch.",
       story: [
-        'Renewly was my first big collaborative project and my first time working with a database, a login system and a user base. If it went wrong it could cause real damage, and that changed how I think. We also planned the flow and tools first, instead of just coding with no direction.',
+        'Renewly was my first big collaborative project and my first time working with a database, a login system and a user base. If it went wrong it could cause real damage, and that changed how I think. It was also my first time planning the flow and tools first, instead of just vibe coding with no direction.',
         "Most of what I learnt was about protecting data. I used SQL and Supabase to manage the database and set its rules, stopped people reaching other accounts' data by changing the URL, and kept the backend hidden from the frontend.",
         "It also showed me how much communication with a collaborator matters, and how important file and variable naming gets across a huge number of files. I lost progress more than once to bad Git habits I thought didn't matter, which is how I learnt to take branches and rebasing seriously.",
       ],
