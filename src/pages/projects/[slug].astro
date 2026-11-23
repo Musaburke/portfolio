@@ -10,8 +10,8 @@ export async function getStaticPaths() {
   return caseStudies.map((p, i) => ({ params: { slug: p.id }, props: { p, next: caseStudies[(i + 1) % caseStudies.length]! } }));
 }
 const { p, next } = Astro.props;
-const { Content } = await render(p.caseStudy!);
-const d = p.caseStudy!.data;
+const { Content } = await render(p.caseStudy);
+const d = p.caseStudy.data;
 const site = Astro.site!;
 const jsonLd = [
   {
@@ -102,7 +102,7 @@ const jsonLd = [
           </p>
         </div>
         <a class="next-pic" href={`/projects/${next.id}`} tabindex="-1" aria-hidden="true" data-reveal>
-          <Shot src={next.caseStudy!.data.cover} alt="" host={next.host} sizes="(max-width: 900px) 100vw, 50vw" />
+          <Shot src={next.caseStudy.data.cover} alt="" host={next.host} sizes="(max-width: 900px) 100vw, 50vw" />
         </a>
       </section>
     )}

@@ -10,9 +10,9 @@ import Icon from './Icon.astro';
 </button>
 
 <script>
+  import { scrollToTop } from '../scripts/motion';
   const btn = document.querySelector<HTMLButtonElement>('[data-totop]')!;
   const ring = btn.querySelector<SVGCircleElement>('[data-ring]')!;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let pyramidVisible = false;
 
   const update = () => {
@@ -33,10 +33,7 @@ import Icon from './Icon.astro';
     new IntersectionObserver(([e]) => { pyramidVisible = e.isIntersecting; update(); }).observe(pyramid);
   }
 
-  btn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-    document.querySelector<HTMLElement>('.mono')?.focus({ preventScroll: true });
-  });
+  btn.addEventListener('click', scrollToTop);
 </script>
 
 <style>

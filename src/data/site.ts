@@ -15,9 +15,3 @@ export const site = {
   linkedin: 'https://www.linkedin.com/in/musa-burke',
   cv: '', // TODO(musa): put cv.pdf in /public and set this to '/cv.pdf'
 };
-
-export const nav = [
-  { href: '/projects', label: 'Work' },
-  { href: '/about', label: 'About' },
-  { href: '/blog', label: 'Writing' },
-];

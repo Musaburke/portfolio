@@ -6,12 +6,11 @@ import type { ImageMetadata } from 'astro';
 
 interface Props {
   href: string;
-  title: string;
   host: string;
   cover: { src: ImageMetadata; alt: string };
   back: { src: ImageMetadata; alt: string }[];
 }
-const { href, title, host, cover, back } = Astro.props;
+const { href, host, cover, back } = Astro.props;
 ---
 <div class="iso" data-iso>
   <div class="plane">

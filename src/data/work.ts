@@ -19,7 +19,7 @@ import dtpDesk from '../assets/projects/dtp-desk.jpg';
 
 export type Work = {
   id: string;          // also the case study's filename (src/content/projects/<id>.mdx), if it has one
-  date: string;        // 'YYYY-MM'; entries in the same month keep their order in this list
+  date: `${number}-${number}`; // 'YYYY-MM'; entries in the same month keep their order in this list
   title: string;
   role: string;        // "My own", "Team project", ...
   summary: string;     // one line, shown on All work
