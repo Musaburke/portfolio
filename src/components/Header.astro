@@ -62,17 +62,19 @@ const current = path.startsWith('/projects') ? 'projects' : path.startsWith('/jo
   // The drawer is display:none while closed; it is shown a frame before the slide-in
   // starts and hidden again once the slide-out has finished.
   let hideTimer = 0;
+  let focusTimer = 0;
   // While the drawer is open, the page behind it is inert, so neither a screen reader nor Tab can reach it.
   const behind = () => document.querySelectorAll<HTMLElement>('main, body > footer, [data-totop]');
   const setOpen = (open: boolean) => {
     clearTimeout(hideTimer);
+    clearTimeout(focusTimer); // closing within 250ms must not drop focus into the hidden drawer
     behind().forEach((el) => (el.inert = open));
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     if (open) {
       drawer.hidden = false;
       requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('menu-open')));
-      setTimeout(() => drawer.querySelector('a')?.focus({ preventScroll: true }), 250);
+      focusTimer = window.setTimeout(() => drawer.querySelector('a')?.focus({ preventScroll: true }), 250);
     } else {
       root.classList.remove('menu-open');
       hideTimer = window.setTimeout(() => { drawer.hidden = true; }, 650);
