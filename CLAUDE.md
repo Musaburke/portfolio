@@ -15,9 +15,9 @@
 | Before deploying | `workflows/pre-ship.md` |
 
 ## Skills (use without being asked)
-- Before writing or changing UI: `design-taste-frontend`. Stay inside the dealt direction in AGENTS.md; do not redraw it.
-- Motion or component feel: `emil-design-eng`.
-- After finishing a page or section: `impeccable` as a second pass, then `web-design-guidelines`.
+- Before writing or changing UI: `design-memory`. Stay inside the dealt direction in AGENTS.md; do not redraw it (this repo's rules are design-memory's site layer and win over its core).
+- Motion or component feel: `emil-design-eng` (polish only, never the style).
+- After finishing a page or section: design-memory's gates and judge, then `web-design-guidelines`.
 - Before building something new (not small edits): `grill-me`. Ask questions first.
 - Page copy: `copywriting`, then `humanizer` if installed. SEO: `seo-audit`; structured data: `schema`.
 - Anything with forms, user input, third-party scripts or keys: `vibesec-skill`.
