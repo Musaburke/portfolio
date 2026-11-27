@@ -24,7 +24,7 @@ You play a red-team contractor hired by Fernleigh Bank, a made-up bank. Each lev
 
 ## What I built
 
-- Four levels so far, each a different attack: pretending to be staff, getting round a keyword filter, getting a PIN past an output filter by having it spelled out one character at a time, and slipping instructions into an email that the bank's AI summariser reads.
+- Five levels so far, each a different attack: pretending to be staff, getting round a keyword filter, getting a PIN past an output filter by having it spelled out one character at a time, slipping instructions into an email that the bank's AI summariser reads, and talking the bank's AI agent into using its tools on another customer's account.
 - Level 4 has no chat at all. You write one email into a staff inbox and only see the summary the AI writes for the inbox's owner. Every email is wrapped in tags marked as data, and the way in is closing that tag yourself, so the lesson is that an AI reading outside text can be steered by whoever wrote it.
 - The bank's chat looks like a real product, in its own green, so it's always clear what you're attacking and what's your side.
 - An email from the bank's security lead at the start of each level, a clue and three hints you can buy, and a score that drops with every message.
@@ -45,7 +45,7 @@ So the game now tells you when a filter blocks you and which word set it off. Th
 
 ## What I'd do next
 
-- Build levels 5 and 6: a banking agent with tools, then a boss level that stacks every defence.
+- Build level 6: a boss level that stacks every defence.
 - Tighten the Content Security Policy so it stops allowing inline scripts.
 - Give the bank its final name, and check that no real bank already uses it.
 
